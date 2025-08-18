@@ -164,7 +164,7 @@ Widget hourBoxes(hours, data, value, elevated, context) {
 }
 
 Widget hourlyDataBuilder(
-    hour, ColorScheme palette, bool elevated, childWidget, data) {
+    hour, ColorScheme palette, bool elevated, Widget childWidget, data) {
   return Padding(
     padding: const EdgeInsets.all(3),
     child: AnimatedSwitcher(
