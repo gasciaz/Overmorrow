@@ -201,7 +201,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
 
   Timer? _debounce;
 
-  void void _onSearchChanged(String query) {
+  void _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 400), () async {
       final result = await LocationService.getRecommendation(
@@ -210,13 +210,13 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
     });
   }
 
-  void void onFavChanged(List<String> fav) {
+  void onFavChanged(List<String> fav) {
     setState(() {
       updateFav(fav);
     });
   }
 
-  void void openSettingsPage() {
+  void openSettingsPage() {
     HapticFeedback.selectionClick();
     Navigator.push(
       context,
@@ -236,7 +236,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
     });
   }
 
-  void void onIsEditingChanged() {
+  void onIsEditingChanged() {
     setState(() {
       isEditing = !isEditing;
     });
