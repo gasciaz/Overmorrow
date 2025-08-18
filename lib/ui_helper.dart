@@ -176,7 +176,7 @@ class MySearchParent extends StatefulWidget {
   final place;
   final settings;
   final Image image;
-  final isTabletMode;
+  final bool isTabletMode;
 
   const MySearchParent(
       {super.key,
@@ -203,7 +203,7 @@ class _MySearchParentState extends State<MySearchParent> {
   final place;
   final settings;
   final Image image;
-  final isTabletMode;
+  final bool isTabletMode;
 
   _MySearchParentState(
       {required this.palette,
@@ -279,7 +279,7 @@ class MySearchWidget extends StatefulWidget {
   final prefs;
   final settings;
   final Image image;
-  final isTabletMode;
+  final bool isTabletMode;
 
   const MySearchWidget(
       {super.key,

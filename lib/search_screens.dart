@@ -136,7 +136,7 @@ class HeroSearchPage extends StatefulWidget {
   final updateLocation;
   final favorites;
   final updateFav;
-  final isTabletMode;
+  final bool isTabletMode;
   final Image image;
 
   const HeroSearchPage(
@@ -558,14 +558,14 @@ Widget buildRecommend(
     ValueListenable<List<String>> recommend,
     updateLocation,
     onFavChanged,
-    isEditing,
+    bool isEditing,
     locationState,
     locationMessage,
     askGrantLocationPermission,
     placeName,
     country,
     region,
-    isTabletMode) {
+    bool isTabletMode) {
   return ValueListenableBuilder(
       valueListenable: favoritesListen,
       builder: (context, value, child) {

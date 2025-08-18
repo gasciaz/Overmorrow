@@ -28,7 +28,7 @@ import 'package:overmorrow/ui_helper.dart';
 class NewHourly extends StatefulWidget {
   final data;
   final hours;
-  final elevated;
+  final bool elevated;
 
   const NewHourly(
       {super.key,
@@ -122,7 +122,7 @@ class _NewHourlyState extends State<NewHourly>
   }
 }
 
-Widget hourBoxes(hours, data, value, elevated, context) {
+Widget hourBoxes(hours, data, value, bool elevated, context) {
   final ColorScheme palette = data.current.palette;
 
   return AnimationLimiter(
