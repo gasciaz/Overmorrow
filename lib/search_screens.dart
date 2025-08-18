@@ -47,7 +47,7 @@ Widget searchBar2(
     favorites,
     Function updateRec,
     String place,
-    var context,
+    BuildContext context,
     Map<String, String> settings,
     Image image) {
   return Align(
@@ -780,7 +780,7 @@ Widget CurrentLocationWidget(
     String country,
     String region,
     updateLocation,
-    context,
+    BuildContext context,
     isTabletMode) {
   if (locationState == 'denied') {
     return GestureDetector(
@@ -883,7 +883,7 @@ Widget CurrentLocationWidget(
 }
 
 Widget favoritesOrReorder(isEditing, favorites, settings, onFavChanged,
-    ColorScheme palette, updateLocation, context, isTabletMode) {
+    ColorScheme palette, updateLocation, BuildContext context, isTabletMode) {
   if (isEditing) {
     return reorderFavorites(
         favorites, settings, onFavChanged, palette, isTabletMode);
@@ -894,7 +894,7 @@ Widget favoritesOrReorder(isEditing, favorites, settings, onFavChanged,
 }
 
 Widget buildFavorites(ColorScheme palette, List<String> favorites,
-    updateLocation, settings, context, isTabletMode) {
+    updateLocation, settings, BuildContext context, isTabletMode) {
   return SingleChildScrollView(
     child: Container(
         key: const ValueKey<String>('normal'),

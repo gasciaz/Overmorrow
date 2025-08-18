@@ -37,7 +37,7 @@ Future<void> _launchUrl(String url) async {
 }
 
 Widget mainSettingEntry(String title, String desc, ColorScheme palette,
-    IconData icon, settings, Widget pushTo, context, updatePage) {
+    IconData icon, settings, Widget pushTo, BuildContext context, updatePage) {
   return Padding(
     padding: const EdgeInsets.only(left: 25, right: 25, top: 5, bottom: 5),
     child: GestureDetector(
@@ -81,7 +81,7 @@ Widget mainSettingEntry(String title, String desc, ColorScheme palette,
 }
 
 Widget NewSettings(Map<String, String> settings, Function updatePage,
-    Image image, ColorScheme palette, context, colornotify) {
+    Image image, ColorScheme palette, BuildContext context, colornotify) {
   final localizations = AppLocalizations.of(context)!;
 
   return Padding(
@@ -268,7 +268,8 @@ class AppearanceSelector extends StatelessWidget {
   final goBack;
 
   const AppearanceSelector(
-      {super.key, required this.image,
+      {super.key,
+      required this.image,
       required this.settings,
       required this.colorPalette,
       required this.updatePage,

@@ -461,7 +461,7 @@ Widget aqiCircleAndDesc(data, ColorScheme palette) {
   );
 }
 
-Widget mainPollutantIndicator(data, extendedAqi, ColorScheme palette, context) {
+Widget mainPollutantIndicator(data, extendedAqi, ColorScheme palette, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(top: 25, bottom: 3),
     child: Container(
@@ -485,7 +485,7 @@ Widget mainPollutantIndicator(data, extendedAqi, ColorScheme palette, context) {
   );
 }
 
-Widget pollenIndicators(data, extendedAqi, ColorScheme palette, context) {
+Widget pollenIndicators(data, extendedAqi, ColorScheme palette, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(top: 10, bottom: 10),
     child: Container(
@@ -572,7 +572,7 @@ Widget pollutantIndicators(data, extendedAqi, ColorScheme palette) {
   );
 }
 
-Widget europeanAndUsAqi(data, extendedAqi, ColorScheme palette, context) {
+Widget europeanAndUsAqi(data, extendedAqi, ColorScheme palette, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(top: 10),
     child: Row(
@@ -642,7 +642,7 @@ Widget europeanAndUsAqi(data, extendedAqi, ColorScheme palette, context) {
   );
 }
 
-Widget dailyAqi(data, extendedAqi, ColorScheme palette, context, highestAqi) {
+Widget dailyAqi(data, extendedAqi, ColorScheme palette, BuildContext context, highestAqi) {
   return Column(
     children: [
       Padding(
@@ -709,7 +709,7 @@ Widget dailyAqi(data, extendedAqi, ColorScheme palette, context, highestAqi) {
   );
 }
 
-Widget dustAndAODIndicators(data, extendedAqi, ColorScheme palette, context) {
+Widget dustAndAODIndicators(data, extendedAqi, ColorScheme palette, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(top: 10),
     child: Row(
@@ -958,7 +958,7 @@ class AQIGraphPainter extends CustomPainter {
 }
 
 Widget HourlyQqi(
-    data, hourValues, name, extendedAqi, context, ColorScheme palette) {
+    data, hourValues, name, extendedAqi, BuildContext context, ColorScheme palette) {
   const chartTypes = <List<int>>[
     [0, 2, 4, 6, 8, 10],
     [0, 5, 10, 15, 20, 25],

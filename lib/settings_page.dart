@@ -214,8 +214,8 @@ Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
       });
 }
 
-Widget settingEntry(
-    icon, text, settings, ColorScheme palette, updatePage, rawText, context) {
+Widget settingEntry(icon, text, settings, ColorScheme palette, updatePage,
+    rawText, BuildContext context) {
   return GestureDetector(
     behavior: HitTestBehavior.translucent,
     onTap: () {

@@ -245,7 +245,7 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
   }
 }
 
-Widget aqiWidget(var data, ColorScheme palette, context, bool isTabletMode) {
+Widget aqiWidget(var data, ColorScheme palette, BuildContext context, bool isTabletMode) {
   return Column(
     children: [
       Padding(
@@ -334,7 +334,7 @@ Widget aqiWidget(var data, ColorScheme palette, context, bool isTabletMode) {
   );
 }
 
-Widget alertWidget(var data, context, ColorScheme palette) {
+Widget alertWidget(var data, BuildContext context, ColorScheme palette) {
   if (data.alerts.length > 0) {
     return Padding(
         padding:
@@ -415,7 +415,7 @@ Widget alertWidget(var data, context, ColorScheme palette) {
   return Container();
 }
 
-Widget rain15MinuteChart(var data, ColorScheme palette, context) {
+Widget rain15MinuteChart(var data, ColorScheme palette, BuildContext context) {
   if (data.minutely_15_precip.t_minus != '') {
     return Container(
       margin: const EdgeInsets.only(left: 23, right: 23, top: 15, bottom: 30),

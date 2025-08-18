@@ -101,7 +101,7 @@ class ParrallaxBackground extends StatelessWidget {
   }
 }
 
-Widget Circles(var data, double bottom, context, ColorScheme palette) {
+Widget Circles(var data, double bottom, BuildContext context, ColorScheme palette) {
   return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 13, top: 2),
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -481,7 +481,7 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
 }
 
 Widget providerSelector(settings, updateLocation, ColorScheme palette, provider,
-    latlng, realLoc, context) {
+    latlng, realLoc, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 25, right: 25, bottom: 80, top: 35),
     child: Column(

@@ -29,7 +29,7 @@ import 'package:stretchy_header/stretchy_header.dart';
 class NewMain extends StatefulWidget {
   final data;
   final updateLocation;
-  final context;
+  final BuildContext context;
 
   const NewMain(
       {super.key,
@@ -45,7 +45,7 @@ class _NewMainState extends State<NewMain> {
   final data;
   final updateLocation;
   @override
-  final context;
+  final BuildContext context;
 
   _NewMainState(this.data, this.updateLocation, this.context);
 
