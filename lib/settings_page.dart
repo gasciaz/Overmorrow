@@ -395,16 +395,16 @@ class SettingsMain extends StatelessWidget {
   final Map<String, String> settings;
   final void Function(String, String) updatePage;
   final Image image;
-  final colornotify;
+  final ValueNotifier<ColorPalette> colornotify;
 
   const SettingsMain(
       {super.key,
       required this.settings,
       required this.updatePage,
       required this.goBack,
-      this.image,
+      required this.image,
       required this.palette,
-      this.colornotify});
+      required this.colornotify});
 
   @override
   Widget build(BuildContext context) {

@@ -199,7 +199,7 @@ Widget NewSettings(
 class AppearancePage extends StatefulWidget {
   final Map<String, String> settings;
   final Image image;
-  final colornotify;
+  final ValueNotifier<ColorPalette> colornotify;
   final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
@@ -223,7 +223,7 @@ class AppearancePage extends StatefulWidget {
 class _AppearancePageState extends State<AppearancePage> {
   final Image image;
   final Map<String, String> settings;
-  final colornotify;
+  final ValueNotifier<ColorPalette> colornotify;
   final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
