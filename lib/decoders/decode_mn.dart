@@ -88,7 +88,7 @@ int metNcalculateFeelsLike(double t, double r, double v) {
 }
 
 String metNGetName(
-    index, settings, item, start, hourDif, AppLocalizations localizations) {
+    int index, settings, item, start, hourDif, AppLocalizations localizations) {
   final String x =
       item['properties']['timeseries'][start]['time'].split('T')[0];
   final String hour = item['properties']['timeseries'][start]['time']
@@ -324,7 +324,7 @@ class MetNDay {
     required this.wind_dir,
   });
 
-  static MetNDay fromJson(item, settings, start, end, index, hourDif,
+  static MetNDay fromJson(item, settings, start, end, int index, hourDif,
       AppLocalizations localizations) {
     final temperatures = <int>[];
     final rawTemps = <double>[];

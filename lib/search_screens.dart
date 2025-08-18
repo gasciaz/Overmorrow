@@ -993,8 +993,13 @@ Widget reorderFavorites(items, Map<String, String> settings, onFavChanged,
   );
 }
 
-Widget reorderableItem(List<dynamic> items, index, Map<String, String> settings,
-    ColorScheme palette, onFavChanged, bool isTabletMode) {
+Widget reorderableItem(
+    List<dynamic> items,
+    int index,
+    Map<String, String> settings,
+    ColorScheme palette,
+    onFavChanged,
+    bool isTabletMode) {
   final split = json.decode(items[index]);
   final String name = split['name'];
   final country = generateAbbreviation(split['country']);

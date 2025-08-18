@@ -37,7 +37,7 @@ String OMConvertTime(String time) {
   return time.split('T')[1];
 }
 
-String OmAqiDesc(index, AppLocalizations localizations) {
+String OmAqiDesc(int index, AppLocalizations localizations) {
   return [
     localizations.goodAqiDesc,
     localizations.fairAqiDesc,
@@ -48,7 +48,7 @@ String OmAqiDesc(index, AppLocalizations localizations) {
   ][index - 1];
 }
 
-String OmAqiTitle(index, AppLocalizations localizations) {
+String OmAqiTitle(int index, AppLocalizations localizations) {
   return [
     localizations.good,
     localizations.fair,
@@ -191,7 +191,7 @@ Future<List<dynamic>> OMRequestData(
 }
 
 String oMGetName(
-    index, settings, item, dayDif, AppLocalizations localizations) {
+    int index, settings, item, dayDif, AppLocalizations localizations) {
   final String x = item['daily']['time'][index].split('T')[0];
   final z = x.split('-');
   final time = DateTime(int.parse(z[0]), int.parse(z[1]), int.parse(z[2]));
@@ -405,7 +405,7 @@ class OMDay {
     required this.wind_dir,
   });
 
-  static OMDay? build(item, settings, index, sunstatus, approximatelocal,
+  static OMDay? build(item, settings, int index, sunstatus, approximatelocal,
       dayDif, AppLocalizations localizations) {
     final hours = buildHours(index, true, item, settings, sunstatus,
         approximatelocal, localizations);

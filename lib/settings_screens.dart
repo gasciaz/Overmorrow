@@ -87,8 +87,13 @@ Widget mainSettingEntry(
   );
 }
 
-Widget NewSettings(Map<String, String> settings, Function updatePage,
-    Image image, ColorScheme palette, BuildContext context, colornotify) {
+Widget NewSettings(
+    Map<String, String> settings,
+    void Function(String, String) updatePage,
+    Image image,
+    ColorScheme palette,
+    BuildContext context,
+    colornotify) {
   final localizations = AppLocalizations.of(context)!;
 
   return Padding(
@@ -195,7 +200,7 @@ class AppearancePage extends StatefulWidget {
   final Map<String, String> settings;
   final image;
   final colornotify;
-  final updateMainPage;
+  final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
   const AppearancePage(
@@ -219,7 +224,7 @@ class _AppearancePageState extends State<AppearancePage> {
   final image;
   final Map<String, String> settings;
   final colornotify;
-  final updateMainPage;
+  final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
   _AppearancePageState(
@@ -481,7 +486,7 @@ class UnitsPage extends StatefulWidget {
   final Map<String, String> settings;
   final image;
   final palette;
-  final updateMainPage;
+  final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
   const UnitsPage(
@@ -505,7 +510,7 @@ class _UnitsPageState extends State<UnitsPage> {
   final image;
   final Map<String, String> settings;
   final ColorScheme palette;
-  final updateMainPage;
+  final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
   _UnitsPageState(
@@ -601,7 +606,7 @@ class GeneralSettingsPage extends StatefulWidget {
   final Map<String, String> settings;
   final image;
   final palette;
-  final updateMainPage;
+  final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
   const GeneralSettingsPage(
@@ -625,7 +630,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
   final image;
   final Map<String, String> settings;
   final ColorScheme palette;
-  final updateMainPage;
+  final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
   _GeneralSettingsPageState(
@@ -743,7 +748,7 @@ class LangaugePage extends StatefulWidget {
   final Map<String, String> settings;
   final image;
   final palette;
-  final updateMainPage;
+  final void Function(String, String) updateMainPage;
 
   const LangaugePage(
       {super.key,
@@ -764,7 +769,7 @@ class _LangaugePageState extends State<LangaugePage> {
   final image;
   final Map<String, String> settings;
   final ColorScheme palette;
-  final updateMainPage;
+  final void Function(String, String) updateMainPage;
 
   _LangaugePageState(
       {required this.image,
@@ -817,7 +822,7 @@ class _LangaugePageState extends State<LangaugePage> {
 
 class TranslationSelection extends StatelessWidget {
   final VoidCallback goBack;
-  final onTap;
+  final ValueChanged<String?>? onTap;
   final Map<String, String> settings;
   final options;
   final selected;
@@ -938,7 +943,7 @@ class LayoutPage extends StatefulWidget {
   final Map<String, String> settings;
   final image;
   final ColorScheme palette;
-  final updateMainPage;
+  final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
   const LayoutPage(
@@ -962,7 +967,7 @@ class _LayoutPageState extends State<LayoutPage> {
   final image;
   final Map<String, String> settings;
   final ColorScheme palette;
-  final updateMainPage;
+  final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
   _LayoutPageState(

@@ -208,7 +208,7 @@ class _buildDaysState extends State<buildDays>
 }
 
 Widget dailyCollapsed(WeatherData data, var day, ColorScheme palette, int index,
-    int daysToShow, onExpandTapped) {
+    int daysToShow, void Function(int) onExpandTapped) {
   return GestureDetector(
     behavior: HitTestBehavior.translucent,
     onTap: () {
@@ -297,8 +297,8 @@ Widget dailyCollapsed(WeatherData data, var day, ColorScheme palette, int index,
   );
 }
 
-Widget dailyExpanded(
-    var day, WeatherData data, ColorScheme palette, onExpandTapped, index) {
+Widget dailyExpanded(var day, WeatherData data, ColorScheme palette,
+    void Function(int) onExpandTapped, int index) {
   return Padding(
     padding: const EdgeInsets.only(left: 13, right: 13, bottom: 16),
     child: Column(

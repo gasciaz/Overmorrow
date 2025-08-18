@@ -393,7 +393,7 @@ class SettingsMain extends StatelessWidget {
   final ColorScheme palette;
   final VoidCallback goBack;
   final Map<String, String> settings;
-  final Function updatePage;
+  final void Function(String, String) updatePage;
   final image;
   final colornotify;
 

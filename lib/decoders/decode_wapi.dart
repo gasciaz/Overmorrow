@@ -207,7 +207,7 @@ String getTime(date, bool ampm) {
   }
 }
 
-String wapiGetName(index, settings, AppLocalizations localizations, item) {
+String wapiGetName(int index, settings, AppLocalizations localizations, item) {
   final time = DateTime.parse(item['date']);
   final weeks = <String>[
     localizations.mon,
@@ -395,7 +395,7 @@ class WapiDay {
     required this.wind_dir,
   });
 
-  static WapiDay fromJson(item, index, Map<String, String> settings,
+  static WapiDay fromJson(item, int index, Map<String, String> settings,
           approximatelocal, AppLocalizations localizations) =>
       WapiDay(
           text: textCorrection(
