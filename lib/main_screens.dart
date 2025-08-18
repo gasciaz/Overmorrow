@@ -23,6 +23,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:overmorrow/daily.dart';
 import 'package:overmorrow/radar.dart';
 import 'package:stretchy_header/stretchy_header.dart';
+
 import 'hourly.dart';
 import 'main_ui.dart';
 import 'new_displays.dart';
@@ -33,7 +34,12 @@ class NewMain extends StatefulWidget {
   final updateLocation;
   final context;
 
-  NewMain({Key? key, required this.data, required this.updateLocation, required this.context}) : super(key: key);
+  NewMain(
+      {Key? key,
+      required this.data,
+      required this.updateLocation,
+      required this.context})
+      : super(key: key);
 
   @override
   _NewMainState createState() => _NewMainState(data, updateLocation, context);
@@ -120,21 +126,30 @@ class _NewMainState extends State<NewMain> {
 
   @override
   Widget build(BuildContext context) {
-
-    final FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
+    final FlutterView view =
+        WidgetsBinding.instance.platformDispatcher.views.first;
     final Size size = (view.physicalSize) / view.devicePixelRatio;
 
     final Map<String, Widget> widgetsMap = {
-      'sunstatus': NewSunriseSunset(data: data, key: Key(data.place), width: size.width,),
+      'sunstatus': NewSunriseSunset(
+        data: data,
+        key: Key(data.place),
+        width: size.width,
+      ),
       'rain indicator': rain15MinuteChart(data, data.current.palette, context),
-      'hourly': NewHourly(data: data, hours: data.hourly72, elevated: false,),
-      'alerts' : alertWidget(data, context, data.current.palette),
+      'hourly': NewHourly(
+        data: data,
+        hours: data.hourly72,
+        elevated: false,
+      ),
+      'alerts': alertWidget(data, context, data.current.palette),
       'radar': RadarSmall(data: data),
       'daily': buildDays(data: data),
       'air quality': aqiWidget(data, data.current.palette, context, false)
     };
 
-    final List<String> order = data.settings["Layout"] == "" ? [] : data.settings["Layout"].split(",");
+    final List<String> order =
+        data.settings["Layout"] == "" ? [] : data.settings["Layout"].split(",");
     List<Widget> orderedWidgets = [];
     if (order.isNotEmpty && order[0] != "") {
       orderedWidgets = order.map((name) => widgetsMap[name]!).toList();
@@ -142,7 +157,8 @@ class _NewMainState extends State<NewMain> {
 
     String colorMode = data.settings["Color mode"];
     if (colorMode == "auto") {
-      var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+      var brightness =
+          SchedulerBinding.instance.platformDispatcher.platformBrightness;
       colorMode = brightness == Brightness.dark ? "dark" : "light";
     }
 
@@ -151,40 +167,49 @@ class _NewMainState extends State<NewMain> {
       body: StretchyHeader.listView(
         displacement: 130,
         onRefresh: () async {
-          await updateLocation("${data.lat}, ${data.lng}", data.real_loc, time: 400);
+          await updateLocation("${data.lat}, ${data.lng}", data.real_loc,
+              time: 400);
         },
         headerData: HeaderData(
-          //backgroundColor: WHITE,
-          blurContent: false,
-          headerHeight: (size.height ) * 0.495,
-          header: ParrallaxBackground(image: data.current.imageService.image, key: Key(data.place),
-              color: BLACK),
-          overlay: Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 26, right: 26, bottom: 26),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Spacer(),
-                    comfortatext(
-                        "${data.current.temp}°", 75, data.settings,
-                        color: data.current.colorPop, weight: FontWeight.w200,
-                    ),
-                    comfortatext(
-                        data.current.text, 33, data.settings,
-                        weight: FontWeight.w400,
-                        color: data.current.descColor)
-                  ],
+            //backgroundColor: WHITE,
+            blurContent: false,
+            headerHeight: (size.height) * 0.495,
+            header: ParrallaxBackground(
+                image: data.current.imageService.image,
+                key: Key(data.place),
+                color: BLACK),
+            overlay: Stack(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 26, right: 26, bottom: 26),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Spacer(),
+                      comfortatext(
+                        "${data.current.temp}°",
+                        75,
+                        data.settings,
+                        color: data.current.colorPop,
+                        weight: FontWeight.w200,
+                      ),
+                      comfortatext(data.current.text, 33, data.settings,
+                          weight: FontWeight.w400,
+                          color: data.current.descColor)
+                    ],
+                  ),
                 ),
-              ),
-
-              MySearchParent(updateLocation: updateLocation, palette: data.current.palette, place: data.place,
-                settings: data.settings, image: data.current.imageService.image, isTabletMode: false,
-              ),
-            ],
-          )
-        ),
+                MySearchParent(
+                  updateLocation: updateLocation,
+                  palette: data.current.palette,
+                  place: data.place,
+                  settings: data.settings,
+                  image: data.current.imageService.image,
+                  isTabletMode: false,
+                ),
+              ],
+            )),
         children: [
           FadingWidget(
             data: data,
@@ -192,7 +217,7 @@ class _NewMainState extends State<NewMain> {
           ),
           Circles(data, 0.5, context, data.current.palette),
 
-            /*
+          /*
             Padding(
               padding: const EdgeInsets.only(left: 30),
               child: SizedBox(
@@ -224,14 +249,19 @@ class _NewMainState extends State<NewMain> {
               return widget;
             }).toList(),
           ),
-          providerSelector(data.settings, updateLocation, data.current.palette, data.provider,
-            "${data.lat}, ${data.lng}", data.real_loc, context),
+          providerSelector(
+              data.settings,
+              updateLocation,
+              data.current.palette,
+              data.provider,
+              "${data.lat}, ${data.lng}",
+              data.real_loc,
+              context),
         ],
       ),
     );
   }
 }
-
 
 class TabletLayout extends StatelessWidget {
   final data;
@@ -241,7 +271,6 @@ class TabletLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
 
     Size size = view.physicalSize / view.devicePixelRatio;
@@ -257,116 +286,147 @@ class TabletLayout extends StatelessWidget {
           children: [
             SizedBox(
               width: panelWidth,
-              child: MySearchParent(updateLocation: updateLocation, palette: data.current.palette, place: data.place,
-                settings: data.settings, image: data.current.imageService.image, isTabletMode: true,
+              child: MySearchParent(
+                updateLocation: updateLocation,
+                palette: data.current.palette,
+                place: data.place,
+                settings: data.settings,
+                image: data.current.imageService.image,
+                isTabletMode: true,
               ),
             ),
-
             Expanded(
               child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  return StretchyHeader.listView(
-                    displacement: 130,
-                    onRefresh: () async {
-                      await updateLocation(
-                          "${data.lat}, ${data.lng}", data.real_loc, time: 400);
-                    },
-                    headerData: HeaderData(
-                        blurContent: false,
-                        headerHeight: (size.height) * 0.43,
-                        header: ParrallaxBackground(image: data.current.imageService.image, color: BLACK),
-                        overlay: Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: Align(
-                            alignment: Alignment.topLeft,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: palette.inverseSurface,
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              padding: const EdgeInsets.all(18),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.place_outlined, color: palette.onInverseSurface, size: 22,),
-                                  const SizedBox(width: 4,),
-                                  comfortatext(data.place, 22, data.settings, color: palette.onInverseSurface)
-                                ],
-                              ),
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                return StretchyHeader.listView(
+                  displacement: 130,
+                  onRefresh: () async {
+                    await updateLocation(
+                        "${data.lat}, ${data.lng}", data.real_loc,
+                        time: 400);
+                  },
+                  headerData: HeaderData(
+                      blurContent: false,
+                      headerHeight: (size.height) * 0.43,
+                      header: ParrallaxBackground(
+                          image: data.current.imageService.image, color: BLACK),
+                      overlay: Padding(
+                        padding: const EdgeInsets.all(30),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: palette.inverseSurface,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            padding: const EdgeInsets.all(18),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.place_outlined,
+                                  color: palette.onInverseSurface,
+                                  size: 22,
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                comfortatext(data.place, 22, data.settings,
+                                    color: palette.onInverseSurface)
+                              ],
                             ),
                           ),
-                        )
-                    ),
-                    children: [
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: FadingWidget(data: data, time: data.updatedTime, key: Key(data.updatedTime.toString())),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  bottom: 7, left: 30),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  comfortatext("${data.current.temp}°", 72, data.settings,
-                                      color: palette.primary, weight: FontWeight.w200),
-                                  comfortatext(data.current.text, 27, data.settings,
-                                      color: palette.onSurface, weight: FontWeight.w400),
-                                ],
-                              ),
-                            ),
-                            const Spacer(),
-                            SizedBox(
-                              width: 397,
-                              child: Circles(data, 0.3, context, data.current.palette)
-                            ),
-                          ],
                         ),
-                      ),
-
-                      NewSunriseSunset(data: data, key: Key(data.place), width: constraints.maxWidth,),
-                      NewHourly(data: data, hours: data.hourly72, elevated: false,),
-                      Row(
+                      )),
+                  children: [
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: FadingWidget(
+                          data: data,
+                          time: data.updatedTime,
+                          key: Key(data.updatedTime.toString())),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 0),
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 7, left: 30),
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const SizedBox(height: 15,),
-                                rain15MinuteChart(
-                                    data, data.current.palette, context),
-                                RadarSmall(data: data),
-                                aqiWidget(data, data.current.palette, context, true),
-                                providerSelector(data.settings, updateLocation, data.current.palette,
-                                    data.provider, "${data.lat}, ${data.lng}", data.real_loc, context),
+                                comfortatext(
+                                    "${data.current.temp}°", 72, data.settings,
+                                    color: palette.primary,
+                                    weight: FontWeight.w200),
+                                comfortatext(
+                                    data.current.text, 27, data.settings,
+                                    color: palette.onSurface,
+                                    weight: FontWeight.w400),
                               ],
                             ),
                           ),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                //since it's only available with weatherapi, and in that case there are only 3 days
-                                //this makes the two sides more even
-                                alertWidget(data, context, data.current.palette),
-                                buildDays(data: data),
-                              ],
-                            ),
-                          )
+                          const Spacer(),
+                          SizedBox(
+                              width: 397,
+                              child: Circles(
+                                  data, 0.3, context, data.current.palette)),
                         ],
                       ),
-
-                    ],
-                  );
-                }
-              ),
+                    ),
+                    NewSunriseSunset(
+                      data: data,
+                      key: Key(data.place),
+                      width: constraints.maxWidth,
+                    ),
+                    NewHourly(
+                      data: data,
+                      hours: data.hourly72,
+                      elevated: false,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              rain15MinuteChart(
+                                  data, data.current.palette, context),
+                              RadarSmall(data: data),
+                              aqiWidget(
+                                  data, data.current.palette, context, true),
+                              providerSelector(
+                                  data.settings,
+                                  updateLocation,
+                                  data.current.palette,
+                                  data.provider,
+                                  "${data.lat}, ${data.lng}",
+                                  data.real_loc,
+                                  context),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              //since it's only available with weatherapi, and in that case there are only 3 days
+                              //this makes the two sides more even
+                              alertWidget(data, context, data.current.palette),
+                              buildDays(data: data),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                );
+              }),
             ),
           ],
-        )
-    );
+        ));
   }
 }
