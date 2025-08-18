@@ -192,11 +192,11 @@ Widget NewSettings(Map<String, String> settings, Function updatePage,
 }
 
 class AppearancePage extends StatefulWidget {
-  final settings;
+  final Map<String, String> settings;
   final image;
   final colornotify;
   final updateMainPage;
-  final localizations;
+  final AppLocalizations localizations;
 
   const AppearancePage(
       {super.key,
@@ -217,10 +217,10 @@ class AppearancePage extends StatefulWidget {
 
 class _AppearancePageState extends State<AppearancePage> {
   final image;
-  final settings;
+  final Map<String, String> settings;
   final colornotify;
   final updateMainPage;
-  final localizations;
+  final AppLocalizations localizations;
 
   _AppearancePageState(
       {required this.image,
@@ -271,7 +271,7 @@ class AppearanceSelector extends StatelessWidget {
   final Map<String, String> settings;
   final ColorPalette colorPalette;
   final updatePage;
-  final localizations;
+  final AppLocalizations localizations;
   final goBack;
 
   const AppearanceSelector(
@@ -482,7 +482,7 @@ class UnitsPage extends StatefulWidget {
   final image;
   final palette;
   final updateMainPage;
-  final localizations;
+  final AppLocalizations localizations;
 
   const UnitsPage(
       {super.key,
@@ -506,7 +506,7 @@ class _UnitsPageState extends State<UnitsPage> {
   final Map<String, String> settings;
   final ColorScheme palette;
   final updateMainPage;
-  final localizations;
+  final AppLocalizations localizations;
 
   _UnitsPageState(
       {required this.image,
@@ -602,7 +602,7 @@ class GeneralSettingsPage extends StatefulWidget {
   final image;
   final palette;
   final updateMainPage;
-  final localizations;
+  final AppLocalizations localizations;
 
   const GeneralSettingsPage(
       {super.key,
@@ -626,7 +626,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
   final Map<String, String> settings;
   final ColorScheme palette;
   final updateMainPage;
-  final localizations;
+  final AppLocalizations localizations;
 
   _GeneralSettingsPageState(
       {required this.image,

@@ -34,10 +34,10 @@ import 'package:overmorrow/services/image_service.dart';
 import 'package:overmorrow/ui_helper.dart';
 import 'package:overmorrow/weather_refact.dart';
 
-String metNTextCorrection(String text, bool shouldTranslate, localizations) {
+String metNTextCorrection(String text, bool shouldTranslate, AppLocalizations? localizations) {
   var p = metNWeatherToText[text] ?? 'Clear Sky';
   if (shouldTranslate) {
-    p = conditionTranslation(p, localizations) ?? 'TranslationErr';
+    p = conditionTranslation(p, localizations!) ?? 'TranslationErr';
   }
   return p;
 }
@@ -86,7 +86,7 @@ int metNcalculateFeelsLike(double t, double r, double v) {
   }
 }
 
-String metNGetName(index, settings, item, start, hourDif, localizations) {
+String metNGetName(index, settings, item, start, hourDif, AppLocalizations localizations) {
   final String x = item['properties']['timeseries'][start]['time'].split('T')[0];
   final String hour = item['properties']['timeseries'][start]['time']
       .split('T')[1]
@@ -237,7 +237,7 @@ class MetNCurrent {
   });
 
   static Future<MetNCurrent> fromJson(
-      item, settings, realLoc, lat, lng, localizations) async {
+      item, settings, realLoc, lat, lng, AppLocalizations localizations) async {
     final currentCondition = metNTextCorrection(
         item['properties']['timeseries'][0]['data']['next_1_hours']['summary']
             ['symbol_code'],
@@ -322,7 +322,7 @@ class MetNDay {
   });
 
   static MetNDay fromJson(
-      item, settings, start, end, index, hourDif, localizations) {
+      item, settings, start, end, index, hourDif, AppLocalizations localizations) {
     final var temperatures = <int>[];
     final var rawTemps = <double>[];
     final var windspeeds = <double>[];
@@ -438,7 +438,7 @@ class MetNHour {
     required this.rawText,
   });
 
-  static MetNHour fromJson(item, settings, hourDif, localizations) {
+  static MetNHour fromJson(item, settings, hourDif, AppLocalizations localizations) {
     final nextHours =
         item['data']['next_1_hours'] ?? item['data']['next_6_hours'];
 

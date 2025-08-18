@@ -37,7 +37,7 @@ String OMConvertTime(String time) {
   return time.split('T')[1];
 }
 
-String OmAqiDesc(index, localizations) {
+String OmAqiDesc(index, AppLocalizations localizations) {
   return [
     localizations.goodAqiDesc,
     localizations.fairAqiDesc,
@@ -48,7 +48,7 @@ String OmAqiDesc(index, localizations) {
   ][index - 1];
 }
 
-String OmAqiTitle(index, localizations) {
+String OmAqiTitle(index, AppLocalizations localizations) {
   return [
     localizations.good,
     localizations.fair,
@@ -188,7 +188,7 @@ Future<List<dynamic>> OMRequestData(
   return [OMData, fetchDatetime, isonline];
 }
 
-String oMGetName(index, settings, item, dayDif, localizations) {
+String oMGetName(index, settings, item, dayDif, AppLocalizations localizations) {
   final String x = item['daily']['time'][index].split('T')[0];
   final z = x.split('-');
   final var time = DateTime(int.parse(z[0]), int.parse(z[1]), int.parse(z[2]));
@@ -311,7 +311,7 @@ class OMCurrent {
   });
 
   static Future<OMCurrent> fromJson(item, settings, sunstatus, timenow,
-      realLoc, lat, lng, start, dayDif, context, bool isonline) async {
+      realLoc, lat, lng, start, dayDif, AppLocalizations context, bool isonline) async {
     var currentCondition = oMCurrentTextCorrection(
         item['current']['weather_code'],
         sunstatus.absoluteSunriseSunset,
@@ -403,7 +403,7 @@ class OMDay {
   });
 
   static OMDay? build(item, settings, index, sunstatus, approximatelocal,
-      dayDif, localizations) {
+      dayDif, AppLocalizations localizations) {
     final hours = buildHours(index, true, item, settings, sunstatus,
         approximatelocal, localizations);
 
@@ -444,7 +444,7 @@ class OMDay {
   }
 
   static List<OMHour> buildHours(index, getRidFirst, item, settings,
-      sunstatus, approximatelocal, localizations) {
+      sunstatus, approximatelocal, AppLocalizations localizations) {
     final hourly = <OMHour>[];
 
     final int l = item['hourly']['weather_code'].length;
@@ -576,7 +576,7 @@ class OMHour {
     required this.precip_prob,
   });
 
-  static OMHour fromJson(item, index, settings, sunstatus, localizations) =>
+  static OMHour fromJson(item, index, settings, sunstatus, AppLocalizations localizations) =>
       OMHour(
         temp: unit_coversion(item['hourly']['temperature_2m'][index],
                 settings['Temperature'])
@@ -651,7 +651,7 @@ class OMAqi {
     required this.aqi_index,
   });
 
-  static Future<OMAqi> fromJson(lat, lng, settings, localizations) async {
+  static Future<OMAqi> fromJson(lat, lng, settings, AppLocalizations localizations) async {
     final params = {
       'latitude': lat.toString(),
       'longitude': lng.toString(),

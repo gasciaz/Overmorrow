@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
 import 'package:overmorrow/Icons/overmorrow_weather_icons3_icons.dart';
-
+import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
 
 Map<String, Locale> languageNameToLocale = {
@@ -83,7 +83,7 @@ Map<String, String> conditionToCollection = {
   'Cloudy Night': 'ymdgzsktNTE'
 };
 
-String? conditionTranslation(String key, localizations) {
+String? conditionTranslation(String key, AppLocalizations localizations) {
   final localizationMap = {
     'Clear Night': localizations.clearNight,
     'Partly Cloudy': localizations.partlyCloudy,

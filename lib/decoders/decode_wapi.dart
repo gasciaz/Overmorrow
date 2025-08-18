@@ -70,7 +70,7 @@ int wapiGetWindDir(var data) {
   return (total / data.length).round();
 }
 
-List<WapiAlert> getWapiAlerts(var data, localizations) {
+List<WapiAlert> getWapiAlerts(WeatherData data, AppLocalizations localizations) {
   final alerts = <WapiAlert>[];
   final alertList = data['alerts']['alert'];
   //for some reason weatherapi sometimes returns like 5 of the same alerts, so i have to manually remove duplicates
@@ -178,7 +178,7 @@ double unit_coversion(double value, String unit, {decimals = 2}) {
   return a;
 }
 
-IconData iconCorrection(name, isday, localizations) {
+IconData iconCorrection(name, isday, AppLocalizations localizations) {
   final text = textCorrection(name, isday, false, localizations);
   //String p = weather_refactor.textIconMap[text] ?? 'clear_night.png';
   return textMaterialIcon[text] ?? OvermorrowWeatherIcons3.clear_sky;
@@ -206,7 +206,7 @@ String getTime(date, bool ampm) {
   }
 }
 
-String wapiGetName(index, settings, localizations, item) {
+String wapiGetName(index, settings, AppLocalizations localizations, item) {
   final time = DateTime.parse(item['date']);
   final weeks = <String>[
     localizations.mon,
@@ -251,14 +251,14 @@ String getDateStringFromLocalTime(DateTime now) {
   return '${weekNames[now.weekday - 1]}, ${monthNames[now.month - 1]} ${now.day}';
 }
 
-String backdropCorrection(name, isday, localizations) {
+String backdropCorrection(name, isday, AppLocalizations localizations) {
   final var text = textCorrection(name, isday, false, localizations);
   final var backdrop = weather_refactor.textBackground[text] ?? 'haze.jpg';
 
   return backdrop;
 }
 
-String textCorrection(name, isday, bool ShouldTranslate, localizations) {
+String textCorrection(name, isday, bool ShouldTranslate, AppLocalizations? localizations) {
   var x = weather_refactor.weatherTextMap[name] ?? 'Clear Sky';
   if (x == 'Clear Sky') {
     if (isday == 1) {
@@ -275,7 +275,7 @@ String textCorrection(name, isday, bool ShouldTranslate, localizations) {
   }
 
   if (ShouldTranslate) {
-    x = conditionTranslation(x, localizations) ?? 'TranslationErr';
+    x = conditionTranslation(x, localizations!) ?? 'TranslationErr';
   }
   return x;
 }
@@ -313,7 +313,7 @@ class WapiCurrent {
   });
 
   static Future<WapiCurrent> fromJson(
-      item, settings, realLoc, lat, lng, start, localizations) async {
+      item, settings, realLoc, lat, lng, start, AppLocalizations localizations) async {
     final currentCondition = textCorrection(
         item['hour'][start]['condition']['code'],
         item['hour'][start]['is_day'],
@@ -394,7 +394,7 @@ class WapiDay {
   });
 
   static WapiDay fromJson(
-          item, index, settings, approximatelocal, localizations) =>
+          item, index, Map<String, String> settings, approximatelocal, AppLocalizations localizations) =>
       WapiDay(
           text: textCorrection(
               item['day']['condition']['code'], 1, true, localizations),
@@ -428,8 +428,8 @@ class WapiDay {
           uv: item['day']['uv'].round(),
           wind_dir: wapiGetWindDir(item['hour']));
 
-  static List<WapiHour> buildWapiHour(data, settings, int index,
-      DateTime approximatelocal, bool getRidFirst, localizations) {
+  static List<WapiHour> buildWapiHour(data, Map<String, String> settings, int index,
+      DateTime approximatelocal, bool getRidFirst, AppLocalizations localizations) {
     final var hourly = <WapiHour>[];
 
     for (var i = 0; i < 24; i++) {
@@ -476,7 +476,7 @@ class WapiHour {
     required this.precip_prob,
   });
 
-  static WapiHour fromJson(item, settings, localizations) => WapiHour(
+  static WapiHour fromJson(item, Map<String, String> settings, AppLocalizations localizations) => WapiHour(
         text: textCorrection(
             item['condition']['code'], item['is_day'], true, localizations),
         icon: iconCorrection(
@@ -512,7 +512,7 @@ class WapiSunstatus {
     required this.absoluteSunriseSunset,
   });
 
-  static WapiSunstatus fromJson(item, settings, localtime) => WapiSunstatus(
+  static WapiSunstatus fromJson(item, Map<String, String> settings, localtime) => WapiSunstatus(
         sunrise: settings['Time mode'] == '24 hour'
             ? convertTime(
                 item['forecast']['forecastday'][0]['astro']['sunrise'])
@@ -585,7 +585,7 @@ class WapiAlert {
     required this.areas,
   });
 
-  static WapiAlert fromJson(item, localizations) {
+  static WapiAlert fromJson(item, AppLocalizations localizations) {
     var start = DateTime.now();
     var end = DateTime.now();
 
@@ -637,7 +637,7 @@ class Wapi15MinutePrecip {
   });
 
   static Wapi15MinutePrecip fromJson(
-      item, settings, day, hour, AppLocalizations localizations) {
+      item, Map<String, String> settings, day, hour, AppLocalizations localizations) {
     var closest = 100;
     var end = -1;
     double sum = 0;
@@ -820,7 +820,7 @@ Future<WeatherData> WapiGetWeatherData(
       isonline: isonline);
 }
 
-Future<dynamic> wapiGetCurrentResponse(settings, placeName, lat, lon) async {
+Future<dynamic> wapiGetCurrentResponse(Map<String, String> settings, placeName, lat, lon) async {
   final params = {
     'key': wapi_Key,
     'q': '$lat, $lon',
@@ -835,7 +835,7 @@ Future<dynamic> wapiGetCurrentResponse(settings, placeName, lat, lon) async {
 }
 
 Future<LightCurrentWeatherData> wapiGetLightCurrentData(
-    settings, placeName, lat, lon) async {
+    Map<String, String> settings, placeName, lat, lon) async {
   final item = await wapiGetCurrentResponse(settings, placeName, lat, lon);
 
   final var now = DateTime.now();
@@ -852,7 +852,7 @@ Future<LightCurrentWeatherData> wapiGetLightCurrentData(
 }
 
 Future<LightWindData> wapiGetLightWindData(
-    settings, placeName, lat, lon) async {
+    Map<String, String> settings, placeName, lat, lon) async {
   final item = await wapiGetCurrentResponse(settings, placeName, lat, lon);
 
   return LightWindData(
@@ -864,7 +864,7 @@ Future<LightWindData> wapiGetLightWindData(
 }
 
 Future<LightHourlyForecastData> wapiGetLightHourlyData(
-    settings, placeName, lat, lon) async {
+    Map<String, String> settings, placeName, lat, lon) async {
   final params = {
     'key': wapi_Key,
     'q': '$lat, $lon',
