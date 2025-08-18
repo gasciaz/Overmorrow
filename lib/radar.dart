@@ -23,14 +23,13 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:overmorrow/ui_helper.dart';
 import 'package:latlong2/latlong.dart';
-import '../l10n/app_localizations.dart';
+import 'package:overmorrow/ui_helper.dart';
 
+import '../l10n/app_localizations.dart';
 import 'decoders/decode_OM.dart';
 
 class RadarSmall extends StatefulWidget {
-
   final data;
 
   const RadarSmall({Key? key, required this.data}) : super(key: key);
@@ -70,9 +69,9 @@ class _RadarSmallState extends State<RadarSmall> {
       int hour = (int.parse(split[0]) + offset) % 24;
       if (data.settings["Time mode"] == "12 hour") {
         times.add(OMamPmTime("jT$hour:${minute == "0" ? "00" : minute}"));
-      }
-      else {
-        times.add("${hour.toString().padLeft(2, "0")}:${minute == "0" ? "00" : minute}");
+      } else {
+        times.add(
+            "${hour.toString().padLeft(2, "0")}:${minute == "0" ? "00" : minute}");
       }
     }
 
@@ -83,7 +82,7 @@ class _RadarSmallState extends State<RadarSmall> {
         }
         setState(() {
           currentFrameIndex =
-          ((currentFrameIndex + 1) % (data.radar.images.length - 1));
+              ((currentFrameIndex + 1) % (data.radar.images.length - 1));
         });
       }
     });
@@ -100,8 +99,7 @@ class _RadarSmallState extends State<RadarSmall> {
       setState(() {
         isPlaying = !isPlaying;
       });
-    }
-    else {
+    } else {
       setState(() {
         hasBeenPlayed = true;
         currentFrameIndex = 0;
@@ -112,12 +110,12 @@ class _RadarSmallState extends State<RadarSmall> {
 
   @override
   Widget build(BuildContext context) {
-
     ColorScheme palette = data.current.palette;
     String mode = data.settings["Color mode"];
 
     if (mode == "auto") {
-      var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+      var brightness =
+          SchedulerBinding.instance.platformDispatcher.platformBrightness;
       mode = brightness == Brightness.dark ? "dark" : "light";
     }
 
@@ -128,86 +126,99 @@ class _RadarSmallState extends State<RadarSmall> {
           child: Align(
             alignment: Alignment.centerLeft,
             child: comfortatext(
-                AppLocalizations.of(context)!.radar, 17,
-                data.settings,
+                AppLocalizations.of(context)!.radar, 17, data.settings,
                 color: palette.onSurface),
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(
-              left: 23, right: 23, top: 14, bottom: 10,),
+            left: 23,
+            right: 23,
+            top: 14,
+            bottom: 10,
+          ),
           child: AspectRatio(
             aspectRatio: 1.65,
             child: Container(
               decoration: BoxDecoration(
                   color: palette.surface,
                   borderRadius: BorderRadius.circular(33),
-                  border: Border.all(
-                      width: 2, color: palette.outlineVariant)
-              ),
+                  border: Border.all(width: 2, color: palette.outlineVariant)),
               child: Stack(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(31),
-                    child: (data.isonline) ? FlutterMap(
-                      options: MapOptions(
-                        onTap: (tapPosition, point) =>
-                        {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => RadarBig(data: data,)),
-                          )
-                        },
-                        initialCenter: LatLng(data.lat, data.lng),
-                        initialZoom: 6,
-                        backgroundColor: mode == "dark"? const Color(0xff262626) : const Color(0xffD4DADC),
-                        keepAlive: true,
-                        maxZoom: 6,
-                        minZoom: 6,
-                        interactionOptions: const InteractionOptions(
-                            flags: InteractiveFlag.drag | InteractiveFlag
-                                .flingAnimation),
-                        cameraConstraint: CameraConstraint.containCenter(
-                          bounds: LatLngBounds(
-                            LatLng(data.lat - 3, data.lng - 3),
-                            LatLng(data.lat + 3, data.lng + 3),
-                          ),
-                        ),
-                      ),
-                      children: [
-                        TileLayer(
-                          urlTemplate: mode == "dark"
-                              ? 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png'
-                              : 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
-                        ),
-                        TileLayer(
-                          urlTemplate: data.radar.images[currentFrameIndex
-                              .toInt()] + "/256/{z}/{x}/{y}/2/1_1.png",
-                          //whoah i didn't know that the radar stuttering was because of a fading animation
-                          //this makes it so much more fluid, because there is no fade between frames
-                          tileDisplay: const TileDisplay.instantaneous(),
-                        ),
-                        MarkerLayer(
-                          markers: [
-                            Marker(
-                              point: LatLng(data.lat, data.lng),
-                              width: 54,
-                              height: 54,
-                              child: Padding(
-                                //try to make the bottom of the pointer where the place actually is
-                                padding: const EdgeInsets.only(bottom: 14),
-                                child: Icon(Icons.place_sharp, color: palette.inverseSurface, size: 38,),
+                      borderRadius: BorderRadius.circular(31),
+                      child: (data.isonline)
+                          ? FlutterMap(
+                              options: MapOptions(
+                                onTap: (tapPosition, point) => {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => RadarBig(
+                                              data: data,
+                                            )),
+                                  )
+                                },
+                                initialCenter: LatLng(data.lat, data.lng),
+                                initialZoom: 6,
+                                backgroundColor: mode == "dark"
+                                    ? const Color(0xff262626)
+                                    : const Color(0xffD4DADC),
+                                keepAlive: true,
+                                maxZoom: 6,
+                                minZoom: 6,
+                                interactionOptions: const InteractionOptions(
+                                    flags: InteractiveFlag.drag |
+                                        InteractiveFlag.flingAnimation),
+                                cameraConstraint:
+                                    CameraConstraint.containCenter(
+                                  bounds: LatLngBounds(
+                                    LatLng(data.lat - 3, data.lng - 3),
+                                    LatLng(data.lat + 3, data.lng + 3),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
-                        )
-                      ],
-                    )
-                    : Center(
-                        child: comfortatext("not available offline", 15, data.settings, color: palette.outline)
-                    )
-                  ),
+                              children: [
+                                TileLayer(
+                                  urlTemplate: mode == "dark"
+                                      ? 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png'
+                                      : 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
+                                ),
+                                TileLayer(
+                                  urlTemplate: data.radar
+                                          .images[currentFrameIndex.toInt()] +
+                                      "/256/{z}/{x}/{y}/2/1_1.png",
+                                  //whoah i didn't know that the radar stuttering was because of a fading animation
+                                  //this makes it so much more fluid, because there is no fade between frames
+                                  tileDisplay:
+                                      const TileDisplay.instantaneous(),
+                                ),
+                                MarkerLayer(
+                                  markers: [
+                                    Marker(
+                                      point: LatLng(data.lat, data.lng),
+                                      width: 54,
+                                      height: 54,
+                                      child: Padding(
+                                        //try to make the bottom of the pointer where the place actually is
+                                        padding:
+                                            const EdgeInsets.only(bottom: 14),
+                                        child: Icon(
+                                          Icons.place_sharp,
+                                          color: palette.inverseSurface,
+                                          size: 38,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            )
+                          : Center(
+                              child: comfortatext(
+                                  "not available offline", 15, data.settings,
+                                  color: palette.outline))),
                   Padding(
                     padding: const EdgeInsets.only(right: 10, top: 10),
                     child: Align(
@@ -224,8 +235,7 @@ class _RadarSmallState extends State<RadarSmall> {
                               backgroundColor: palette.secondaryContainer,
                               //side: BorderSide(width: 3, color: main),
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(19)
-                              ),
+                                  borderRadius: BorderRadius.circular(19)),
                             ),
                             onPressed: () {
                               HapticFeedback.selectionClick();
@@ -234,12 +244,17 @@ class _RadarSmallState extends State<RadarSmall> {
                               });
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) =>
-                                    RadarBig(data: data,)),
+                                MaterialPageRoute(
+                                    builder: (context) => RadarBig(
+                                          data: data,
+                                        )),
                               );
                             },
-                            child: Icon(Icons.open_in_full,
-                              color: palette.onSecondaryContainer, size: 20,),
+                            child: Icon(
+                              Icons.open_in_full,
+                              color: palette.onSecondaryContainer,
+                              size: 20,
+                            ),
                           ),
                         ),
                       ),
@@ -251,13 +266,17 @@ class _RadarSmallState extends State<RadarSmall> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 36, right: 32, bottom: 25, top: 5),
+          padding:
+              const EdgeInsets.only(left: 36, right: 32, bottom: 25, top: 5),
           child: Row(
             children: [
               AnimatedSwitcher(
                 duration: const Duration(milliseconds: 200),
                 transitionBuilder: (Widget child, Animation<double> animation) {
-                  return ScaleTransition(scale: animation, child: child,);
+                  return ScaleTransition(
+                    scale: animation,
+                    child: child,
+                  );
                 },
                 child: Hero(
                   tag: 'playpause',
@@ -271,21 +290,21 @@ class _RadarSmallState extends State<RadarSmall> {
                           padding: const EdgeInsets.all(10),
                           backgroundColor: palette.secondaryContainer,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                          )
-                      ),
+                            borderRadius: BorderRadius.circular(30),
+                          )),
                       onPressed: () async {
                         HapticFeedback.selectionClick();
                         togglePlayPause();
                       },
-                      child: Icon(isPlaying ? Icons.pause_outlined : Icons.play_arrow,
-                        color: palette.onSecondaryContainer, size: 18,),
-
+                      child: Icon(
+                        isPlaying ? Icons.pause_outlined : Icons.play_arrow,
+                        color: palette.onSecondaryContainer,
+                        size: 18,
+                      ),
                     ),
                   ),
                 ),
               ),
-
               Expanded(
                 child: Hero(
                   tag: "sliderTag",
@@ -313,9 +332,7 @@ class _RadarSmallState extends State<RadarSmall> {
                         max: data.radar.times.length - 1.0,
                         divisions: data.radar.times.length,
                         label: times[currentFrameIndex.toInt()].toString(),
-                    
                         padding: const EdgeInsets.symmetric(horizontal: 15),
-                    
                         onChanged: (double value) {
                           if (data.settings["Radar haptics"] == "on") {
                             HapticFeedback.lightImpact();
@@ -338,7 +355,6 @@ class _RadarSmallState extends State<RadarSmall> {
   }
 }
 
-
 class RadarBig extends StatefulWidget {
   final data;
 
@@ -349,12 +365,20 @@ class RadarBig extends StatefulWidget {
 }
 
 class _RadarBigState extends State<RadarBig> {
-
   final List<Color> radarColors = [
-    const Color(0xFF88ddee), const Color(0xFF0099cc), const Color(0xFF0077aa), const Color(0xFF005588),
-    const Color(0xFFffee00), const Color(0xFFffaa00), const Color(0xFFff7700),
-    const Color(0xFFff4400), const Color(0xFFee0000), const Color(0xFF990000),
-    const Color(0xFFffaaff), const Color(0xFFff77ff), const Color(0xFFff00ff),
+    const Color(0xFF88ddee),
+    const Color(0xFF0099cc),
+    const Color(0xFF0077aa),
+    const Color(0xFF005588),
+    const Color(0xFFffee00),
+    const Color(0xFFffaa00),
+    const Color(0xFFff7700),
+    const Color(0xFFff4400),
+    const Color(0xFFee0000),
+    const Color(0xFF990000),
+    const Color(0xFFffaaff),
+    const Color(0xFFff77ff),
+    const Color(0xFFff00ff),
   ];
 
   double currentFrameIndex = 0;
@@ -387,12 +411,11 @@ class _RadarBigState extends State<RadarBig> {
       int hour = (int.parse(split[0]) + offset) % 24;
       if (data.settings["Time mode"] == "12 hour") {
         times.add(OMamPmTime("jT$hour:${minute == "0" ? "00" : minute}"));
-      }
-      else {
-        times.add("${hour.toString().padLeft(2, "0")}:${minute == "0" ? "00" : minute}");
+      } else {
+        times.add(
+            "${hour.toString().padLeft(2, "0")}:${minute == "0" ? "00" : minute}");
       }
     }
-
 
     timer = Timer.periodic(const Duration(milliseconds: 1600), (Timer t) {
       if (isPlaying) {
@@ -401,7 +424,7 @@ class _RadarBigState extends State<RadarBig> {
         }
         setState(() {
           currentFrameIndex =
-          ((currentFrameIndex + 1) % (data.radar.images.length - 1));
+              ((currentFrameIndex + 1) % (data.radar.images.length - 1));
         });
       }
     });
@@ -418,8 +441,7 @@ class _RadarBigState extends State<RadarBig> {
       setState(() {
         isPlaying = !isPlaying;
       });
-    }
-    else {
+    } else {
       setState(() {
         hasBeenPlayed = true;
         currentFrameIndex = 0;
@@ -430,14 +452,14 @@ class _RadarBigState extends State<RadarBig> {
 
   @override
   Widget build(BuildContext context) {
-
     ColorScheme palette = data.current.palette;
     double x = MediaQuery.of(context).padding.top;
 
     String mode = data.settings["Color mode"];
 
     if (mode == "auto") {
-      var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+      var brightness =
+          SchedulerBinding.instance.platformDispatcher.platformBrightness;
       mode = brightness == Brightness.dark ? "dark" : "light";
     }
 
@@ -445,54 +467,66 @@ class _RadarBigState extends State<RadarBig> {
       backgroundColor: palette.surface,
       body: Stack(
         children: [
-          (data.isonline) ? FlutterMap(
-            options: MapOptions(
-              initialCenter: LatLng(data.lat, data.lng),
-              initialZoom: 6,
-              minZoom: 2,
-              maxZoom: 9,
-
-              backgroundColor: mode == "dark"? const Color(0xff262626) : const Color(0xffD4DADC),
-              interactionOptions: const InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate,),
-            ),
-            children: [
-              Container(
-                color: mode == "dark"? const Color(0xff262626) : const Color(0xffD4DADC),
-              ),
-              TileLayer(
-                urlTemplate: mode == "dark"
-                    ? 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png'
-                    : 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
-              ),
-              TileLayer(
-                urlTemplate: data.radar.images[currentFrameIndex.toInt()] + "/256/{z}/{x}/{y}/2/1_1.png",
-                tileDisplay: const TileDisplay.instantaneous(),
-              ),
-              TileLayer(
-                urlTemplate: mode == "dark"
-                    ? 'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png'
-                    : 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
-              ),
-              MarkerLayer(
-                markers: [
-                  Marker(
-                    point: LatLng(data.lat, data.lng),
-                    width: 62,
-                    height: 62,
-                    child: Padding(
-                      //try to make the bottom of the pointer where the place actually is
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: Icon(Icons.place_sharp, color: palette.inverseSurface, size: 44,),
+          (data.isonline)
+              ? FlutterMap(
+                  options: MapOptions(
+                    initialCenter: LatLng(data.lat, data.lng),
+                    initialZoom: 6,
+                    minZoom: 2,
+                    maxZoom: 9,
+                    backgroundColor: mode == "dark"
+                        ? const Color(0xff262626)
+                        : const Color(0xffD4DADC),
+                    interactionOptions: const InteractionOptions(
+                      flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
                     ),
                   ),
-                ],
-              )
-            ],
-          )
-          : Center(
-            child: comfortatext("not available offline", 15, data.settings, color: palette.outline)
-          ),
-
+                  children: [
+                    Container(
+                      color: mode == "dark"
+                          ? const Color(0xff262626)
+                          : const Color(0xffD4DADC),
+                    ),
+                    TileLayer(
+                      urlTemplate: mode == "dark"
+                          ? 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png'
+                          : 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
+                    ),
+                    TileLayer(
+                      urlTemplate:
+                          data.radar.images[currentFrameIndex.toInt()] +
+                              "/256/{z}/{x}/{y}/2/1_1.png",
+                      tileDisplay: const TileDisplay.instantaneous(),
+                    ),
+                    TileLayer(
+                      urlTemplate: mode == "dark"
+                          ? 'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png'
+                          : 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
+                    ),
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: LatLng(data.lat, data.lng),
+                          width: 62,
+                          height: 62,
+                          child: Padding(
+                            //try to make the bottom of the pointer where the place actually is
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: Icon(
+                              Icons.place_sharp,
+                              color: palette.inverseSurface,
+                              size: 44,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                )
+              : Center(
+                  child: comfortatext(
+                      "not available offline", 15, data.settings,
+                      color: palette.outline)),
           Padding(
             padding: const EdgeInsets.only(left: 15, right: 15, bottom: 35),
             child: Container(
@@ -506,33 +540,38 @@ class _RadarBigState extends State<RadarBig> {
                     margin: const EdgeInsets.only(bottom: 10),
                     decoration: BoxDecoration(
                         color: palette.inverseSurface,
-                        borderRadius: BorderRadius.circular(20)
-                    ),
+                        borderRadius: BorderRadius.circular(20)),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        comfortatext(AppLocalizations.of(context)!.light, 16, data.settings, color: palette.onInverseSurface),
+                        comfortatext(AppLocalizations.of(context)!.light, 16,
+                            data.settings,
+                            color: palette.onInverseSurface),
                         Padding(
                           padding: const EdgeInsets.only(left: 8, right: 8),
                           child: Row(
-                              children: List<Widget>.generate(radarColors.length, (int index) {
-                                return Container(
-                                  width: 10,
-                                  height: 15,
-                                  decoration: BoxDecoration(
-                                      color: radarColors[index],
-                                      borderRadius: index == 0
-                                          ? const BorderRadius.only(topLeft: Radius.circular(7), bottomLeft: Radius.circular(7))
-                                          : index == (radarColors.length - 1)
-                                          ? const BorderRadius.only(topRight: Radius.circular(7), bottomRight: Radius.circular(7))
-                                          : BorderRadius.circular(0)
-
-                                  ),
-                                );
-                              })
-                          ),
+                              children: List<Widget>.generate(
+                                  radarColors.length, (int index) {
+                            return Container(
+                              width: 10,
+                              height: 15,
+                              decoration: BoxDecoration(
+                                  color: radarColors[index],
+                                  borderRadius: index == 0
+                                      ? const BorderRadius.only(
+                                          topLeft: Radius.circular(7),
+                                          bottomLeft: Radius.circular(7))
+                                      : index == (radarColors.length - 1)
+                                          ? const BorderRadius.only(
+                                              topRight: Radius.circular(7),
+                                              bottomRight: Radius.circular(7))
+                                          : BorderRadius.circular(0)),
+                            );
+                          })),
                         ),
-                        comfortatext(AppLocalizations.of(context)!.heavy, 16, data.settings, color: palette.onInverseSurface),
+                        comfortatext(AppLocalizations.of(context)!.heavy, 16,
+                            data.settings,
+                            color: palette.onInverseSurface),
                       ],
                     ),
                   ),
@@ -547,8 +586,12 @@ class _RadarBigState extends State<RadarBig> {
                         children: [
                           AnimatedSwitcher(
                             duration: const Duration(milliseconds: 200),
-                            transitionBuilder: (Widget child, Animation<double> animation) {
-                              return ScaleTransition(scale: animation, child: child,);
+                            transitionBuilder:
+                                (Widget child, Animation<double> animation) {
+                              return ScaleTransition(
+                                scale: animation,
+                                child: child,
+                              );
                             },
                             child: Hero(
                               tag: 'playpause',
@@ -560,19 +603,23 @@ class _RadarBigState extends State<RadarBig> {
                                   style: ElevatedButton.styleFrom(
                                       elevation: 0.0,
                                       padding: const EdgeInsets.all(10),
-                                      backgroundColor: palette.secondaryContainer,
+                                      backgroundColor:
+                                          palette.secondaryContainer,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(30),
                                         //side: BorderSide(width: 2, color: palette.primaryLighter)
-                                      )
-                                  ),
+                                      )),
                                   onPressed: () async {
                                     HapticFeedback.selectionClick();
                                     togglePlayPause();
                                   },
-                                  child: Icon(isPlaying ? Icons.pause_outlined : Icons.play_arrow,
-                                    color: palette.onSecondaryContainer, size: 18,),
-
+                                  child: Icon(
+                                    isPlaying
+                                        ? Icons.pause_outlined
+                                        : Icons.play_arrow,
+                                    color: palette.onSecondaryContainer,
+                                    size: 18,
+                                  ),
                                 ),
                               ),
                             ),
@@ -584,31 +631,34 @@ class _RadarBigState extends State<RadarBig> {
                                 color: palette.surface,
                                 child: SliderTheme(
                                   data: SliderTheme.of(context).copyWith(
-                                    trackHeight: 19,
-                                    valueIndicatorColor: palette.inverseSurface,
-                                    thumbColor: palette.secondary,
-                                    activeTrackColor: palette.secondary,
-                                    inactiveTrackColor: palette.secondaryContainer,
-                                    inactiveTickMarkColor: palette.secondary,
-                                    activeTickMarkColor: palette.surface,
-                                    valueIndicatorTextStyle: GoogleFonts.outfit(
-                                      color: palette.onInverseSurface,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    year2023: false
-                                  ),
+                                      trackHeight: 19,
+                                      valueIndicatorColor:
+                                          palette.inverseSurface,
+                                      thumbColor: palette.secondary,
+                                      activeTrackColor: palette.secondary,
+                                      inactiveTrackColor:
+                                          palette.secondaryContainer,
+                                      inactiveTickMarkColor: palette.secondary,
+                                      activeTickMarkColor: palette.surface,
+                                      valueIndicatorTextStyle:
+                                          GoogleFonts.outfit(
+                                        color: palette.onInverseSurface,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      year2023: false),
                                   child: Slider(
                                     value: currentFrameIndex,
                                     min: 0,
                                     max: data.radar.times.length - 1.0,
                                     divisions: data.radar.times.length,
-                                    label: times[currentFrameIndex.toInt()].toString(),
-
-                                    padding: const EdgeInsets.only(left: 20, right: 5),
-
+                                    label: times[currentFrameIndex.toInt()]
+                                        .toString(),
+                                    padding: const EdgeInsets.only(
+                                        left: 20, right: 5),
                                     onChanged: (double value) {
-                                      if (data.settings["Radar haptics"] == "on") {
+                                      if (data.settings["Radar haptics"] ==
+                                          "on") {
                                         HapticFeedback.lightImpact();
                                       }
                                       setState(() {
@@ -645,8 +695,7 @@ class _RadarBigState extends State<RadarBig> {
                       backgroundColor: palette.secondaryContainer,
                       //side: BorderSide(width: 3, color: main),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(19)
-                      ),
+                          borderRadius: BorderRadius.circular(19)),
                     ),
                     onPressed: () {
                       HapticFeedback.selectionClick();
@@ -655,8 +704,11 @@ class _RadarBigState extends State<RadarBig> {
                       });
                       Navigator.of(context).pop();
                     },
-                    child: Icon(Icons.close_fullscreen,
-                      color: palette.onSecondaryContainer, size: 21,),
+                    child: Icon(
+                      Icons.close_fullscreen,
+                      color: palette.onSecondaryContainer,
+                      size: 21,
+                    ),
                   ),
                 ),
               ),
