@@ -319,7 +319,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final Image image:
+  final Image image;
 
   String _locale = 'English';
   //this is so that appearance page setting changes take effect in place rather that having to exit the page
@@ -394,7 +394,7 @@ class SettingsMain extends StatelessWidget {
   final VoidCallback goBack;
   final Map<String, String> settings;
   final void Function(String, String) updatePage;
-  final Image image:
+  final Image image;
   final colornotify;
 
   const SettingsMain(
