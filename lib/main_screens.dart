@@ -29,7 +29,7 @@ import 'package:stretchy_header/stretchy_header.dart';
 
 class NewMain extends StatefulWidget {
   final WeatherData data;
-  final updateLocation;
+  final Function updateLocation;
   final BuildContext context;
 
   const NewMain(
@@ -44,7 +44,7 @@ class NewMain extends StatefulWidget {
 
 class _NewMainState extends State<NewMain> {
   final WeatherData data;
-  final updateLocation;
+  final Function updateLocation;
   @override
   final BuildContext context;
 
@@ -261,7 +261,7 @@ class _NewMainState extends State<NewMain> {
 
 class TabletLayout extends StatelessWidget {
   final WeatherData data;
-  final updateLocation;
+  final Function updateLocation;
 
   const TabletLayout(
       {super.key, required this.data, required this.updateLocation});

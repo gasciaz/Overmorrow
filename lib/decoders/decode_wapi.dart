@@ -71,7 +71,7 @@ int wapiGetWindDir(var data) {
 }
 
 List<WapiAlert> getWapiAlerts(
-    WeatherData data, AppLocalizations localizations) {
+    Map<String, dynamic> data, AppLocalizations localizations) {
   final alerts = <WapiAlert>[];
   final alertList = data['alerts']['alert'];
   //for some reason weatherapi sometimes returns like 5 of the same alerts, so i have to manually remove duplicates

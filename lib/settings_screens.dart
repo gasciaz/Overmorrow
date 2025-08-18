@@ -44,7 +44,7 @@ Widget mainSettingEntry(
     Map<String, String> settings,
     Widget pushTo,
     BuildContext context,
-    updatePage) {
+    Function updatePage) {
   return Padding(
     padding: const EdgeInsets.only(left: 25, right: 25, top: 5, bottom: 5),
     child: GestureDetector(
@@ -270,9 +270,9 @@ class AppearanceSelector extends StatelessWidget {
   final image;
   final Map<String, String> settings;
   final ColorPalette colorPalette;
-  final updatePage;
+  final Function updatePage;
   final AppLocalizations localizations;
-  final goBack;
+  final VoidCallback goBack;
 
   const AppearanceSelector(
       {super.key,
@@ -816,7 +816,7 @@ class _LangaugePageState extends State<LangaugePage> {
 }
 
 class TranslationSelection extends StatelessWidget {
-  final goBack;
+  final VoidCallback goBack;
   final onTap;
   final Map<String, String> settings;
   final options;
@@ -826,7 +826,7 @@ class TranslationSelection extends StatelessWidget {
   const TranslationSelection(
       {super.key,
       required this.settings,
-      this.goBack,
+      required this.goBack,
       this.onTap,
       this.options,
       this.selected,

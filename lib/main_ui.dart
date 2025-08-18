@@ -40,7 +40,7 @@ Future<void> _launchUrl(String url) async {
 
 class WeatherPage extends StatelessWidget {
   final WeatherData data;
-  final updateLocation;
+  final Function updateLocation;
 
   const WeatherPage(
       {super.key, required this.data, required this.updateLocation});
@@ -481,7 +481,7 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
   }
 }
 
-Widget providerSelector(Map<String, String> settings, updateLocation,
+Widget providerSelector(Map<String, String> settings, Function updateLocation,
     ColorScheme palette, provider, latlng, realLoc, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 25, right: 25, bottom: 80, top: 35),
@@ -548,7 +548,7 @@ Widget providerSelector(Map<String, String> settings, updateLocation,
 
 class ErrorPage extends StatelessWidget {
   final errorMessage;
-  final updateLocation;
+  final Function updateLocation;
   final place;
   final icon;
   final Map<String, String> settings;

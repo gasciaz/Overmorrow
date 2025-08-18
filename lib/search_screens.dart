@@ -132,7 +132,7 @@ class HeroSearchPage extends StatefulWidget {
   final Map<String, String> settings;
   final recommend;
   final updateRec;
-  final updateLocation;
+  final Function updateLocation;
   final favorites;
   final updateFav;
   final bool isTabletMode;
@@ -171,7 +171,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
   final Map<String, String> settings;
   final recommend;
   final updateRec;
-  final updateLocation;
+  final Function updateLocation;
   final favorites;
   final updateFav;
   final bool isTabletMode;
@@ -555,12 +555,12 @@ Widget buildRecommend(
     Map<String, String> settings,
     ValueListenable<List<String>> favoritesListen,
     ValueListenable<List<String>> recommend,
-    updateLocation,
+    Function updateLocation,
     onFavChanged,
     bool isEditing,
     locationState,
     locationMessage,
-    askGrantLocationPermission,
+    VoidCallback askGrantLocationPermission,
     placeName,
     country,
     region,
@@ -671,7 +671,7 @@ Widget buildSearchResults(
     List<String> favorites,
     ValueListenable<List<String>> recommend,
     ColorScheme palette,
-    updateLocation,
+    Function updateLocation,
     onFavChanged,
     Map<String, String> settings,
     bool isTabletMode) {
@@ -774,11 +774,11 @@ Widget CurrentLocationWidget(
     locationState,
     locationMessage,
     ColorScheme palette,
-    askGrantLocationPermission,
+    VoidCallback askGrantLocationPermission,
     String placeName,
     String country,
     String region,
-    updateLocation,
+    Function updateLocation,
     BuildContext context,
     isTabletMode) {
   if (locationState == 'denied') {
@@ -887,7 +887,7 @@ Widget favoritesOrReorder(
     Map<String, String> settings,
     onFavChanged,
     ColorScheme palette,
-    updateLocation,
+    Function updateLocation,
     BuildContext context,
     bool isTabletMode) {
   if (isEditing) {
@@ -902,7 +902,7 @@ Widget favoritesOrReorder(
 Widget buildFavorites(
     ColorScheme palette,
     List<String> favorites,
-    updateLocation,
+    Function updateLocation,
     Map<String, String> settings,
     BuildContext context,
     bool isTabletMode) {

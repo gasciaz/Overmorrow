@@ -172,7 +172,7 @@ String generateAbbreviation(String countryName) {
 }
 
 class MySearchParent extends StatefulWidget {
-  final updateLocation;
+  final Function updateLocation;
   final ColorScheme palette;
   final place;
   final Map<String, String> settings;
@@ -275,7 +275,7 @@ class _MySearchParentState extends State<MySearchParent> {
 class MySearchWidget extends StatefulWidget {
   final ColorScheme palette;
   final place;
-  final updateLocation;
+  final Function updateLocation;
   final favorites;
   final prefs;
   final Map<String, String> settings;
@@ -309,7 +309,7 @@ class _MySearchWidgetState extends State<MySearchWidget> {
   //final FloatingSearchBarController _controller = FloatingSearchBarController();
   final ColorScheme palette;
   final place;
-  final updateLocation;
+  final Function updateLocation;
   final prefs;
   final Map<String, String> settings;
   final Image image;

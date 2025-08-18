@@ -107,7 +107,7 @@ Future<Map<String, String>> getSettingsUsed() async {
   return settings;
 }
 
-Future<String> isLocationSafe(translationProv) async {
+Future<String> isLocationSafe(AppLocalizations translationProv) async {
   final serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
     return translationProv.locationServicesAreDisabled;
@@ -215,7 +215,7 @@ Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
 }
 
 Widget settingEntry(icon, text, Map<String, String> settings,
-    ColorScheme palette, updatePage, rawText, BuildContext context) {
+    ColorScheme palette, Function updatePage, rawText, BuildContext context) {
   return GestureDetector(
     behavior: HitTestBehavior.translucent,
     onTap: () {
@@ -391,17 +391,17 @@ class _SettingsPageState extends State<SettingsPage> {
 
 class SettingsMain extends StatelessWidget {
   final ColorScheme palette;
-  final goBack;
+  final VoidCallback goBack;
   final Map<String, String> settings;
-  final updatePage;
+  final Function updatePage;
   final image;
   final colornotify;
 
   const SettingsMain(
       {super.key,
       required this.settings,
-      this.updatePage,
-      this.goBack,
+      required this.updatePage,
+      required this.goBack,
       this.image,
       required this.palette,
       this.colornotify});
