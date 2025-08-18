@@ -932,7 +932,7 @@ class LayoutPage extends StatefulWidget {
   final image;
   final ColorScheme palette;
   final updateMainPage;
-  final localizations;
+  final AppLocalizations localizations;
 
   const LayoutPage(
       {super.key,

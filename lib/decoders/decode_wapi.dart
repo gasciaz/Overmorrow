@@ -723,7 +723,7 @@ class Wapi15MinutePrecip {
 }
 
 Future<WeatherData> WapiGetWeatherData(
-    lat, lng, realLoc, settings, placeName, localizations) async {
+    lat, lng, realLoc, settings, placeName, AppLocalizations localizations) async {
   final wapi = await WapiMakeRequest('$lat,$lng', realLoc);
 
   final wapiBody = wapi[0];

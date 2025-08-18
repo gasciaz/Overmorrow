@@ -631,7 +631,7 @@ class MetN15MinutePrecip {
 }
 
 Future<WeatherData> MetNGetWeatherData(
-    lat, lng, realLoc, settings, placeName, localizations) async {
+    lat, lng, realLoc, settings, placeName, AppLocalizations localizations) async {
   final Mn = await MetNMakeRequest(lat, lng, realLoc);
   final MnBody = Mn[0];
 

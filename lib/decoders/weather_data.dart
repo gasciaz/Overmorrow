@@ -22,6 +22,7 @@ import 'package:overmorrow/decoders/decode_OM.dart';
 import 'package:overmorrow/decoders/decode_mn.dart';
 
 import 'package:overmorrow/decoders/decode_wapi.dart';
+import 'package:overmorrow/l10n/app_localizations.dart';
 
 class WeatherData {
   final Map<String, String> settings;
@@ -72,9 +73,9 @@ class WeatherData {
       required this.dailyMinMaxTemp});
 
   static Future<WeatherData> getFullData(
-      settings, placeName, realLoc, latlong, provider, localizations) async {
+      settings, placeName, realLoc, latlong, String provider, AppLocalizations localizations) async {
     final List<String> split = latlong.split(',');
-    final var lat = double.parse(split[0]);
+    final lat = double.parse(split[0]);
     final lng = double.parse(split[1]);
 
     if (provider == 'weatherapi.com') {
