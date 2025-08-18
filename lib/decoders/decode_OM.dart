@@ -456,8 +456,8 @@ class OMDay {
     return null;
   }
 
-  static List<OMHour> buildHours(index, getRidFirst, item, settings, sunstatus,
-      approximatelocal, AppLocalizations localizations) {
+  static List<OMHour> buildHours(index, bool getRidFirst, item, settings,
+      sunstatus, approximatelocal, AppLocalizations localizations) {
     final hourly = <OMHour>[];
 
     final int l = item['hourly']['weather_code'].length;
