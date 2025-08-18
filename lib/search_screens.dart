@@ -556,7 +556,7 @@ Widget buildRecommend(
     ValueListenable<List<String>> favoritesListen,
     ValueListenable<List<String>> recommend,
     Function updateLocation,
-    onFavChanged,
+    void Function(List<String>) onFavChanged,
     bool isEditing,
     locationState,
     locationMessage,
@@ -672,7 +672,7 @@ Widget buildSearchResults(
     ValueListenable<List<String>> recommend,
     ColorScheme palette,
     Function updateLocation,
-    onFavChanged,
+    void Function(List<String>) onFavChanged,
     Map<String, String> settings,
     bool isTabletMode) {
   final favoriteNarrow = <String>[];
@@ -885,7 +885,7 @@ Widget favoritesOrReorder(
     bool isEditing,
     List<String> favorites,
     Map<String, String> settings,
-    onFavChanged,
+    void Function(List<String>) onFavChanged,
     ColorScheme palette,
     Function updateLocation,
     BuildContext context,
@@ -958,8 +958,12 @@ Widget buildFavorites(
   );
 }
 
-Widget reorderFavorites(items, Map<String, String> settings, onFavChanged,
-    ColorScheme palette, bool isTabletMode) {
+Widget reorderFavorites(
+    items,
+    Map<String, String> settings,
+    void Function(List<String>) onFavChanged,
+    ColorScheme palette,
+    bool isTabletMode) {
   return Container(
     key: const ValueKey<String>('editing'),
     decoration: BoxDecoration(
@@ -998,7 +1002,7 @@ Widget reorderableItem(
     int index,
     Map<String, String> settings,
     ColorScheme palette,
-    onFavChanged,
+    void Function(List<String>) onFavChanged,
     bool isTabletMode) {
   final split = json.decode(items[index]);
   final String name = split['name'];
