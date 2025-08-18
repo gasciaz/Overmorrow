@@ -179,7 +179,7 @@ Future<void> SetData(String name, String to) async {
 }
 
 Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
-    Map<String, String> settings, textcolor, Color primary, rawName) {
+    Map<String, String> settings, textcolor, Color primary, String rawName) {
   final Items = settingSwitches[rawName] ?? ['˚C', '˚F'];
 
   return DropdownButton(
@@ -207,9 +207,9 @@ Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
           child: Text(item),
         );
       }).toList(),
-      onChanged: (Object? value) {
+      onChanged: (String? value) {
         HapticFeedback.lightImpact();
-        settings[rawName] = value;
+        settings[rawName] = value!;
         updatePage(rawName, value);
       });
 }

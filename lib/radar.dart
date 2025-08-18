@@ -111,7 +111,7 @@ class _RadarSmallState extends State<RadarSmall> {
   @override
   Widget build(BuildContext context) {
     final ColorScheme palette = data.current.palette;
-    String mode = data.settings['Color mode'];
+    String mode = data.settings['Color mode']!;
 
     if (mode == 'auto') {
       final brightness =
@@ -454,7 +454,7 @@ class _RadarBigState extends State<RadarBig> {
     final ColorScheme palette = data.current.palette;
     final x = MediaQuery.of(context).padding.top;
 
-    String mode = data.settings['Color mode'];
+    String mode = data.settings['Color mode']!;
 
     if (mode == 'auto') {
       final brightness =

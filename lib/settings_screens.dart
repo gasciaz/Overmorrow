@@ -782,7 +782,7 @@ class _LangaugePageState extends State<LangaugePage> {
   @override
   void initState() {
     super.initState();
-    _locale = settings['Language'];
+    _locale = settings['Language']!;
   }
 
   void goBack() {

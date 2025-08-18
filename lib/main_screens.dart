@@ -152,7 +152,7 @@ class _NewMainState extends State<NewMain> {
       orderedWidgets = order.map((name) => widgetsMap[name]!).toList();
     }
 
-    String colorMode = data.settings['Color mode'];
+    String colorMode = data.settings['Color mode']!;
     if (colorMode == 'auto') {
       final brightness =
           SchedulerBinding.instance.platformDispatcher.platformBrightness;
