@@ -191,7 +191,7 @@ class ColorPalette {
           //try to keep it close as possible to the palette while still readable
           return [newColor, newColor];
         }
-        bestDif = dif;
+        bestDif = dif.toInt();
         bestColor = newColor;
       }
 
@@ -203,7 +203,7 @@ class ColorPalette {
           //try to keep it close as possible to the palette while still readable
           return [newColor, newColor];
         }
-        bestDif = dif;
+        bestDif = dif.toInt();
         bestColor = newColor;
       }
     }
@@ -252,7 +252,7 @@ class ColorPalette {
     for (var i = 0; i < imageColors.length; i++) {
       final score = scoreColor(imageColors[i]);
       if (score > bestValue) {
-        bestValue = score;
+        bestValue = score.toInt();
         seedColor = imageColors[i];
       }
     }
