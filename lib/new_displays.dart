@@ -89,7 +89,7 @@ class WavePainter extends CustomPainter {
 }
 
 class NewSunriseSunset extends StatefulWidget {
-  final data;
+  final WeatherData data;
   final width;
 
   @override

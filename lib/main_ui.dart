@@ -102,7 +102,7 @@ class ParrallaxBackground extends StatelessWidget {
   }
 }
 
-Widget Circles(var data, double bottom, BuildContext context, ColorScheme palette) {
+Widget Circles(WeatherData data, double bottom, BuildContext context, ColorScheme palette) {
   return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 13, top: 2),
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -221,7 +221,7 @@ class DescriptionCircle extends StatelessWidget {
 }
 
 class FadingWidget extends StatefulWidget {
-  final data;
+  final WeatherData data;
   final time;
 
   const FadingWidget({super.key, required this.data, required this.time});
@@ -322,7 +322,7 @@ class _FadingWidgetState extends State<FadingWidget>
 
 class SinceLastUpdate extends StatefulWidget {
   final split;
-  final data;
+  final WeatherData data;
   final bool isVisible;
 
   const SinceLastUpdate(

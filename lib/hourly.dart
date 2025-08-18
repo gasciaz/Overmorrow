@@ -21,12 +21,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:overmorrow/decoders/weather_data.dart';
 
 import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
 
 class NewHourly extends StatefulWidget {
-  final data;
+  final WeatherData data;
   final hours;
   final bool elevated;
 
@@ -42,7 +43,7 @@ class NewHourly extends StatefulWidget {
 
 class _NewHourlyState extends State<NewHourly>
     with AutomaticKeepAliveClientMixin {
-  final data;
+  final WeatherData data;
   final hours;
   final bool elevated;
 
@@ -122,7 +123,7 @@ class _NewHourlyState extends State<NewHourly>
   }
 }
 
-Widget hourBoxes(hours, data, value, bool elevated, context) {
+Widget hourBoxes(hours, WeatherData data, value, bool elevated, context) {
   final ColorScheme palette = data.current.palette;
 
   return AnimationLimiter(
@@ -164,7 +165,7 @@ Widget hourBoxes(hours, data, value, bool elevated, context) {
 }
 
 Widget hourlyDataBuilder(
-    hour, ColorScheme palette, bool elevated, Widget childWidget, data) {
+    hour, ColorScheme palette, bool elevated, Widget childWidget, WeatherData data) {
   return Padding(
     padding: const EdgeInsets.all(3),
     child: AnimatedSwitcher(
@@ -197,7 +198,7 @@ Widget hourlyDataBuilder(
   );
 }
 
-Widget dividerWidget(ColorScheme palette, name, data) {
+Widget dividerWidget(ColorScheme palette, name, WeatherData data) {
   return Padding(
     padding: const EdgeInsets.only(top: 3, bottom: 3, left: 6, right: 6),
     child: RotatedBox(
@@ -217,7 +218,7 @@ Widget dividerWidget(ColorScheme palette, name, data) {
   );
 }
 
-Widget buildHourlySum(var hour, ColorScheme palette, data) {
+Widget buildHourlySum(var hour, ColorScheme palette, WeatherData data) {
   return Column(
     key: const ValueKey('sum'),
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -246,7 +247,7 @@ Widget buildHourlySum(var hour, ColorScheme palette, data) {
   );
 }
 
-Widget buildHourlyPrecip(var hour, ColorScheme palette, data) {
+Widget buildHourlyPrecip(var hour, ColorScheme palette, WeatherData data) {
   return Stack(
     children: [
       Column(

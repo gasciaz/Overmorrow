@@ -24,6 +24,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:overmorrow/decoders/decode_OM.dart';
+import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
 
@@ -199,7 +200,7 @@ Widget pollutantWidget(data, name, value, percent, ColorScheme palette) {
 }
 
 class AllergensPage extends StatefulWidget {
-  final data;
+  final WeatherData data;
   final bool isTabletMode;
 
   const AllergensPage(
@@ -210,7 +211,7 @@ class AllergensPage extends StatefulWidget {
 }
 
 class _AllergensPageState extends State<AllergensPage> {
-  final data;
+  final WeatherData data;
 
   _AllergensPageState({required this.data});
 
@@ -802,7 +803,7 @@ Widget dustAndAODIndicators(data, extendedAqi, ColorScheme palette, BuildContext
 }
 
 class NewHourlyAqi extends StatefulWidget {
-  final data;
+  final WeatherData data;
   final extendedAqi;
 
   const NewHourlyAqi({super.key, required this.data, required this.extendedAqi});
@@ -813,7 +814,7 @@ class NewHourlyAqi extends StatefulWidget {
 
 class _NewHourlyAqiState extends State<NewHourlyAqi>
     with AutomaticKeepAliveClientMixin {
-  final data;
+  final WeatherData data;
   final extendedAqi;
   int _value = 0;
 

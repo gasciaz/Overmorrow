@@ -20,6 +20,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/hourly.dart';
 import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
@@ -54,7 +55,7 @@ Widget dayStat(data, IconData icon, number, addon,
 }
 
 class buildDays extends StatefulWidget {
-  final data;
+  final WeatherData data;
 
   const buildDays({super.key, required this.data});
 
@@ -64,7 +65,7 @@ class buildDays extends StatefulWidget {
 
 class _buildDaysState extends State<buildDays>
     with AutomaticKeepAliveClientMixin {
-  final data;
+  final WeatherData data;
 
   int daysToShow = 0;
   bool isDaysListExpanded = false;
@@ -206,7 +207,7 @@ class _buildDaysState extends State<buildDays>
   }
 }
 
-Widget dailyCollapsed(var data, var day, ColorScheme palette, int index,
+Widget dailyCollapsed(WeatherData data, var day, ColorScheme palette, int index,
     int daysToShow, onExpandTapped) {
   return GestureDetector(
     behavior: HitTestBehavior.translucent,
@@ -297,7 +298,7 @@ Widget dailyCollapsed(var data, var day, ColorScheme palette, int index,
 }
 
 Widget dailyExpanded(
-    var day, data, ColorScheme palette, onExpandTapped, index) {
+    var day, WeatherData data, ColorScheme palette, onExpandTapped, index) {
   return Padding(
     padding: const EdgeInsets.only(left: 13, right: 13, bottom: 16),
     child: Column(

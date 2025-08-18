@@ -25,11 +25,12 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:overmorrow/decoders/decode_OM.dart';
+import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
 
 class RadarSmall extends StatefulWidget {
-  final data;
+  final WeatherData data;
 
   const RadarSmall({super.key, required this.data});
 
@@ -43,7 +44,7 @@ class _RadarSmallState extends State<RadarSmall> {
 
   bool hasBeenPlayed = false;
 
-  final data;
+  final WeatherData data;
 
   List<String> times = [];
 
@@ -354,7 +355,7 @@ class _RadarSmallState extends State<RadarSmall> {
 }
 
 class RadarBig extends StatefulWidget {
-  final data;
+  final WeatherData data;
 
   const RadarBig({super.key, this.data});
 
@@ -386,9 +387,9 @@ class _RadarBigState extends State<RadarBig> {
 
   bool hasBeenPlayed = false;
 
-  final data;
+  final WeatherData data;
 
-  _RadarBigState({this.data});
+  _RadarBigState({required this.data});
 
   bool isPlaying = false;
 

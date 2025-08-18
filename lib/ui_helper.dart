@@ -24,6 +24,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/main.dart';
 import 'package:overmorrow/search_screens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -122,7 +123,7 @@ Color lightAccent(Color color, int intensity) {
       sqrt(color.b * x).toInt(), 1);
 }
 
-Widget NewAqiDataPoints(String name, double value, var data,
+Widget NewAqiDataPoints(String name, double value, WeatherData data,
     [double size = 15]) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
