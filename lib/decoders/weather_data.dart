@@ -17,10 +17,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 import 'dart:async';
+
 import 'package:overmorrow/decoders/decode_OM.dart';
 import 'package:overmorrow/decoders/decode_mn.dart';
-import 'decode_wapi.dart';
 
+import 'decode_wapi.dart';
 
 class WeatherData {
   final Map<String, String> settings;
@@ -49,48 +50,45 @@ class WeatherData {
 
   final List<double> dailyMinMaxTemp;
 
-  WeatherData({
-    required this.place,
-    required this.settings,
-    required this.provider,
-    required this.real_loc,
-    required this.lat,
-    required this.lng,
-    required this.sunstatus,
-    required this.aqi,
-    required this.radar,
-    required this.days,
-    required this.hourly72,
-    required this.current,
-    required this.fetch_datetime,
-    required this.isonline,
-    required this.updatedTime,
-    required this.localtime,
+  WeatherData(
+      {required this.place,
+      required this.settings,
+      required this.provider,
+      required this.real_loc,
+      required this.lat,
+      required this.lng,
+      required this.sunstatus,
+      required this.aqi,
+      required this.radar,
+      required this.days,
+      required this.hourly72,
+      required this.current,
+      required this.fetch_datetime,
+      required this.isonline,
+      required this.updatedTime,
+      required this.localtime,
+      required this.minutely_15_precip,
+      required this.alerts,
+      required this.dailyMinMaxTemp});
 
-    required this.minutely_15_precip,
-    required this.alerts,
-
-    required this.dailyMinMaxTemp
-  });
-
-  static Future<WeatherData> getFullData(settings, placeName, real_loc, latlong, provider, localizations) async {
-
+  static Future<WeatherData> getFullData(
+      settings, placeName, real_loc, latlong, provider, localizations) async {
     List<String> split = latlong.split(",");
     double lat = double.parse(split[0]);
     double lng = double.parse(split[1]);
 
     if (provider == 'weatherapi.com') {
-      return WapiGetWeatherData(lat, lng, real_loc, settings, placeName, localizations);
-    }
-    else if (provider == "met norway"){
-      return MetNGetWeatherData(lat, lng, real_loc, settings, placeName, localizations);
-    }
-    else {
-      return OMGetWeatherData(lat, lng, real_loc, settings, placeName, localizations);
+      return WapiGetWeatherData(
+          lat, lng, real_loc, settings, placeName, localizations);
+    } else if (provider == "met norway") {
+      return MetNGetWeatherData(
+          lat, lng, real_loc, settings, placeName, localizations);
+    } else {
+      return OMGetWeatherData(
+          lat, lng, real_loc, settings, placeName, localizations);
     }
   }
 }
-
 
 //A more lightweight version of data fetching for the current widgets to use
 class LightCurrentWeatherData {
@@ -108,8 +106,8 @@ class LightCurrentWeatherData {
     required this.dateString,
   });
 
-  static Future<LightCurrentWeatherData> getLightCurrentWeatherData(placeName, latlong, provider, settings) async {
-
+  static Future<LightCurrentWeatherData> getLightCurrentWeatherData(
+      placeName, latlong, provider, settings) async {
     List<String> split = latlong.split(",");
     double lat = double.parse(split[0]);
     double lng = double.parse(split[1]);
@@ -136,8 +134,8 @@ class LightWindData {
     required this.windUnit,
   });
 
-  static Future<LightWindData> getLightWindData(placeName, latlong, provider, settings) async {
-
+  static Future<LightWindData> getLightWindData(
+      placeName, latlong, provider, settings) async {
     List<String> split = latlong.split(",");
     double lat = double.parse(split[0]);
     double lon = double.parse(split[1]);
@@ -162,18 +160,17 @@ class LightHourlyForecastData {
   final String hourlyTemps;
   final String hourlyNames;
 
-  LightHourlyForecastData({
-    required this.place,
-    required this.currentCondition,
-    required this.currentTemp,
-    required this.updatedTime,
-    required this.hourlyConditions,
-    required this.hourlyNames,
-    required this.hourlyTemps
-  });
+  LightHourlyForecastData(
+      {required this.place,
+      required this.currentCondition,
+      required this.currentTemp,
+      required this.updatedTime,
+      required this.hourlyConditions,
+      required this.hourlyNames,
+      required this.hourlyTemps});
 
-  static Future<LightHourlyForecastData> getLightForecastData(placeName, latLon, provider, settings) async {
-
+  static Future<LightHourlyForecastData> getLightForecastData(
+      placeName, latLon, provider, settings) async {
     List<String> split = latLon.split(",");
     double lat = double.parse(split[0]);
     double lon = double.parse(split[1]);

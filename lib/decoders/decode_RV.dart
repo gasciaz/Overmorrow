@@ -20,6 +20,7 @@ import 'dart:convert';
 
 import '../caching.dart';
 
+
 class RainviewerRadar {
   final List<String> images;
   final List<String> times;

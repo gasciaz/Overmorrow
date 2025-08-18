@@ -16,14 +16,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
+
 import '../api_key.dart';
 import '../caching.dart';
 
 class LocationService {
-
-  static Future<List<String>> getRecommendation(String query, String? searchProvider, settings) async {
+  static Future<List<String>> getRecommendation(
+      String query, String? searchProvider, settings) async {
     query = _sanitizeQuery(query);
     if (query == '') {
       return [];
@@ -45,8 +46,8 @@ class LocationService {
 
     var jsonbody = [];
     try {
-      var file = await cacheManager.getSingleFile(url.toString(), 
-        headers: {'cache-control': 'private, max-age=120'});
+      var file = await cacheManager.getSingleFile(url.toString(),
+          headers: {'cache-control': 'private, max-age=120'});
       var response = await file.readAsString();
       jsonbody = jsonDecode(response);
     } on SocketException {
@@ -61,7 +62,8 @@ class LocationService {
     return recommendations;
   }
 
-  static Future<List<String>> _getOMRecommendation(String query, settings) async {
+  static Future<List<String>> _getOMRecommendation(
+      String query, settings) async {
     var params = {
       'name': query,
       'count': '6',
@@ -72,13 +74,14 @@ class LocationService {
 
     var jsonbody = [];
     try {
-      var file = await cacheManager.getSingleFile(url.toString(), 
-        key: "$query, open-meteo search",
-        headers: {'cache-control': 'private, max-age=120'})
-        .timeout(const Duration(seconds: 3));
+      var file = await cacheManager.getSingleFile(url.toString(),
+          key: "$query, open-meteo search",
+          headers: {
+            'cache-control': 'private, max-age=120'
+          }).timeout(const Duration(seconds: 3));
       var response = await file.readAsString();
       jsonbody = jsonDecode(response)["results"];
-    } catch(e) {
+    } catch (e) {
       return [];
     }
 
@@ -109,6 +112,8 @@ class LocationService {
   static String _sanitizeQuery(String input) {
     final safeInput = input.replaceAll(RegExp(r'[^\w\s,\-]'), '');
     final trimmedInput = safeInput.trim();
-    return trimmedInput.length > 100 ? trimmedInput.substring(0, 100) : trimmedInput;
+    return trimmedInput.length > 100
+        ? trimmedInput.substring(0, 100)
+        : trimmedInput;
   }
 }

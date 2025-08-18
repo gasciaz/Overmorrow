@@ -16,8 +16,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-import 'package:overmorrow/Icons/overmorrow_weather_icons3_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:overmorrow/Icons/overmorrow_weather_icons3_icons.dart';
 
 import 'ui_helper.dart';
 
@@ -33,18 +33,18 @@ Map<String, Locale> languageNameToLocale = {
   'Polski': const Locale('pl'),
   'Ελληνικά': const Locale('el'),
   '简体中文': const Locale('zh'),
-  '繁體字' : const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
+  '繁體字': const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
   '日本語': const Locale('ja'),
   'українська': const Locale('uk'),
   'türkçe': const Locale('tr'),
-  'தமிழ்' : const Locale('ta'),
+  'தமிழ்': const Locale('ta'),
   'български': const Locale('bg'),
   'Indonesia': const Locale('id'),
   'عربي': const Locale('ar'),
   'Suomi': const Locale('fi'),
-  'Nederlands' : const Locale('nl'),
-  'اُردُو' : const Locale('ur'),
-  'Hrvat' : const Locale('hr'),
+  'Nederlands': const Locale('nl'),
+  'اُردُو': const Locale('ur'),
+  'Hrvat': const Locale('hr'),
 };
 
 Map<String, IconData> textMaterialIcon = {
@@ -61,7 +61,7 @@ Map<String, IconData> textMaterialIcon = {
   'Fog': OvermorrowWeatherIcons3.fog,
   'Snow': OvermorrowWeatherIcons3.snow,
   'Heavy Rain': OvermorrowWeatherIcons3.heavy_rain,
-  'Cloudy Night' : OvermorrowWeatherIcons3.cloudy_night,
+  'Cloudy Night': OvermorrowWeatherIcons3.cloudy_night,
 };
 
 //each condition has a separate unsplash collection where i selected the best images i could find
@@ -80,14 +80,14 @@ Map<String, String> conditionToCollection = {
   'Fog': 'lt3McWCS6sk',
   'Snow': 'IV6PyvU0Vyo',
   'Heavy Rain': '9w3d8QBzjsw',
-  'Cloudy Night' : 'ymdgzsktNTE'
+  'Cloudy Night': 'ymdgzsktNTE'
 };
 
 String? conditionTranslation(String key, localizations) {
   final localizationMap = {
     'Clear Night': localizations.clearNight,
     'Partly Cloudy': localizations.partlyCloudy,
-    'Clear Sky':localizations.clearSky,
+    'Clear Sky': localizations.clearSky,
     'Overcast': localizations.overcast,
     'Haze': localizations.haze,
     'Rain': localizations.rain,
@@ -98,7 +98,7 @@ String? conditionTranslation(String key, localizations) {
     'Fog': localizations.fog,
     'Snow': localizations.snow,
     'Heavy Rain': localizations.heavyRain,
-    'Cloudy Night' : localizations.cloudyNight,
+    'Cloudy Night': localizations.cloudyNight,
   };
 
   return localizationMap[key];
@@ -120,7 +120,7 @@ Map<String, List<String>> assetPhotoCredits = {
     'Irina Iriser',
     'https://unsplash.com/@iriser'
   ],
-  'Overcast':[
+  'Overcast': [
     'https://unsplash.com/photos/view-of-calm-sea-nQM2oClouhY',
     'Lionel Gustave',
     'https://unsplash.com/@lionel_gustave'
@@ -155,7 +155,7 @@ Map<String, List<String>> assetPhotoCredits = {
     'Willian Justen de Vasconcellos',
     'https://unsplash.com/@willianjusten',
   ],
-  'Fog':[
+  'Fog': [
     'https://unsplash.com/photos/green-trees-on-mountain-under-white-clouds-during-daytime-obQacWYxB1I',
     'Federico Bottos',
     'https://unsplash.com/@landscapeplaces'
@@ -165,7 +165,7 @@ Map<String, List<String>> assetPhotoCredits = {
     'Jessica Fadel',
     'https://unsplash.com/@jessicalfadel',
   ],
-  'Heavy Rain':[
+  'Heavy Rain': [
     'https://unsplash.com/photos/dew-drops-on-glass-panel-bWtd1ZyEy6w',
     'Valentin Müller',
     'https://unsplash.com/@wackeltin_meem'
@@ -235,83 +235,83 @@ Map<String, String> metNWeatherToText = {
   'cloudy': 'Overcast',
   'fair_day': 'Partly Cloudy',
   'fair_night': 'Cloudy Night',
-  'fair_polartwilight' : 'Cloudy Night',
+  'fair_polartwilight': 'Cloudy Night',
   'fog': 'Fog',
-  'heavyrain' : 'Heavy Rain',
-  'heavyrainandthunder' : 'Thunderstorm',
-  'heavyrainshowers_day' : 'Heavy Rain',
-  'heavyrainshowers_night' : 'Heavy Rain',
-  'heavyrainshowers_polartwilight' : 'Heavy Rain',
-  'heavyrainshowersandthunder_day' : 'Thunderstorm',
-  'heavyrainshowersandthunder_night' : 'Thunderstorm',
-  'heavyrainshowersandthunder_polartwilight' : 'Thunderstorm',
-  'heavysleet' : 'Sleet',
-  'heavysleetandthunder' : 'Thunderstorm',
-  'heavysleetshowers_day' : 'Sleet',
-  'heavysleetshowers_night' : 'Sleet',
-  'heavysleetshowers_polartwilight' : 'Sleet',
-  'heavysleetshowersandthunder_day' : 'Thunderstorm',
-  'heavysleetshowersandthunder_night' : 'Thunderstorm',
-  'heavysleetshowersandthunder_polartwilight' : 'Thunderstorm',
-  'heavysnow' : 'Heavy Snow',
-  'heavysnowandthunder' : 'Thunderstorm',
-  'heavysnowshowers_day' : 'Heavy Snow',
-  'heavysnowshowers_night' : 'Heavy Snow',
-  'heavysnowshowers_polartwilight' : 'Heavy Snow',
-  'heavysnowshowersandthunder_day' : 'Thunderstorm',
-  'heavysnowshowersandthunder_night' : 'Thunderstorm',
-  'heavysnowshowersandthunder_polartwilight' : 'Thunderstorm',
-  'lightrain' : 'Drizzle',
-  'lightrainandthunder' : 'Thunderstorm',
-  'lightrainshowers_day' : 'Drizzle',
-  'lightrainshowers_night' : 'Drizzle',
-  'lightrainshowers_polartwilight' : 'Drizzle',
-  'lightrainshowersandthunder_day' : 'Thunderstorm',
-  'lightrainshowersandthunder_night' : 'Thunderstorm',
-  'lightrainshowersandthunder_polartwilight' : 'Thunderstorm',
-  'lightsleet' : 'Sleet',
-  'lightsleetandthunder' : 'Thunderstorm',
-  'lightsleetshowers_day' : 'Sleet',
-  'lightsleetshowers_night' : 'Sleet',
-  'lightsleetshowers_polartwilight' : 'Sleet',
-  'lightsnow' : 'Snow',
-  'lightsnowandthunder' : 'Thunderstorm',
-  'lightsnowshowers_day' : 'Snow',
-  'lightsnowshowers_night' : 'Snow',
-  'lightsnowshowers_polartwilight' : 'Snow',
-  'lightssleetshowersandthunder_day' : 'Thunderstorm',
-  'lightssleetshowersandthunder_night' : 'Thunderstorm',
-  'lightssleetshowersandthunder_polartwilight' : 'Thunderstorm',
-  'lightssnowshowersandthunder_day' : 'Thunderstorm',
-  'lightssnowshowersandthunder_night' : 'Thunderstorm',
-  'lightssnowshowersandthunder_polartwilight' : 'Thunderstorm',
-  'partlycloudy_day' : 'Partly Cloudy',
-  'partlycloudy_night' : 'Cloudy Night',
-  'partlycloudy_polartwilight' : 'Cloudy Night',
-  'rain' : 'Rain',
-  'rainandthunder' : 'Thunderstorm',
-  'rainshowers_day' : 'Rain',
-  'rainshowers_night' : 'Rain',
-  'rainshowers_polartwilight' : 'Rain',
-  'rainshowersandthunder_day' : 'Thunderstorm',
-  'rainshowersandthunder_night' : 'Thunderstorm',
-  'rainshowersandthunder_polartwilight' : 'Thunderstorm',
-  'sleet' : 'Sleet',
-  'sleetshowers_day' : 'Sleet',
-  'sleetshowers_night' :  'Sleet',
-  'sleetshowers_polartwilight' : 'Sleet',
-  'sleetshowersandthunder_day' : 'Thunderstorm',
-  'sleetshowersandthunder_night' : 'Thunderstorm',
-  'sleetshowersandthunder_polartwilight' : 'Thunderstorm',
-  'snow' : 'Snow',
-  'snowandthunder' : 'Thunderstorm',
-  'snowshowers_day' : 'Snow',
-  'snowshowers_night' : 'Snow',
-  'snowshowers_polartwilight' : 'Snow',
-  'snowshowersandthunder_day' : 'Thunderstorm',
-  'snowshowersandthunder_night' : 'Thunderstorm',
-  'snowshowersandthunder_polartwilight' : 'Thunderstorm'
- };
+  'heavyrain': 'Heavy Rain',
+  'heavyrainandthunder': 'Thunderstorm',
+  'heavyrainshowers_day': 'Heavy Rain',
+  'heavyrainshowers_night': 'Heavy Rain',
+  'heavyrainshowers_polartwilight': 'Heavy Rain',
+  'heavyrainshowersandthunder_day': 'Thunderstorm',
+  'heavyrainshowersandthunder_night': 'Thunderstorm',
+  'heavyrainshowersandthunder_polartwilight': 'Thunderstorm',
+  'heavysleet': 'Sleet',
+  'heavysleetandthunder': 'Thunderstorm',
+  'heavysleetshowers_day': 'Sleet',
+  'heavysleetshowers_night': 'Sleet',
+  'heavysleetshowers_polartwilight': 'Sleet',
+  'heavysleetshowersandthunder_day': 'Thunderstorm',
+  'heavysleetshowersandthunder_night': 'Thunderstorm',
+  'heavysleetshowersandthunder_polartwilight': 'Thunderstorm',
+  'heavysnow': 'Heavy Snow',
+  'heavysnowandthunder': 'Thunderstorm',
+  'heavysnowshowers_day': 'Heavy Snow',
+  'heavysnowshowers_night': 'Heavy Snow',
+  'heavysnowshowers_polartwilight': 'Heavy Snow',
+  'heavysnowshowersandthunder_day': 'Thunderstorm',
+  'heavysnowshowersandthunder_night': 'Thunderstorm',
+  'heavysnowshowersandthunder_polartwilight': 'Thunderstorm',
+  'lightrain': 'Drizzle',
+  'lightrainandthunder': 'Thunderstorm',
+  'lightrainshowers_day': 'Drizzle',
+  'lightrainshowers_night': 'Drizzle',
+  'lightrainshowers_polartwilight': 'Drizzle',
+  'lightrainshowersandthunder_day': 'Thunderstorm',
+  'lightrainshowersandthunder_night': 'Thunderstorm',
+  'lightrainshowersandthunder_polartwilight': 'Thunderstorm',
+  'lightsleet': 'Sleet',
+  'lightsleetandthunder': 'Thunderstorm',
+  'lightsleetshowers_day': 'Sleet',
+  'lightsleetshowers_night': 'Sleet',
+  'lightsleetshowers_polartwilight': 'Sleet',
+  'lightsnow': 'Snow',
+  'lightsnowandthunder': 'Thunderstorm',
+  'lightsnowshowers_day': 'Snow',
+  'lightsnowshowers_night': 'Snow',
+  'lightsnowshowers_polartwilight': 'Snow',
+  'lightssleetshowersandthunder_day': 'Thunderstorm',
+  'lightssleetshowersandthunder_night': 'Thunderstorm',
+  'lightssleetshowersandthunder_polartwilight': 'Thunderstorm',
+  'lightssnowshowersandthunder_day': 'Thunderstorm',
+  'lightssnowshowersandthunder_night': 'Thunderstorm',
+  'lightssnowshowersandthunder_polartwilight': 'Thunderstorm',
+  'partlycloudy_day': 'Partly Cloudy',
+  'partlycloudy_night': 'Cloudy Night',
+  'partlycloudy_polartwilight': 'Cloudy Night',
+  'rain': 'Rain',
+  'rainandthunder': 'Thunderstorm',
+  'rainshowers_day': 'Rain',
+  'rainshowers_night': 'Rain',
+  'rainshowers_polartwilight': 'Rain',
+  'rainshowersandthunder_day': 'Thunderstorm',
+  'rainshowersandthunder_night': 'Thunderstorm',
+  'rainshowersandthunder_polartwilight': 'Thunderstorm',
+  'sleet': 'Sleet',
+  'sleetshowers_day': 'Sleet',
+  'sleetshowers_night': 'Sleet',
+  'sleetshowers_polartwilight': 'Sleet',
+  'sleetshowersandthunder_day': 'Thunderstorm',
+  'sleetshowersandthunder_night': 'Thunderstorm',
+  'sleetshowersandthunder_polartwilight': 'Thunderstorm',
+  'snow': 'Snow',
+  'snowandthunder': 'Thunderstorm',
+  'snowshowers_day': 'Snow',
+  'snowshowers_night': 'Snow',
+  'snowshowers_polartwilight': 'Snow',
+  'snowshowersandthunder_day': 'Thunderstorm',
+  'snowshowersandthunder_night': 'Thunderstorm',
+  'snowshowersandthunder_polartwilight': 'Thunderstorm'
+};
 
 Map<int, String> OMCodes = {
   0: 'Clear Sky',
@@ -358,7 +358,7 @@ Map<String, String> textBackground = {
   'Fog': 'fog2.jpg',
   'Snow': 'snowy_sky.jpg',
   'Heavy Rain': 'heavy_rainy_sky.jpg',
-  'Cloudy Night' : 'clear_night_color.jpg'
+  'Cloudy Night': 'clear_night_color.jpg'
 };
 
 Map<String, List<Color>> textFontColor = {
@@ -437,7 +437,7 @@ Map<String, List<double>> conversionTable = {
   'kph': [0, 1],
   'm/s': [0, 0.277778],
   'mph': [0, 0.621371],
-  'kn' : [0, 0.539957],
+  'kn': [0, 0.539957],
   'inHg': [0, 1],
   'mmHg': [0, 25.4],
   'mb': [0, 33.864],
@@ -455,10 +455,10 @@ Map<String, int> weatherConditionBiassTable = {
   'Rain': 31,
   'Sleet': 8,
   'Drizzle': 25,
-  'Thunderstorm': 35,  // super rare
+  'Thunderstorm': 35, // super rare
   'Heavy Snow': 30,
   'Fog': 10,
-  'Snow': 13,  // you can't go wrong by choosing the less extreme one
+  'Snow': 13, // you can't go wrong by choosing the less extreme one
   'Heavy Rain': 30,
-  'Cloudy Night' : 1, // you don't want night in the daily summary
+  'Cloudy Night': 1, // you don't want night in the daily summary
 };

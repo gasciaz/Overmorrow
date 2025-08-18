@@ -16,11 +16,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+import 'dart:async';
 import 'dart:io';
 
-import 'package:http/http.dart' as http;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'dart:async';
+import 'package:http/http.dart' as http;
 
 class MyGetResponse implements FileServiceResponse {
   var url;
@@ -40,7 +40,8 @@ class MyGetResponse implements FileServiceResponse {
 
   @override
   DateTime get validTill {
-    if (url.toString().contains("search")) { //search results are stored for 40 days
+    if (url.toString().contains("search")) {
+      //search results are stored for 40 days
       return DateTime.now().add(const Duration(days: 40));
     }
 
@@ -71,7 +72,6 @@ class MyGetResponse implements FileServiceResponse {
 
   @override
   String get fileExtension => _response.fileExtension;
-
 }
 
 class MyFileService extends HttpFileService {
@@ -93,7 +93,6 @@ CacheManager cacheManager = CacheManager(Config(
   fileService: MyFileService(),
 ));
 
-
 CacheManager cacheManager2 = CacheManager(Config(
   "hihikey",
   stalePeriod: const Duration(hours: 3),
@@ -110,14 +109,18 @@ class CustomCacheManager {
     fileService: MyFileService(),
   ));
 
-  Future<List<dynamic>> fetchData(String url, String cacheKey, {headers}) async {
+  Future<List<dynamic>> fetchData(String url, String cacheKey,
+      {headers}) async {
     try {
       final fileInfo = await _cacheManager.getFileFromCache(cacheKey);
 
       //print(("got here", fileInfo?.validTill, fileInfo?.validTill.difference(DateTime.now())));
 
-      if (fileInfo == null || fileInfo.validTill.difference(DateTime.now()).isNegative) {
-        final file = await _cacheManager.downloadFile(url, key: cacheKey, authHeaders: headers).timeout(const Duration(seconds: 5));
+      if (fileInfo == null ||
+          fileInfo.validTill.difference(DateTime.now()).isNegative) {
+        final file = await _cacheManager
+            .downloadFile(url, key: cacheKey, authHeaders: headers)
+            .timeout(const Duration(seconds: 5));
         return [file.file, true];
       } else {
         return [fileInfo.file, true];
@@ -125,10 +128,10 @@ class CustomCacheManager {
     } catch (error) {
       print("last data");
       try {
-        final FileInfo? fileInfo = await _cacheManager.getFileFromCache(cacheKey);
+        final FileInfo? fileInfo =
+            await _cacheManager.getFileFromCache(cacheKey);
         return [fileInfo!.file, false];
-      }
-      catch (error) {
+      } catch (error) {
         throw const SocketException("no wifi");
       }
 

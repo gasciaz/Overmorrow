@@ -23,10 +23,10 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:overmorrow/ui_helper.dart';
 
+import '../l10n/app_localizations.dart';
 import 'alerts_page.dart';
 import 'aqi_page.dart';
 import 'decoders/decode_OM.dart';
-import '../l10n/app_localizations.dart';
 
 class WavePainter extends CustomPainter {
   final double waveValue;
@@ -99,7 +99,8 @@ class NewSunriseSunset extends StatefulWidget {
   _NewSunriseSunsetState createState() => _NewSunriseSunsetState();
 }
 
-class _NewSunriseSunsetState extends State<NewSunriseSunset> with SingleTickerProviderStateMixin {
+class _NewSunriseSunsetState extends State<NewSunriseSunset>
+    with SingleTickerProviderStateMixin {
   late int hourdif;
 
   late AnimationController _controller;
@@ -151,8 +152,9 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset> with SingleTickerPr
             text: TextSpan(
               text: write,
               style: GoogleFonts.outfit(
-                  fontSize:
-                      15.0 * 1.1 * getFontSize(widget.data.settings["Font size"]),
+                  fontSize: 15.0 *
+                      1.1 *
+                      getFontSize(widget.data.settings["Font size"]),
                   fontWeight: FontWeight.w300),
             ),
             textDirection: TextDirection.ltr);
@@ -161,13 +163,18 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset> with SingleTickerPr
         final textWidth = textPainter.width * 1.1;
 
         return Padding(
-          padding: const EdgeInsets.only(left: 24, right: 24, bottom: 23, top: 13),
+          padding:
+              const EdgeInsets.only(left: 24, right: 24, bottom: 23, top: 13),
           child: Column(
             children: [
               Padding(
                 padding: EdgeInsets.only(
                     left: min(
-                        max((progress * (widget.width - 53)) - textWidth / 2  + 4, 0),
+                        max(
+                            (progress * (widget.width - 53)) -
+                                textWidth / 2 +
+                                4,
+                            0),
                         widget.width - 53 - textWidth)),
                 child: Align(
                   alignment: Alignment.centerLeft,
@@ -196,11 +203,8 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset> with SingleTickerPr
                 padding:
                     const EdgeInsets.only(left: 5, right: 5, bottom: 5, top: 7),
                 child: CustomPaint(
-                  painter: WavePainter(
-                      _controller.value,
-                      palette.secondary,
-                      palette.surfaceContainerHighest,
-                      progress),
+                  painter: WavePainter(_controller.value, palette.secondary,
+                      palette.surfaceContainerHighest, progress),
                   child: const SizedBox(
                     width: double.infinity,
                     height: 8.0,
@@ -221,13 +225,11 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset> with SingleTickerPr
                     ),
                     comfortatext(
                         widget.data.sunstatus.sunrise, 15, widget.data.settings,
-                        color: palette.secondary,
-                        weight: FontWeight.w400),
+                        color: palette.secondary, weight: FontWeight.w400),
                     const Spacer(),
                     comfortatext(
                         widget.data.sunstatus.sunset, 15, widget.data.settings,
-                        color: palette.outline,
-                        weight: FontWeight.w400),
+                        color: palette.outline, weight: FontWeight.w400),
                     Padding(
                       padding: const EdgeInsets.only(left: 4, top: 1),
                       child: Icon(Icons.nightlight_outlined,
@@ -251,29 +253,30 @@ Widget aqiWidget(var data, ColorScheme palette, context, bool isTabletMode) {
         padding: const EdgeInsets.only(left: 25, top: 15),
         child: Align(
           alignment: Alignment.centerLeft,
-          child: comfortatext(
-            AppLocalizations.of(context)!.airQualityLowercase, 17,
-            data.settings,
-            color: palette.onSurface
-          ),
+          child: comfortatext(AppLocalizations.of(context)!.airQualityLowercase,
+              17, data.settings,
+              color: palette.onSurface),
         ),
       ),
       GestureDetector(
         behavior: HitTestBehavior.translucent,
-        onTap: (){
+        onTap: () {
           HapticFeedback.lightImpact();
           Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AllergensPage(data: data, isTabletMode: isTabletMode,))
-          );
+              MaterialPageRoute(
+                  builder: (context) => AllergensPage(
+                        data: data,
+                        isTabletMode: isTabletMode,
+                      )));
         },
         child: Container(
           padding: const EdgeInsets.all(20),
-          margin: const EdgeInsets.only(left: 25, right: 25, top: 14, bottom: 10),
+          margin:
+              const EdgeInsets.only(left: 25, right: 25, top: 14, bottom: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            border: Border.all(color: palette.outlineVariant, width: 2)
-          ),
+              borderRadius: BorderRadius.circular(100),
+              border: Border.all(color: palette.outlineVariant, width: 2)),
           child: Row(
             children: [
               Container(
@@ -285,23 +288,26 @@ Widget aqiWidget(var data, ColorScheme palette, context, bool isTabletMode) {
                 ),
                 margin: const EdgeInsets.only(right: 20),
                 child: Center(
-                    child: comfortatext(data.aqi.aqi_index.toString(), 24, data.settings,
-                        color: palette.onSecondaryContainer)
-                ),
+                    child: comfortatext(
+                        data.aqi.aqi_index.toString(), 24, data.settings,
+                        color: palette.onSecondaryContainer)),
               ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     comfortatext(
-                      data.aqi.aqi_title, 19, data.settings, color: palette.secondary, align: TextAlign.left,
+                      data.aqi.aqi_title,
+                      19,
+                      data.settings,
+                      color: palette.secondary,
+                      align: TextAlign.left,
                       weight: FontWeight.w500,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 6, left: 0),
                       child: comfortatext(data.aqi.aqi_desc, 14, data.settings,
-                          color: palette.outline,
-                          weight: FontWeight.w400),
+                          color: palette.outline, weight: FontWeight.w400),
                     ),
                   ],
                 ),
@@ -311,14 +317,19 @@ Widget aqiWidget(var data, ColorScheme palette, context, bool isTabletMode) {
                   HapticFeedback.lightImpact();
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AllergensPage(data: data, isTabletMode: isTabletMode,))
-                  );
+                      MaterialPageRoute(
+                          builder: (context) => AllergensPage(
+                                data: data,
+                                isTabletMode: isTabletMode,
+                              )));
                 },
-                icon: Icon(Icons.keyboard_arrow_right_rounded, color: palette.primary,),
+                icon: Icon(
+                  Icons.keyboard_arrow_right_rounded,
+                  color: palette.primary,
+                ),
               ),
             ],
           ),
-
         ),
       ),
     ],
@@ -328,16 +339,15 @@ Widget aqiWidget(var data, ColorScheme palette, context, bool isTabletMode) {
 Widget alertWidget(var data, context, ColorScheme palette) {
   if (data.alerts.length > 0) {
     return Padding(
-        padding: const EdgeInsets.only(
-            left: 25, right: 25, bottom: 10, top: 20),
+        padding:
+            const EdgeInsets.only(left: 25, right: 25, bottom: 10, top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 11),
-              child: comfortatext(
-                  AppLocalizations.of(context)!.alertsLowercase, 17,
-                  data.settings,
+              child: comfortatext(AppLocalizations.of(context)!.alertsLowercase,
+                  17, data.settings,
                   color: palette.onSurface),
             ),
             Column(
@@ -349,29 +359,38 @@ Widget alertWidget(var data, context, ColorScheme palette) {
                       HapticFeedback.lightImpact();
                       Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => AlertsPage(data: data))
-                      );
+                          MaterialPageRoute(
+                              builder: (context) => AlertsPage(data: data)));
                     },
                     child: Container(
-                      padding: const EdgeInsets.only(left: 25, top: 23, bottom: 23, right: 22),
+                      padding: const EdgeInsets.only(
+                          left: 25, top: 23, bottom: 23, right: 22),
                       decoration: BoxDecoration(
                         color: palette.errorContainer,
-                          borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(18),
                       ),
                       child: Row(
                         children: [
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min, //first time i realised this makes it wrap the content size
+                              mainAxisSize: MainAxisSize
+                                  .min, //first time i realised this makes it wrap the content size
                               children: [
                                 Flexible(
-                                  child: comfortatext(data.alerts[index].event, 18,
-                                      data.settings, color: palette.onErrorContainer,),
+                                  child: comfortatext(
+                                    data.alerts[index].event,
+                                    18,
+                                    data.settings,
+                                    color: palette.onErrorContainer,
+                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 2),
-                                  child: comfortatext("${data.alerts[index].start} - ${data.alerts[index].end}", 14, data.settings,
+                                  child: comfortatext(
+                                      "${data.alerts[index].start} - ${data.alerts[index].end}",
+                                      14,
+                                      data.settings,
                                       color: palette.outline),
                                 )
                               ],
@@ -379,7 +398,11 @@ Widget alertWidget(var data, context, ColorScheme palette) {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 5, left: 20),
-                            child: Icon(Icons.warning_amber_rounded, color: palette.error, size: 26,),
+                            child: Icon(
+                              Icons.warning_amber_rounded,
+                              color: palette.error,
+                              size: 26,
+                            ),
                           )
                         ],
                       ),
@@ -389,8 +412,7 @@ Widget alertWidget(var data, context, ColorScheme palette) {
               }),
             ),
           ],
-        )
-    );
+        ));
   }
   return Container();
 }
@@ -411,56 +433,55 @@ Widget rain15MinuteChart(var data, ColorScheme palette, context) {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Padding(
-                padding:
-                const EdgeInsets.only(right: 3),
+                padding: const EdgeInsets.only(right: 3),
                 child: Icon(
                   Icons.water_drop_outlined,
                   color: palette.onSecondaryContainer,
                   size: 20,
                 ),
               ),
-              comfortatext(data.minutely_15_precip.precip_sum.toStringAsFixed(1),
-                  19, data.settings,
-                  color: palette.primary),
               comfortatext(
-                  data.settings["Precipitation"], 16, data.settings,
+                  data.minutely_15_precip.precip_sum.toStringAsFixed(1),
+                  19,
+                  data.settings,
+                  color: palette.primary),
+              comfortatext(data.settings["Precipitation"], 16, data.settings,
                   color: palette.primary),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 4),
                   child: comfortatext(
-                    data.minutely_15_precip.t_minus,
-                    16,
-                    data.settings,
-                    color: palette.onSecondaryContainer),
+                      data.minutely_15_precip.t_minus, 16, data.settings,
+                      color: palette.onSecondaryContainer),
                 ),
               ),
-
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 20, bottom: 10, left: 15, right: 15),
+            padding:
+                const EdgeInsets.only(top: 20, bottom: 10, left: 15, right: 15),
             child: SizedBox(
-                height: 45,
-                child: Row(
+              height: 45,
+              child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
-                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                   children: List<Widget>.generate( data.minutely_15_precip.precips.length, (int index)  {
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List<Widget>.generate(
+                      data.minutely_15_precip.precips.length, (int index) {
                     return Container(
                       width: 5,
                       //i'm doing this because otherwise you wouldn't be
                       // able to tell the 0mm rain apart from the 0.1mm, or just low values in general
-                      height: data.minutely_15_precip.precips[index] == 0 ?
-                        5 : 8.0 + data.minutely_15_precip.precips[index] * 30,
+                      height: data.minutely_15_precip.precips[index] == 0
+                          ? 5
+                          : 8.0 + data.minutely_15_precip.precips[index] * 30,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: data.minutely_15_precip.precips[index] == 0 ?
-                        palette.outline : palette.primary,
+                        color: data.minutely_15_precip.precips[index] == 0
+                            ? palette.outline
+                            : palette.primary,
                       ),
                     );
-                  }
-                )
-              ),
+                  })),
             ),
           ),
           Padding(
@@ -468,9 +489,15 @@ Widget rain15MinuteChart(var data, ColorScheme palette, context) {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                comfortatext(AppLocalizations.of(context)!.now, 13, data.settings, color: palette.onSurfaceVariant),
-                comfortatext('3${AppLocalizations.of(context)!.hr}', 13, data.settings, color: palette.onSurfaceVariant),
-                comfortatext('6${AppLocalizations.of(context)!.hr}', 13, data.settings, color: palette.onSurfaceVariant)
+                comfortatext(
+                    AppLocalizations.of(context)!.now, 13, data.settings,
+                    color: palette.onSurfaceVariant),
+                comfortatext(
+                    '3${AppLocalizations.of(context)!.hr}', 13, data.settings,
+                    color: palette.onSurfaceVariant),
+                comfortatext(
+                    '6${AppLocalizations.of(context)!.hr}', 13, data.settings,
+                    color: palette.onSurfaceVariant)
               ],
             ),
           )

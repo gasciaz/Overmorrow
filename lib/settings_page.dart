@@ -25,12 +25,13 @@ import 'package:overmorrow/services/color_service.dart';
 import 'package:overmorrow/settings_screens.dart';
 import 'package:overmorrow/weather_refact.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../l10n/app_localizations.dart';
 import 'main.dart';
 import 'ui_helper.dart';
-import '../l10n/app_localizations.dart';
 
 Map<String, List<String>> settingSwitches = {
-  'Language' : [
+  'Language': [
     'English', //English
     'Español', //Spanish
     'Français', //French
@@ -58,28 +59,34 @@ Map<String, List<String>> settingSwitches = {
   'Temperature': ['˚C', '˚F'],
   'Precipitation': ['mm', 'in'],
   'Wind': ['m/s', 'kph', 'mph', 'kn'],
-
   'Time mode': ['12 hour', '24 hour'],
   'Date format': ['mm/dd', 'dd/mm'],
-
   'Font size': ['normal', 'small', 'very small', 'big'],
-
-  'Color mode' : ['auto', 'light', 'dark'],
-
-  'Color source' : ['image', 'wallpaper', 'custom'],
-  'Image source' : ['network', 'asset'],
-  'Custom color': ['#c62828', '#ff80ab', '#7b1fa2', '#9575cd', '#3949ab', '#40c4ff',
-        '#4db6ac', '#4caf50', '#b2ff59', '#ffeb3b', '#ffab40',],
-
-  'Search provider' : ['weatherapi', 'open-meteo'],
-
-  'Layout' : ["sunstatus,rain indicator,hourly,alerts,radar,daily,air quality"],
+  'Color mode': ['auto', 'light', 'dark'],
+  'Color source': ['image', 'wallpaper', 'custom'],
+  'Image source': ['network', 'asset'],
+  'Custom color': [
+    '#c62828',
+    '#ff80ab',
+    '#7b1fa2',
+    '#9575cd',
+    '#3949ab',
+    '#40c4ff',
+    '#4db6ac',
+    '#4caf50',
+    '#b2ff59',
+    '#ffeb3b',
+    '#ffab40',
+  ],
+  'Search provider': ['weatherapi', 'open-meteo'],
+  'Layout': ["sunstatus,rain indicator,hourly,alerts,radar,daily,air quality"],
   'Radar haptics': ["on", "off"],
 };
 
 Future<List<dynamic>> getSettingsAndColors(image) async {
   Map<String, String> settings = await getSettingsUsed();
-  ColorPalette colorPalette = await ColorPalette.getColorPalette(image, settings["Color mode"]!, settings);
+  ColorPalette colorPalette = await ColorPalette.getColorPalette(
+      image, settings["Color mode"]!, settings);
   return [settings, colorPalette];
 }
 
@@ -89,10 +96,10 @@ Future<Map<String, String>> getSettingsUsed() async {
     final prefs = await SharedPreferences.getInstance();
     final ifnot = v.value[0];
     final used = prefs.getString('setting${v.key}') ?? ifnot;
-    if (v.value.length > 1) { //this is so that ones like the layout don't have to include all possible options
-      settings[v.key] = v.value.contains(used) ? used: ifnot;
-    }
-    else {
+    if (v.value.length > 1) {
+      //this is so that ones like the layout don't have to include all possible options
+      settings[v.key] = v.value.contains(used) ? used : ifnot;
+    } else {
       settings[v.key] = used;
     }
   }
@@ -122,7 +129,6 @@ Future<String> isLocationSafe(translationProv) async {
   return translationProv.failedToAccessGps;
 }
 
-
 //the last place you viewed in the app,
 // so that's where it will start up next time you open it
 Future<List<String>> getLastPlace() async {
@@ -150,7 +156,8 @@ setLastKnownLocation(String place, String cord) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('LastKnownPositionName', place);
   await prefs.setString('LastKnownPositionCord', cord);
-  WidgetService.saveData("widget.lastKnownPlace", place); //save the name of the place to the widgets
+  WidgetService.saveData("widget.lastKnownPlace",
+      place); //save the name of the place to the widgets
 }
 
 Future<String> getWeatherProvider() async {
@@ -170,95 +177,101 @@ SetData(String name, String to) async {
   await prefs.setString(name, to);
 }
 
-Widget dropdown(Color bgcolor, String name, Function updatePage, String unit, settings, textcolor,
-    Color primary, rawName) {
+Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
+    settings, textcolor, Color primary, rawName) {
   List<String> Items = settingSwitches[rawName] ?? ['˚C', '˚F'];
 
   return DropdownButton(
-    elevation: 0,
-    underline: Container(),
-    dropdownColor: bgcolor,
-    borderRadius: BorderRadius.circular(18),
-    icon: Padding(
-      padding: const EdgeInsets.only(left:10),
-      child: Icon(Icons.arrow_drop_down_circle_rounded, color: primary,),
-    ),
-    style: GoogleFonts.comfortaa(
-      color: textcolor,
-      fontSize: 19 * getFontSize(settings["Font size"]),
-      fontWeight: FontWeight.w300,
-    ),
-    alignment: Alignment.centerRight,
-    value: unit,
-    items: Items.map((item) {
-      return DropdownMenuItem(
-        value: item,
-        child: Text(item),
-      );
-    }).toList(),
-    onChanged: (Object? value) {
-      HapticFeedback.lightImpact();
-      settings[rawName] = value;
-      updatePage(rawName, value);
-    }
-  );
+      elevation: 0,
+      underline: Container(),
+      dropdownColor: bgcolor,
+      borderRadius: BorderRadius.circular(18),
+      icon: Padding(
+        padding: const EdgeInsets.only(left: 10),
+        child: Icon(
+          Icons.arrow_drop_down_circle_rounded,
+          color: primary,
+        ),
+      ),
+      style: GoogleFonts.comfortaa(
+        color: textcolor,
+        fontSize: 19 * getFontSize(settings["Font size"]),
+        fontWeight: FontWeight.w300,
+      ),
+      alignment: Alignment.centerRight,
+      value: unit,
+      items: Items.map((item) {
+        return DropdownMenuItem(
+          value: item,
+          child: Text(item),
+        );
+      }).toList(),
+      onChanged: (Object? value) {
+        HapticFeedback.lightImpact();
+        settings[rawName] = value;
+        updatePage(rawName, value);
+      });
 }
 
-Widget settingEntry(icon, text, settings, ColorScheme palette, updatePage, rawText, context) {
+Widget settingEntry(
+    icon, text, settings, ColorScheme palette, updatePage, rawText, context) {
   return GestureDetector(
     behavior: HitTestBehavior.translucent,
     onTap: () {
       HapticFeedback.lightImpact();
       showDialog<String>(
-        context: context,
-        builder: (BuildContext context) {
-          List<String> options = settingSwitches[rawText] ?? [""];
-          return AlertDialog(
-            backgroundColor: palette.surface,
-            content: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20, top: 10, left: 0),
-                      child: comfortatext(text, 22, settings, color: palette.onSurface),
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: List<Widget>.generate(options.length, (int index) {
-                        return GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onTap: () {
-                            HapticFeedback.lightImpact();
-                            Navigator.pop(context);
-                            updatePage(rawText, options[index]);
-                          },
-                          child: Row(
-                            children: [
-                              Radio<String>(
-                                value: options[index],
-                                groupValue: settings[rawText],
-                                activeColor: palette.primary,
-                                onChanged: (String? value) {
-                                  HapticFeedback.lightImpact();
-                                  Navigator.pop(context, value);
-                                },
-                              ),
-                              comfortatext(options[index], 18, settings, color: palette.onSurface)
-                            ],
-                          ),
-                        );
-                      }),
-                    ),
-                  ],
-                );
-              },
-            ),
-          );
-        }
-      ).then((selectedValue) {
+          context: context,
+          builder: (BuildContext context) {
+            List<String> options = settingSwitches[rawText] ?? [""];
+            return AlertDialog(
+              backgroundColor: palette.surface,
+              content: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(bottom: 20, top: 10, left: 0),
+                        child: comfortatext(text, 22, settings,
+                            color: palette.onSurface),
+                      ),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children:
+                            List<Widget>.generate(options.length, (int index) {
+                          return GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () {
+                              HapticFeedback.lightImpact();
+                              Navigator.pop(context);
+                              updatePage(rawText, options[index]);
+                            },
+                            child: Row(
+                              children: [
+                                Radio<String>(
+                                  value: options[index],
+                                  groupValue: settings[rawText],
+                                  activeColor: palette.primary,
+                                  onChanged: (String? value) {
+                                    HapticFeedback.lightImpact();
+                                    Navigator.pop(context, value);
+                                  },
+                                ),
+                                comfortatext(options[index], 18, settings,
+                                    color: palette.onSurface)
+                              ],
+                            ),
+                          );
+                        }),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            );
+          }).then((selectedValue) {
         if (selectedValue != null) {
           updatePage(rawText, selectedValue);
         }
@@ -270,14 +283,23 @@ Widget settingEntry(icon, text, settings, ColorScheme palette, updatePage, rawTe
         children: [
           Padding(
             padding: const EdgeInsets.only(right: 17),
-            child: Icon(icon, color: palette.primary, size: 22,),
+            child: Icon(
+              icon,
+              color: palette.primary,
+              size: 22,
+            ),
           ),
           Expanded(
             child: Column(
-             crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 comfortatext(text, 19, settings, color: palette.onSurface),
-                comfortatext(settings[rawText]!, 15, settings, color: palette.outline,),
+                comfortatext(
+                  settings[rawText]!,
+                  15,
+                  settings,
+                  color: palette.outline,
+                ),
               ],
             ),
           ),
@@ -288,7 +310,6 @@ Widget settingEntry(icon, text, settings, ColorScheme palette, updatePage, rawTe
 }
 
 class SettingsPage extends StatefulWidget {
-
   final image;
 
   const SettingsPage({Key? key, required this.image}) : super(key: key);
@@ -298,14 +319,17 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-
   final image;
 
   String _locale = 'English';
   //this is so that appearance page setting changes take effect in place rather that having to exit the page
   ValueNotifier<ColorPalette> colornotify = ValueNotifier<ColorPalette>(
-      const ColorPalette(palette: ColorScheme.light(), imageColors: [], regionColors: [],
-          descColor: WHITE, colorPop: WHITE));
+      const ColorPalette(
+          palette: ColorScheme.light(),
+          imageColors: [],
+          regionColors: [],
+          descColor: WHITE,
+          colorPop: WHITE));
 
   _SettingsPageState({required this.image});
 
@@ -317,6 +341,7 @@ class _SettingsPageState extends State<SettingsPage> {
       }
     });
   }
+
   void goBack() {
     Navigator.of(context).pop();
   }
@@ -331,8 +356,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return FutureBuilder<List<dynamic>>(
       future: getSettingsAndColors(image),
-      builder: (BuildContext context,
-          AsyncSnapshot<List<dynamic>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return Container();
         } else if (snapshot.hasError) {
@@ -351,14 +375,19 @@ class _SettingsPageState extends State<SettingsPage> {
         return Localizations.override(
           context: context,
           locale: languageNameToLocale[_locale] ?? const Locale('en'),
-          child: SettingsMain(settings: snapshot.data?[0], updatePage: updatePage, goBack: goBack, image: image,
-              palette: snapshot.data?[1].palette, colornotify: colornotify,),
+          child: SettingsMain(
+            settings: snapshot.data?[0],
+            updatePage: updatePage,
+            goBack: goBack,
+            image: image,
+            palette: snapshot.data?[1].palette,
+            colornotify: colornotify,
+          ),
         );
       },
     );
   }
 }
-
 
 class SettingsMain extends StatelessWidget {
   final ColorScheme palette;
@@ -368,28 +397,41 @@ class SettingsMain extends StatelessWidget {
   final image;
   final colornotify;
 
-  const SettingsMain({super.key, this.settings, this.updatePage, this.goBack, this.image, required this.palette, this.colornotify});
+  const SettingsMain(
+      {super.key,
+      this.settings,
+      this.updatePage,
+      this.goBack,
+      this.image,
+      required this.palette,
+      this.colornotify});
 
   @override
   Widget build(BuildContext context) {
-    return  Material(
+    return Material(
       color: palette.surface,
       child: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar.large(
-            leading:
-            IconButton(icon: Icon(Icons.arrow_back, color: palette.primary,),
+            leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: palette.primary,
+                ),
                 onPressed: () {
                   HapticFeedback.selectionClick();
                   goBack();
                 }),
-            title: comfortatext(AppLocalizations.of(context)!.settings, 30, settings, color: palette.primary),
+            title: comfortatext(
+                AppLocalizations.of(context)!.settings, 30, settings,
+                color: palette.primary),
             backgroundColor: palette.surface,
             pinned: false,
           ),
           // Just some content big enough to have something to scroll.
           SliverToBoxAdapter(
-            child: NewSettings(settings!, updatePage, image, palette, context, colornotify),
+            child: NewSettings(
+                settings!, updatePage, image, palette, context, colornotify),
           ),
         ],
       ),
