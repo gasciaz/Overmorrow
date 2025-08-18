@@ -23,7 +23,7 @@ import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/new_displays.dart';
 import 'package:overmorrow/ui_helper.dart';
 
-Widget alertBadge(name, text, data, ColorScheme palette) {
+Widget alertBadge(name, text, WeatherData data, ColorScheme palette) {
   return Padding(
     padding: const EdgeInsets.only(right: 3, top: 3, bottom: 3),
     child: Row(

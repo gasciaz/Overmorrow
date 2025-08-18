@@ -1028,7 +1028,7 @@ class OMExtendedAqi {
 }
 
 Future<WeatherData> OMGetWeatherData(
-    lat, lng, realLoc, settings, placeName, AppLocalizations localizations) async {
+    lat, lng, realLoc, Map<String, String> settings, placeName, AppLocalizations localizations) async {
   final OM = await OMRequestData(lat, lng, realLoc);
   final oMBody = OM[0];
 

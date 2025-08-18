@@ -294,7 +294,7 @@ Widget buildHourlyPrecip(var hour, ColorScheme palette, WeatherData data) {
   );
 }
 
-Widget buildHourlyWind(var hour, ColorScheme palette, data) {
+Widget buildHourlyWind(var hour, ColorScheme palette, WeatherData data) {
   return Column(
     key: const ValueKey('wind'),
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -334,7 +334,7 @@ Widget buildHourlyWind(var hour, ColorScheme palette, data) {
   );
 }
 
-Widget buildHourlyUv(var hour, ColorScheme palette, data) {
+Widget buildHourlyUv(var hour, ColorScheme palette, WeatherData data) {
   return Column(
     key: const ValueKey('uv'),
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

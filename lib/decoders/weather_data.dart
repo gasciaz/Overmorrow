@@ -73,7 +73,7 @@ class WeatherData {
       required this.dailyMinMaxTemp});
 
   static Future<WeatherData> getFullData(
-      settings, placeName, realLoc, latlong, String provider, AppLocalizations localizations) async {
+      Map<String, String> settings, placeName, realLoc, latlong, String provider, AppLocalizations localizations) async {
     final List<String> split = latlong.split(',');
     final lat = double.parse(split[0]);
     final lng = double.parse(split[1]);
@@ -108,7 +108,7 @@ class LightCurrentWeatherData {
   });
 
   static Future<LightCurrentWeatherData> getLightCurrentWeatherData(
-      placeName, latlong, provider, settings) async {
+      placeName, latlong, provider, Map<String, String> settings) async {
     final List<String> split = latlong.split(',');
     final var lat = double.parse(split[0]);
     final lng = double.parse(split[1]);
@@ -136,7 +136,7 @@ class LightWindData {
   });
 
   static Future<LightWindData> getLightWindData(
-      placeName, latlong, provider, settings) async {
+      placeName, latlong, provider, Map<String, String> settings) async {
     final List<String> split = latlong.split(',');
     final lat = double.parse(split[0]);
     final lon = double.parse(split[1]);
@@ -171,7 +171,7 @@ class LightHourlyForecastData {
       required this.hourlyTemps});
 
   static Future<LightHourlyForecastData> getLightForecastData(
-      placeName, latLon, provider, settings) async {
+      placeName, latLon, provider, Map<String, String> settings) async {
     final List<String> split = latLon.split(',');
     final lat = double.parse(split[0]);
     final lon = double.parse(split[1]);

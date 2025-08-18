@@ -416,7 +416,7 @@ Widget alertWidget(WeatherData data, BuildContext context, ColorScheme palette) 
   return Container();
 }
 
-Widget rain15MinuteChart(var data, ColorScheme palette, BuildContext context) {
+Widget rain15MinuteChart(WeatherData data, ColorScheme palette, BuildContext context) {
   if (data.minutely_15_precip.t_minus != '') {
     return Container(
       margin: const EdgeInsets.only(left: 23, right: 23, top: 15, bottom: 30),

@@ -45,7 +45,7 @@ double getFontSize(String set) {
   return x;
 }
 
-Widget comfortatext(String text, double size, settings,
+Widget comfortatext(String text, double size, Map<String, String> settings,
     {Color color = WHITE,
     TextAlign align = TextAlign.left,
     weight = FontWeight.w400,
@@ -175,7 +175,7 @@ class MySearchParent extends StatefulWidget {
   final updateLocation;
   final ColorScheme palette;
   final place;
-  final settings;
+  final Map<String, String> settings;
   final Image image;
   final bool isTabletMode;
 
@@ -202,7 +202,7 @@ class _MySearchParentState extends State<MySearchParent> {
 
   final ColorScheme palette;
   final place;
-  final settings;
+  final Map<String, String> settings;
   final Image image;
   final bool isTabletMode;
 
@@ -278,7 +278,7 @@ class MySearchWidget extends StatefulWidget {
   final updateLocation;
   final favorites;
   final prefs;
-  final settings;
+  final Map<String, String> settings;
   final Image image;
   final bool isTabletMode;
 
@@ -311,7 +311,7 @@ class _MySearchWidgetState extends State<MySearchWidget> {
   final place;
   final updateLocation;
   final prefs;
-  final settings;
+  final Map<String, String> settings;
   final Image image;
   final bool isTabletMode;
 

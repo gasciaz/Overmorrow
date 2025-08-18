@@ -33,7 +33,7 @@ Future<void> _launchUrl(String url) async {
 }
 
 class AboutPage extends StatefulWidget {
-  final settings;
+  final Map<String, String> settings;
   final ColorScheme palette;
 
   const AboutPage({super.key, required this.settings, required this.palette});
@@ -44,7 +44,7 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
-  final settings;
+  final Map<String, String> settings;
   final ColorScheme palette;
 
   String version = '--';
@@ -385,7 +385,7 @@ class _AboutPageState extends State<AboutPage> {
 }
 
 class ApiAndServicesPage extends StatefulWidget {
-  final settings;
+  final Map<String, String> settings;
   final ColorScheme palette;
 
   const ApiAndServicesPage(
@@ -397,7 +397,7 @@ class ApiAndServicesPage extends StatefulWidget {
 }
 
 class _ApiAndServicesPageState extends State<ApiAndServicesPage> {
-  final settings;
+  final Map<String, String> settings;
   final ColorScheme palette;
   _ApiAndServicesPageState({required this.settings, required this.palette});
 

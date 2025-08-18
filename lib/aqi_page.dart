@@ -72,7 +72,7 @@ class SquigglyCirclePainter extends CustomPainter {
 }
 
 Widget pollenWidget(
-    IconData icon, String name, double value, data, ColorScheme palette) {
+    IconData icon, String name, double value, WeatherData data, ColorScheme palette) {
   const categoryBoundaries = [-1, 0, 20, 80, 200];
   const categoryNames = ['--', 'none', 'low', 'medium', 'high'];
 
@@ -169,7 +169,7 @@ class ThreeQuarterCirclePainter extends CustomPainter {
   }
 }
 
-Widget pollutantWidget(data, name, value, percent, ColorScheme palette) {
+Widget pollutantWidget(WeatherData data, name, value, percent, ColorScheme palette) {
   return Padding(
     padding: const EdgeInsets.all(14),
     child: Column(
@@ -420,7 +420,7 @@ class _AllergensPageState extends State<AllergensPage> {
   }
 }
 
-Widget aqiCircleAndDesc(data, ColorScheme palette) {
+Widget aqiCircleAndDesc(WeatherData data, ColorScheme palette) {
   return Column(
     children: [
       Padding(
@@ -462,7 +462,7 @@ Widget aqiCircleAndDesc(data, ColorScheme palette) {
   );
 }
 
-Widget mainPollutantIndicator(data, extendedAqi, ColorScheme palette, BuildContext context) {
+Widget mainPollutantIndicator(WeatherData data, extendedAqi, ColorScheme palette, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(top: 25, bottom: 3),
     child: Container(
@@ -486,7 +486,7 @@ Widget mainPollutantIndicator(data, extendedAqi, ColorScheme palette, BuildConte
   );
 }
 
-Widget pollenIndicators(data, extendedAqi, ColorScheme palette, BuildContext context) {
+Widget pollenIndicators(WeatherData data, extendedAqi, ColorScheme palette, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(top: 10, bottom: 10),
     child: Container(
@@ -539,7 +539,7 @@ Widget pollenIndicators(data, extendedAqi, ColorScheme palette, BuildContext con
   );
 }
 
-Widget pollutantIndicators(data, extendedAqi, ColorScheme palette) {
+Widget pollutantIndicators(WeatherData data, extendedAqi, ColorScheme palette) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 3, top: 40),
     child: Container(
@@ -573,7 +573,7 @@ Widget pollutantIndicators(data, extendedAqi, ColorScheme palette) {
   );
 }
 
-Widget europeanAndUsAqi(data, extendedAqi, ColorScheme palette, BuildContext context) {
+Widget europeanAndUsAqi(WeatherData data, extendedAqi, ColorScheme palette, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(top: 10),
     child: Row(
@@ -643,7 +643,7 @@ Widget europeanAndUsAqi(data, extendedAqi, ColorScheme palette, BuildContext con
   );
 }
 
-Widget dailyAqi(data, extendedAqi, ColorScheme palette, BuildContext context, highestAqi) {
+Widget dailyAqi(WeatherData data, extendedAqi, ColorScheme palette, BuildContext context, highestAqi) {
   return Column(
     children: [
       Padding(
@@ -710,7 +710,7 @@ Widget dailyAqi(data, extendedAqi, ColorScheme palette, BuildContext context, hi
   );
 }
 
-Widget dustAndAODIndicators(data, extendedAqi, ColorScheme palette, BuildContext context) {
+Widget dustAndAODIndicators(WeatherData data, extendedAqi, ColorScheme palette, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(top: 10),
     child: Row(
@@ -959,7 +959,7 @@ class AQIGraphPainter extends CustomPainter {
 }
 
 Widget HourlyQqi(
-    data, hourValues, name, extendedAqi, BuildContext context, ColorScheme palette) {
+    WeatherData data, hourValues, name, extendedAqi, BuildContext context, ColorScheme palette) {
   const chartTypes = <List<int>>[
     [0, 2, 4, 6, 8, 10],
     [0, 5, 10, 15, 20, 25],

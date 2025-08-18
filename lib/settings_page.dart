@@ -179,7 +179,7 @@ Future<void> SetData(String name, String to) async {
 }
 
 Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
-    settings, textcolor, Color primary, rawName) {
+    Map<String, String> settings, textcolor, Color primary, rawName) {
   final Items = settingSwitches[rawName] ?? ['˚C', '˚F'];
 
   return DropdownButton(
@@ -214,8 +214,8 @@ Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
       });
 }
 
-Widget settingEntry(icon, text, settings, ColorScheme palette, updatePage,
-    rawText, BuildContext context) {
+Widget settingEntry(icon, text, Map<String, String> settings,
+    ColorScheme palette, updatePage, rawText, BuildContext context) {
   return GestureDetector(
     behavior: HitTestBehavior.translucent,
     onTap: () {
@@ -376,7 +376,7 @@ class _SettingsPageState extends State<SettingsPage> {
           context: context,
           locale: languageNameToLocale[_locale] ?? const Locale('en'),
           child: SettingsMain(
-            settings: snapshot.data?[0],
+            settings: snapshot.data?[0] as Map<String, String>,
             updatePage: updatePage,
             goBack: goBack,
             image: image,
@@ -392,14 +392,14 @@ class _SettingsPageState extends State<SettingsPage> {
 class SettingsMain extends StatelessWidget {
   final ColorScheme palette;
   final goBack;
-  final settings;
+  final Map<String, String> settings;
   final updatePage;
   final image;
   final colornotify;
 
   const SettingsMain(
       {super.key,
-      this.settings,
+      required this.settings,
       this.updatePage,
       this.goBack,
       this.image,

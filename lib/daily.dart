@@ -25,7 +25,7 @@ import 'package:overmorrow/hourly.dart';
 import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
 
-Widget dayStat(data, IconData icon, number, addon,
+Widget dayStat(WeatherData data, IconData icon, number, addon,
     {bool addWind = false, windDir = 0, iconSize = 16.0}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,

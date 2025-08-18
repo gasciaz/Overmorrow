@@ -36,8 +36,15 @@ Future<void> _launchUrl(String url) async {
   }
 }
 
-Widget mainSettingEntry(String title, String desc, ColorScheme palette,
-    IconData icon, settings, Widget pushTo, BuildContext context, updatePage) {
+Widget mainSettingEntry(
+    String title,
+    String desc,
+    ColorScheme palette,
+    IconData icon,
+    Map<String, String> settings,
+    Widget pushTo,
+    BuildContext context,
+    updatePage) {
   return Padding(
     padding: const EdgeInsets.only(left: 25, right: 25, top: 5, bottom: 5),
     child: GestureDetector(
@@ -261,7 +268,7 @@ class _AppearancePageState extends State<AppearancePage> {
 
 class AppearanceSelector extends StatelessWidget {
   final image;
-  final settings;
+  final Map<String, String> settings;
   final ColorPalette colorPalette;
   final updatePage;
   final localizations;
@@ -471,7 +478,7 @@ class AppearanceSelector extends StatelessWidget {
 }
 
 class UnitsPage extends StatefulWidget {
-  final settings;
+  final Map<String, String> settings;
   final image;
   final palette;
   final updateMainPage;
@@ -496,7 +503,7 @@ class UnitsPage extends StatefulWidget {
 
 class _UnitsPageState extends State<UnitsPage> {
   final image;
-  final settings;
+  final Map<String, String> settings;
   final ColorScheme palette;
   final updateMainPage;
   final localizations;
@@ -591,7 +598,7 @@ class _UnitsPageState extends State<UnitsPage> {
 }
 
 class GeneralSettingsPage extends StatefulWidget {
-  final settings;
+  final Map<String, String> settings;
   final image;
   final palette;
   final updateMainPage;
@@ -616,7 +623,7 @@ class GeneralSettingsPage extends StatefulWidget {
 
 class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
   final image;
-  final settings;
+  final Map<String, String> settings;
   final ColorScheme palette;
   final updateMainPage;
   final localizations;
@@ -733,7 +740,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
 }
 
 class LangaugePage extends StatefulWidget {
-  final settings;
+  final Map<String, String> settings;
   final image;
   final palette;
   final updateMainPage;
@@ -755,7 +762,7 @@ class LangaugePage extends StatefulWidget {
 
 class _LangaugePageState extends State<LangaugePage> {
   final image;
-  final settings;
+  final Map<String, String> settings;
   final ColorScheme palette;
   final updateMainPage;
 
@@ -811,14 +818,14 @@ class _LangaugePageState extends State<LangaugePage> {
 class TranslationSelection extends StatelessWidget {
   final goBack;
   final onTap;
-  final settings;
+  final Map<String, String> settings;
   final options;
   final selected;
   final ColorScheme palette;
 
   const TranslationSelection(
       {super.key,
-      this.settings,
+      required this.settings,
       this.goBack,
       this.onTap,
       this.options,
@@ -928,7 +935,7 @@ class TranslationSelection extends StatelessWidget {
 }
 
 class LayoutPage extends StatefulWidget {
-  final settings;
+  final Map<String, String> settings;
   final image;
   final ColorScheme palette;
   final updateMainPage;
@@ -953,7 +960,7 @@ class LayoutPage extends StatefulWidget {
 
 class _LayoutPageState extends State<LayoutPage> {
   final image;
-  final settings;
+  final Map<String, String> settings;
   final ColorScheme palette;
   final updateMainPage;
   final AppLocalizations localizations;

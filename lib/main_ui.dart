@@ -141,7 +141,7 @@ class DescriptionCircle extends StatelessWidget {
   final String text;
   final String undercaption;
   final String extra;
-  final settings;
+  final Map<String, String> settings;
   final dir;
 
   final ColorScheme palette;
@@ -481,7 +481,7 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
   }
 }
 
-Widget providerSelector(settings, updateLocation, ColorScheme palette, provider,
+Widget providerSelector(Map<String, String> settings, updateLocation, ColorScheme palette, provider,
     latlng, realLoc, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 25, right: 25, bottom: 80, top: 35),
@@ -551,7 +551,7 @@ class ErrorPage extends StatelessWidget {
   final updateLocation;
   final place;
   final icon;
-  final settings;
+  final Map<String, String> settings;
   final provider;
   final latlng;
   final shouldAdd;

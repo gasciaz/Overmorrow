@@ -109,7 +109,7 @@ class CustomCacheManager {
   ));
 
   Future<List<dynamic>> fetchData(String url, String cacheKey,
-      {headers}) async {
+      {Map<String, String>? headers}) async {
     try {
       final fileInfo = await _cacheManager.getFileFromCache(cacheKey);
 
@@ -127,8 +127,7 @@ class CustomCacheManager {
     } catch (error) {
       print('last data');
       try {
-        final fileInfo =
-            await _cacheManager.getFileFromCache(cacheKey);
+        final fileInfo = await _cacheManager.getFileFromCache(cacheKey);
         return [fileInfo!.file, false];
       } catch (error) {
         throw const SocketException('no wifi');

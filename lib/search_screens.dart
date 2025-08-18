@@ -130,7 +130,7 @@ Widget searchBar2(
 class HeroSearchPage extends StatefulWidget {
   final ColorScheme palette;
   final String place;
-  final settings;
+  final Map<String, String> settings;
   final recommend;
   final updateRec;
   final updateLocation;
@@ -169,7 +169,7 @@ class HeroSearchPage extends StatefulWidget {
 class _HeroSearchPageState extends State<HeroSearchPage> {
   final ColorScheme palette;
   final String place;
-  final settings;
+  final Map<String, String> settings;
   final recommend;
   final updateRec;
   final updateLocation;
@@ -553,7 +553,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
 Widget buildRecommend(
     String text,
     ColorScheme palette,
-    settings,
+    Map<String, String> settings,
     ValueListenable<List<String>> favoritesListen,
     ValueListenable<List<String>> recommend,
     updateLocation,
@@ -674,7 +674,7 @@ Widget buildSearchResults(
     ColorScheme palette,
     updateLocation,
     onFavChanged,
-    settings,
+    Map<String, String> settings,
     bool isTabletMode) {
   final favoriteNarrow = <String>[];
   for (var i = 0; i < favorites.length; i++) {
@@ -771,7 +771,7 @@ Widget buildSearchResults(
 }
 
 Widget CurrentLocationWidget(
-    settings,
+    Map<String, String> settings,
     locationState,
     locationMessage,
     ColorScheme palette,
@@ -882,7 +882,7 @@ Widget CurrentLocationWidget(
   );
 }
 
-Widget favoritesOrReorder(bool isEditing, favorites, settings, onFavChanged,
+Widget favoritesOrReorder(bool isEditing, favorites, Map<String, String> settings, onFavChanged,
     ColorScheme palette, updateLocation, BuildContext context, bool isTabletMode) {
   if (isEditing) {
     return reorderFavorites(
@@ -894,7 +894,7 @@ Widget favoritesOrReorder(bool isEditing, favorites, settings, onFavChanged,
 }
 
 Widget buildFavorites(ColorScheme palette, List<String> favorites,
-    updateLocation, settings, BuildContext context, bool isTabletMode) {
+    updateLocation, Map<String, String> settings, BuildContext context, bool isTabletMode) {
   return SingleChildScrollView(
     child: Container(
         key: const ValueKey<String>('normal'),
@@ -948,7 +948,7 @@ Widget buildFavorites(ColorScheme palette, List<String> favorites,
 }
 
 Widget reorderFavorites(
-    items, settings, onFavChanged, ColorScheme palette, bool isTabletMode) {
+    items, Map<String, String> settings, onFavChanged, ColorScheme palette, bool isTabletMode) {
   return Container(
     key: const ValueKey<String>('editing'),
     decoration: BoxDecoration(
@@ -982,7 +982,7 @@ Widget reorderFavorites(
   );
 }
 
-Widget reorderableItem(List<dynamic> items, index, settings,
+Widget reorderableItem(List<dynamic> items, index, Map<String, String> settings,
     ColorScheme palette, onFavChanged, bool isTabletMode) {
   final split = json.decode(items[index]);
   final String name = split['name'];
