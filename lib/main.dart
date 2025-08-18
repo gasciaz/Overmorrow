@@ -314,7 +314,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -328,7 +328,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<Widget> getDays(
-      bool recall, proposedLoc, backupName, bool startup) async {
+      bool recall, String proposedLoc, String backupName, bool startup) async {
     try {
       final localizations = AppLocalizations.of(context)!;
 
@@ -545,7 +545,7 @@ class _HomePageState extends State<HomePage> {
         time: 300, startup: true); //just for testing
   }
 
-  Future<void> updateLocation(proposedLoc, backupName,
+  Future<void> updateLocation(String proposedLoc, String backupName,
       {time = 0, bool startup = false}) async {
     setState(() {
       HapticFeedback.lightImpact();

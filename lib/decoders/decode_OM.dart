@@ -313,8 +313,18 @@ class OMCurrent {
     required this.debugColors,
   });
 
-  static Future<OMCurrent> fromJson(item, settings, sunstatus, timenow, realLoc,
-      lat, lng, start, dayDif, AppLocalizations context, bool isonline) async {
+  static Future<OMCurrent> fromJson(
+      item,
+      settings,
+      sunstatus,
+      timenow,
+      String realLoc,
+      lat,
+      lng,
+      start,
+      dayDif,
+      AppLocalizations context,
+      bool isonline) async {
     var currentCondition = oMCurrentTextCorrection(
         item['current']['weather_code'],
         sunstatus.absoluteSunriseSunset,
@@ -1030,9 +1040,9 @@ class OMExtendedAqi {
 Future<WeatherData> OMGetWeatherData(
     lat,
     lng,
-    realLoc,
+    String realLoc,
     Map<String, String> settings,
-    placeName,
+    String placeName,
     AppLocalizations localizations) async {
   final OM = await OMRequestData(lat, lng, realLoc);
   final oMBody = OM[0];
@@ -1120,7 +1130,7 @@ Future<WeatherData> OMGetWeatherData(
 }
 
 Future<LightCurrentWeatherData> omGetLightCurrentData(
-    settings, placeName, lat, lon) async {
+    settings, String placeName, lat, lon) async {
   final oMParams = {
     'latitude': lat.toString(),
     'longitude': lon.toString(),
@@ -1175,7 +1185,7 @@ Future<LightWindData> omGetLightWindData(settings, lat, lon) async {
 }
 
 Future<LightHourlyForecastData> omGetHourlyForecast(
-    settings, placeName, lat, lon) async {
+    settings, String placeName, lat, lon) async {
   final oMParams = {
     'latitude': lat.toString(),
     'longitude': lon.toString(),

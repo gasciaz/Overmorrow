@@ -174,7 +174,7 @@ String generateAbbreviation(String countryName) {
 class MySearchParent extends StatefulWidget {
   final Function updateLocation;
   final ColorScheme palette;
-  final place;
+  final String place;
   final Map<String, String> settings;
   final Image image;
   final bool isTabletMode;
@@ -201,7 +201,7 @@ class _MySearchParentState extends State<MySearchParent> {
   bool isEditing = false;
 
   final ColorScheme palette;
-  final place;
+  final String place;
   final Map<String, String> settings;
   final Image image;
   final bool isTabletMode;
@@ -274,9 +274,9 @@ class _MySearchParentState extends State<MySearchParent> {
 
 class MySearchWidget extends StatefulWidget {
   final ColorScheme palette;
-  final place;
+  final String place;
   final Function updateLocation;
-  final favorites;
+  final List<String> favorites;
   final prefs;
   final Map<String, String> settings;
   final Image image;
@@ -308,7 +308,7 @@ class MySearchWidget extends StatefulWidget {
 class _MySearchWidgetState extends State<MySearchWidget> {
   //final FloatingSearchBarController _controller = FloatingSearchBarController();
   final ColorScheme palette;
-  final place;
+  final String place;
   final Function updateLocation;
   final prefs;
   final Map<String, String> settings;

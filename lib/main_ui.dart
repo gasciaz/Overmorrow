@@ -481,8 +481,14 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
   }
 }
 
-Widget providerSelector(Map<String, String> settings, Function updateLocation,
-    ColorScheme palette, provider, latlng, realLoc, BuildContext context) {
+Widget providerSelector(
+    Map<String, String> settings,
+    Function updateLocation,
+    ColorScheme palette,
+    String provider,
+    String latlng,
+    String realLoc,
+    BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 25, right: 25, bottom: 80, top: 35),
     child: Column(
@@ -549,11 +555,11 @@ Widget providerSelector(Map<String, String> settings, Function updateLocation,
 class ErrorPage extends StatelessWidget {
   final errorMessage;
   final Function updateLocation;
-  final place;
+  final String place;
   final icon;
   final Map<String, String> settings;
-  final provider;
-  final latlng;
+  final String provider;
+  final String latlng;
   final shouldAdd;
 
   const ErrorPage(

@@ -40,11 +40,11 @@ String generateSimplifier(var split) {
 
 Widget searchBar2(
     ColorScheme palette,
-    recommend,
+    ValueListenable<List<String>> recommend,
     Function updateLocation,
-    Function updateFav,
-    favorites,
-    Function updateRec,
+    void Function(List<String>) updateFav,
+    ValueListenable<List<String>> favorites,
+    void Function(List<String>) updateRec,
     String place,
     BuildContext context,
     Map<String, String> settings,
@@ -130,11 +130,11 @@ class HeroSearchPage extends StatefulWidget {
   final ColorScheme palette;
   final String place;
   final Map<String, String> settings;
-  final recommend;
-  final updateRec;
+  final ValueListenable<List<String>> recommend;
+  final void Function(List<String>) updateRec;
   final Function updateLocation;
-  final favorites;
-  final updateFav;
+  final ValueListenable<List<String>> favorites;
+  final void Function(List<String>) updateFav;
   final bool isTabletMode;
   final Image image;
 
@@ -169,11 +169,11 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
   final ColorScheme palette;
   final String place;
   final Map<String, String> settings;
-  final recommend;
-  final updateRec;
+  final ValueListenable<List<String>> recommend;
+  final void Function(List<String>) updateRec;
   final Function updateLocation;
-  final favorites;
-  final updateFav;
+  final ValueListenable<List<String>> favorites;
+  final void Function(List<String>) updateFav;
   final bool isTabletMode;
   final image;
 
@@ -561,7 +561,7 @@ Widget buildRecommend(
     locationState,
     locationMessage,
     VoidCallback askGrantLocationPermission,
-    placeName,
+    String placeName,
     country,
     region,
     bool isTabletMode) {
@@ -883,7 +883,7 @@ Widget CurrentLocationWidget(
 
 Widget favoritesOrReorder(
     bool isEditing,
-    favorites,
+    List<String> favorites,
     Map<String, String> settings,
     onFavChanged,
     ColorScheme palette,

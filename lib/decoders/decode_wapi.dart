@@ -314,8 +314,8 @@ class WapiCurrent {
     required this.descColor,
   });
 
-  static Future<WapiCurrent> fromJson(item, settings, realLoc, lat, lng, start,
-      AppLocalizations localizations) async {
+  static Future<WapiCurrent> fromJson(item, settings, String realLoc, lat, lng,
+      start, AppLocalizations localizations) async {
     final currentCondition = textCorrection(
         item['hour'][start]['condition']['code'],
         item['hour'][start]['is_day'],
@@ -734,9 +734,9 @@ class Wapi15MinutePrecip {
 Future<WeatherData> WapiGetWeatherData(
     lat,
     lng,
-    realLoc,
+    String realLoc,
     Map<String, String> settings,
-    placeName,
+    String placeName,
     AppLocalizations localizations) async {
   final wapi = await WapiMakeRequest('$lat,$lng', realLoc);
 
@@ -835,7 +835,7 @@ Future<WeatherData> WapiGetWeatherData(
 }
 
 Future<dynamic> wapiGetCurrentResponse(
-    Map<String, String> settings, placeName, lat, lon) async {
+    Map<String, String> settings, String placeName, lat, lon) async {
   final params = {
     'key': wapi_Key,
     'q': '$lat, $lon',
@@ -850,7 +850,7 @@ Future<dynamic> wapiGetCurrentResponse(
 }
 
 Future<LightCurrentWeatherData> wapiGetLightCurrentData(
-    Map<String, String> settings, placeName, lat, lon) async {
+    Map<String, String> settings, String placeName, lat, lon) async {
   final item = await wapiGetCurrentResponse(settings, placeName, lat, lon);
 
   final now = DateTime.now();
@@ -867,7 +867,7 @@ Future<LightCurrentWeatherData> wapiGetLightCurrentData(
 }
 
 Future<LightWindData> wapiGetLightWindData(
-    Map<String, String> settings, placeName, lat, lon) async {
+    Map<String, String> settings, String placeName, lat, lon) async {
   final item = await wapiGetCurrentResponse(settings, placeName, lat, lon);
 
   return LightWindData(
@@ -879,7 +879,7 @@ Future<LightWindData> wapiGetLightWindData(
 }
 
 Future<LightHourlyForecastData> wapiGetLightHourlyData(
-    Map<String, String> settings, placeName, lat, lon) async {
+    Map<String, String> settings, String placeName, lat, lon) async {
   final params = {
     'key': wapi_Key,
     'q': '$lat, $lon',

@@ -239,8 +239,8 @@ class MetNCurrent {
     required this.descColor,
   });
 
-  static Future<MetNCurrent> fromJson(
-      item, settings, realLoc, lat, lng, AppLocalizations localizations) async {
+  static Future<MetNCurrent> fromJson(item, settings, String realLoc, lat, lng,
+      AppLocalizations localizations) async {
     final currentCondition = metNTextCorrection(
         item['properties']['timeseries'][0]['data']['next_1_hours']['summary']
             ['symbol_code'],
@@ -637,9 +637,9 @@ class MetN15MinutePrecip {
 Future<WeatherData> MetNGetWeatherData(
     lat,
     lng,
-    realLoc,
+    String realLoc,
     Map<String, String> settings,
-    placeName,
+    String placeName,
     AppLocalizations localizations) async {
   final Mn = await MetNMakeRequest(lat, lng, realLoc);
   final MnBody = Mn[0];
@@ -737,7 +737,8 @@ Future<WeatherData> MetNGetWeatherData(
   );
 }
 
-Future<dynamic> metNGetLightResponse(settings, placeName, lat, lon) async {
+Future<dynamic> metNGetLightResponse(
+    settings, String placeName, lat, lon) async {
   final params = {
     'lat': lat.toString(),
     'lon': lon.toString(),
@@ -756,7 +757,7 @@ Future<dynamic> metNGetLightResponse(settings, placeName, lat, lon) async {
 }
 
 Future<LightCurrentWeatherData> metNGetLightCurrentData(
-    settings, placeName, lat, lon) async {
+    settings, String placeName, lat, lon) async {
   final item = await metNGetLightResponse(settings, placeName, lat, lon);
 
   final now = DateTime.now();
@@ -779,7 +780,7 @@ Future<LightCurrentWeatherData> metNGetLightCurrentData(
 }
 
 Future<LightWindData> metNGetLightWindData(
-    settings, placeName, lat, lon) async {
+    settings, String placeName, lat, lon) async {
   final item = await metNGetLightResponse(settings, placeName, lat, lon);
 
   return LightWindData(
@@ -797,7 +798,7 @@ Future<LightWindData> metNGetLightWindData(
 }
 
 Future<LightHourlyForecastData> metNGetLightHourlyData(
-    settings, placeName, lat, lon) async {
+    settings, String placeName, lat, lon) async {
   final item = await metNGetLightResponse(settings, placeName, lat, lon);
 
   final hourlyConditions = <String>[];

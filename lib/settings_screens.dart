@@ -795,7 +795,7 @@ class _LangaugePageState extends State<LangaugePage> {
     final String selected = settings['Language'] ?? 'English';
     final options = settingSwitches['Language']!;
 
-    void onTap(value) {
+    void onTap(String? value) {
       setState(() {
         HapticFeedback.mediumImpact();
         if (value != null) {
