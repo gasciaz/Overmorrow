@@ -18,7 +18,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:async';
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,7 +42,8 @@ class WeatherPage extends StatelessWidget {
   final WeatherData data;
   final updateLocation;
 
-  const WeatherPage({super.key, required this.data, required this.updateLocation});
+  const WeatherPage(
+      {super.key, required this.data, required this.updateLocation});
 
   void openDrawer(BuildContext context) {
     Scaffold.of(context).openDrawer();
@@ -102,7 +102,8 @@ class ParrallaxBackground extends StatelessWidget {
   }
 }
 
-Widget Circles(WeatherData data, double bottom, BuildContext context, ColorScheme palette) {
+Widget Circles(WeatherData data, double bottom, BuildContext context,
+    ColorScheme palette) {
   return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 13, top: 2),
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -398,8 +399,7 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
         ),
       );
     } else {
-      final var split =
-          AppLocalizations.of(context)!.photoByXOnUnsplash.split(',');
+      final split = AppLocalizations.of(context)!.photoByXOnUnsplash.split(',');
       return SizedBox(
         height: 21,
         child: Padding(
@@ -481,8 +481,8 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
   }
 }
 
-Widget providerSelector(Map<String, String> settings, updateLocation, ColorScheme palette, provider,
-    latlng, realLoc, BuildContext context) {
+Widget providerSelector(Map<String, String> settings, updateLocation,
+    ColorScheme palette, provider, latlng, realLoc, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 25, right: 25, bottom: 80, top: 35),
     child: Column(
@@ -581,8 +581,7 @@ class ErrorPage extends StatelessWidget {
     final image = Image.asset('assets/backdrops/grayscale_snow2.jpg',
         fit: BoxFit.cover, width: double.infinity, height: double.infinity);
 
-    final palette =
-        ColorPalette.getErrorPagePalette(settings['Color mode']);
+    final palette = ColorPalette.getErrorPagePalette(settings['Color mode']);
 
     return Scaffold(
       backgroundColor: palette.surface,

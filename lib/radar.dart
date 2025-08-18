@@ -66,7 +66,7 @@ class _RadarSmallState extends State<RadarSmall> {
     for (var i = 0; i < data.radar.times.length; i++) {
       final List<String> split = data.radar.times[i].split('h');
       final minute = split[1].replaceAll(RegExp(r'\D'), '');
-      final var hour = (int.parse(split[0]) + offset) % 24;
+      final hour = (int.parse(split[0]) + offset) % 24;
       if (data.settings['Time mode'] == '12 hour') {
         times.add(OMamPmTime("jT$hour:${minute == "0" ? "00" : minute}"));
       } else {
@@ -406,7 +406,7 @@ class _RadarBigState extends State<RadarBig> {
 
     for (var i = 0; i < data.radar.times.length; i++) {
       final List<String> split = data.radar.times[i].split('h');
-      final var minute = split[1].replaceAll(RegExp(r'\D'), '');
+      final minute = split[1].replaceAll(RegExp(r'\D'), '');
       final hour = (int.parse(split[0]) + offset) % 24;
       if (data.settings['Time mode'] == '12 hour') {
         times.add(OMamPmTime("jT$hour:${minute == "0" ? "00" : minute}"));
@@ -452,7 +452,7 @@ class _RadarBigState extends State<RadarBig> {
   @override
   Widget build(BuildContext context) {
     final ColorScheme palette = data.current.palette;
-    final var x = MediaQuery.of(context).padding.top;
+    final x = MediaQuery.of(context).padding.top;
 
     String mode = data.settings['Color mode'];
 
@@ -466,64 +466,65 @@ class _RadarBigState extends State<RadarBig> {
       backgroundColor: palette.surface,
       body: Stack(
         children: [
-          if (data.isonline) FlutterMap(
-                  options: MapOptions(
-                    initialCenter: LatLng(data.lat, data.lng),
-                    initialZoom: 6,
-                    minZoom: 2,
-                    maxZoom: 9,
-                    backgroundColor: mode == 'dark'
-                        ? const Color(0xff262626)
-                        : const Color(0xffD4DADC),
-                    interactionOptions: const InteractionOptions(
-                      flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
-                    ),
-                  ),
-                  children: [
-                    Container(
-                      color: mode == 'dark'
-                          ? const Color(0xff262626)
-                          : const Color(0xffD4DADC),
-                    ),
-                    TileLayer(
-                      urlTemplate: mode == 'dark'
-                          ? 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png'
-                          : 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
-                    ),
-                    TileLayer(
-                      urlTemplate:
-                          data.radar.images[currentFrameIndex.toInt()] +
-                              '/256/{z}/{x}/{y}/2/1_1.png',
-                      tileDisplay: const TileDisplay.instantaneous(),
-                    ),
-                    TileLayer(
-                      urlTemplate: mode == 'dark'
-                          ? 'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png'
-                          : 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
-                    ),
-                    MarkerLayer(
-                      markers: [
-                        Marker(
-                          point: LatLng(data.lat, data.lng),
-                          width: 62,
-                          height: 62,
-                          child: Padding(
-                            //try to make the bottom of the pointer where the place actually is
-                            padding: const EdgeInsets.only(bottom: 16),
-                            child: Icon(
-                              Icons.place_sharp,
-                              color: palette.inverseSurface,
-                              size: 44,
-                            ),
-                          ),
+          if (data.isonline)
+            FlutterMap(
+              options: MapOptions(
+                initialCenter: LatLng(data.lat, data.lng),
+                initialZoom: 6,
+                minZoom: 2,
+                maxZoom: 9,
+                backgroundColor: mode == 'dark'
+                    ? const Color(0xff262626)
+                    : const Color(0xffD4DADC),
+                interactionOptions: const InteractionOptions(
+                  flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+                ),
+              ),
+              children: [
+                Container(
+                  color: mode == 'dark'
+                      ? const Color(0xff262626)
+                      : const Color(0xffD4DADC),
+                ),
+                TileLayer(
+                  urlTemplate: mode == 'dark'
+                      ? 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png'
+                      : 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
+                ),
+                TileLayer(
+                  urlTemplate: data.radar.images[currentFrameIndex.toInt()] +
+                      '/256/{z}/{x}/{y}/2/1_1.png',
+                  tileDisplay: const TileDisplay.instantaneous(),
+                ),
+                TileLayer(
+                  urlTemplate: mode == 'dark'
+                      ? 'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png'
+                      : 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
+                ),
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      point: LatLng(data.lat, data.lng),
+                      width: 62,
+                      height: 62,
+                      child: Padding(
+                        //try to make the bottom of the pointer where the place actually is
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Icon(
+                          Icons.place_sharp,
+                          color: palette.inverseSurface,
+                          size: 44,
                         ),
-                      ],
-                    )
+                      ),
+                    ),
                   ],
-                ) else Center(
-                  child: comfortatext(
-                      'not available offline', 15, data.settings,
-                      color: palette.outline)),
+                )
+              ],
+            )
+          else
+            Center(
+                child: comfortatext('not available offline', 15, data.settings,
+                    color: palette.outline)),
           Padding(
             padding: const EdgeInsets.only(left: 15, right: 15, bottom: 35),
             child: Container(
@@ -648,8 +649,7 @@ class _RadarBigState extends State<RadarBig> {
                                     value: currentFrameIndex,
                                     max: data.radar.times.length - 1.0,
                                     divisions: data.radar.times.length,
-                                    label: times[currentFrameIndex.toInt()]
-                                        ,
+                                    label: times[currentFrameIndex.toInt()],
                                     padding: const EdgeInsets.only(
                                         left: 20, right: 5),
                                     onChanged: (double value) {

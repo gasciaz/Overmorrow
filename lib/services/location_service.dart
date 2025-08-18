@@ -85,7 +85,7 @@ class LocationService {
       return [];
     }
 
-    final var recommendations = <String>[];
+    final recommendations = <String>[];
     for (final item in jsonbody) {
       final pre = json.encode(item);
 

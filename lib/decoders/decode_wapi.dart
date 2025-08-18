@@ -70,7 +70,8 @@ int wapiGetWindDir(var data) {
   return (total / data.length).round();
 }
 
-List<WapiAlert> getWapiAlerts(WeatherData data, AppLocalizations localizations) {
+List<WapiAlert> getWapiAlerts(
+    WeatherData data, AppLocalizations localizations) {
   final alerts = <WapiAlert>[];
   final alertList = data['alerts']['alert'];
   //for some reason weatherapi sometimes returns like 5 of the same alerts, so i have to manually remove duplicates
@@ -86,9 +87,9 @@ List<WapiAlert> getWapiAlerts(WeatherData data, AppLocalizations localizations) 
 }
 
 String amPmTime(String time) {
-  final var splited = time.split(' ');
-  final var num = splited[0].split(':');
-  final var hour = int.parse(num[0]);
+  final splited = time.split(' ');
+  final num = splited[0].split(':');
+  final hour = int.parse(num[0]);
   final minute = int.parse(num[1]);
   var atEnd = 'am';
   if (splited[1] == 'PM') {
@@ -132,7 +133,7 @@ double getSunStatus(String sunrise, String sunset, DateTime localtime,
   }
   final all1 = hour1 * 60 + minute1;
 
-  final var splited2 = sunset.split(' ');
+  final splited2 = sunset.split(' ');
   final num2 = splited2[0].split(':');
   var hour2 = int.parse(num2[0]);
   final minute2 = int.parse(num2[1]);
@@ -141,9 +142,9 @@ double getSunStatus(String sunrise, String sunset, DateTime localtime,
   }
   final all2 = (hour2 * 60 + minute2) - all1;
 
-  final var hour3 = localtime.hour;
-  final var minute3 = localtime.minute;
-  final var all3 = (hour3 * 60 + minute3) - all1;
+  final hour3 = localtime.hour;
+  final minute3 = localtime.minute;
+  final all3 = (hour3 * 60 + minute3) - all1;
 
   return min(1, max(all3 / all2, 0));
 }
@@ -172,7 +173,7 @@ double getSunStatus(String sunrise, String sunset, DateTime localtime,
 }*/
 
 double unit_coversion(double value, String unit, {decimals = 2}) {
-  final var p = weather_refactor.conversionTable[unit] ?? [0, 0];
+  final p = weather_refactor.conversionTable[unit] ?? [0, 0];
   var a = p[0] + value * p[1];
   a = double.parse(a.toStringAsFixed(decimals));
   return a;
@@ -252,13 +253,14 @@ String getDateStringFromLocalTime(DateTime now) {
 }
 
 String backdropCorrection(name, isday, AppLocalizations localizations) {
-  final var text = textCorrection(name, isday, false, localizations);
-  final var backdrop = weather_refactor.textBackground[text] ?? 'haze.jpg';
+  final text = textCorrection(name, isday, false, localizations);
+  final backdrop = weather_refactor.textBackground[text] ?? 'haze.jpg';
 
   return backdrop;
 }
 
-String textCorrection(name, isday, bool ShouldTranslate, AppLocalizations? localizations) {
+String textCorrection(
+    name, isday, bool ShouldTranslate, AppLocalizations? localizations) {
   var x = weather_refactor.weatherTextMap[name] ?? 'Clear Sky';
   if (x == 'Clear Sky') {
     if (isday == 1) {
@@ -312,16 +314,16 @@ class WapiCurrent {
     required this.descColor,
   });
 
-  static Future<WapiCurrent> fromJson(
-      item, settings, realLoc, lat, lng, start, AppLocalizations localizations) async {
+  static Future<WapiCurrent> fromJson(item, settings, realLoc, lat, lng, start,
+      AppLocalizations localizations) async {
     final currentCondition = textCorrection(
         item['hour'][start]['condition']['code'],
         item['hour'][start]['is_day'],
         false,
         localizations);
 
-    final var imageService = await ImageService.getImageService(
-        currentCondition, realLoc, settings);
+    final imageService =
+        await ImageService.getImageService(currentCondition, realLoc, settings);
     final colorPalette = await ColorPalette.getColorPalette(
         imageService.image, settings['Color mode'], settings);
 
@@ -393,8 +395,8 @@ class WapiDay {
     required this.wind_dir,
   });
 
-  static WapiDay fromJson(
-          item, index, Map<String, String> settings, approximatelocal, AppLocalizations localizations) =>
+  static WapiDay fromJson(item, index, Map<String, String> settings,
+          approximatelocal, AppLocalizations localizations) =>
       WapiDay(
           text: textCorrection(
               item['day']['condition']['code'], 1, true, localizations),
@@ -404,9 +406,8 @@ class WapiDay {
             localizations,
           ),
           name: wapiGetName(index, settings, localizations, item),
-          minTemp:
-              unit_coversion(item['day']['mintemp_c'], settings['Temperature'])
-                  .round(),
+          minTemp: unit_coversion(item['day']['mintemp_c'], settings['Temperature'])
+              .round(),
           maxTemp:
               unit_coversion(item['day']['maxtemp_c'], settings['Temperature'])
                   .round(),
@@ -418,22 +419,26 @@ class WapiDay {
               approximatelocal, false, localizations),
           mm_precip:
               item['day']['totalprecip_mm'] + item['day']['totalsnow_cm'] / 10,
-          total_precip: double.parse(unit_coversion(
-                  item['day']['totalprecip_mm'], settings['Precipitation'])
-              .toStringAsFixed(1)),
+          total_precip: double.parse(
+              unit_coversion(item['day']['totalprecip_mm'], settings['Precipitation'])
+                  .toStringAsFixed(1)),
           precip_prob: item['day']['daily_chance_of_rain'],
           windspeed:
-              unit_coversion(item['day']['maxwind_kph'], settings['Wind'])
-                  .round(),
+              unit_coversion(item['day']['maxwind_kph'], settings['Wind']).round(),
           uv: item['day']['uv'].round(),
           wind_dir: wapiGetWindDir(item['hour']));
 
-  static List<WapiHour> buildWapiHour(data, Map<String, String> settings, int index,
-      DateTime approximatelocal, bool getRidFirst, AppLocalizations localizations) {
-    final var hourly = <WapiHour>[];
+  static List<WapiHour> buildWapiHour(
+      data,
+      Map<String, String> settings,
+      int index,
+      DateTime approximatelocal,
+      bool getRidFirst,
+      AppLocalizations localizations) {
+    final hourly = <WapiHour>[];
 
     for (var i = 0; i < 24; i++) {
-      final var hour = DateTime.parse(data[i]['time']);
+      final hour = DateTime.parse(data[i]['time']);
       if (approximatelocal.difference(hour).inMinutes <= 0 || !getRidFirst) {
         hourly.add(WapiHour.fromJson(data[i], settings, localizations));
       }
@@ -476,7 +481,9 @@ class WapiHour {
     required this.precip_prob,
   });
 
-  static WapiHour fromJson(item, Map<String, String> settings, AppLocalizations localizations) => WapiHour(
+  static WapiHour fromJson(
+          item, Map<String, String> settings, AppLocalizations localizations) =>
+      WapiHour(
         text: textCorrection(
             item['condition']['code'], item['is_day'], true, localizations),
         icon: iconCorrection(
@@ -512,7 +519,9 @@ class WapiSunstatus {
     required this.absoluteSunriseSunset,
   });
 
-  static WapiSunstatus fromJson(item, Map<String, String> settings, localtime) => WapiSunstatus(
+  static WapiSunstatus fromJson(
+          item, Map<String, String> settings, localtime) =>
+      WapiSunstatus(
         sunrise: settings['Time mode'] == '24 hour'
             ? convertTime(
                 item['forecast']['forecastday'][0]['astro']['sunrise'])
@@ -636,14 +645,14 @@ class Wapi15MinutePrecip {
     required this.precips,
   });
 
-  static Wapi15MinutePrecip fromJson(
-      item, Map<String, String> settings, day, hour, AppLocalizations localizations) {
+  static Wapi15MinutePrecip fromJson(item, Map<String, String> settings, day,
+      hour, AppLocalizations localizations) {
     var closest = 100;
     var end = -1;
     double sum = 0;
 
-    final var precips = <double>[];
-    final var hourly = <double>[];
+    final precips = <double>[];
+    final hourly = <double>[];
 
     //int day = 0;
     //int hour = 0;
@@ -688,7 +697,7 @@ class Wapi15MinutePrecip {
       final now = hourly[i];
       final next = hourly[i + 1];
 
-      final var dif = next - now;
+      final dif = next - now;
       for (double x = 0; x <= 1; x += 0.25) {
         final g = (now + (dif * x)) /
             4; //because we are dividing the sum of 1 hour into quarters
@@ -723,7 +732,12 @@ class Wapi15MinutePrecip {
 }
 
 Future<WeatherData> WapiGetWeatherData(
-    lat, lng, realLoc, Map<String, String> settings, placeName, AppLocalizations localizations) async {
+    lat,
+    lng,
+    realLoc,
+    Map<String, String> settings,
+    placeName,
+    AppLocalizations localizations) async {
   final wapi = await WapiMakeRequest('$lat,$lng', realLoc);
 
   final wapiBody = wapi[0];
@@ -734,7 +748,7 @@ Future<WeatherData> WapiGetWeatherData(
   //DateTime lastKnowTime = await WapiGetLocalTime(lat, lng);
 
   //this gives us the time passed since last fetch, this is all basically for offline mode
-  final var realTimeOffset = DateTime.now().difference(fetchDatetime);
+  final realTimeOffset = DateTime.now().difference(fetchDatetime);
 
   //now we just need to apply this time offset to get the real current time
   final localtime = lastKnowTime.add(realTimeOffset);
@@ -774,7 +788,7 @@ Future<WeatherData> WapiGetWeatherData(
   final hourly72 = <dynamic>[];
 
   for (var n = 0; n < wapiBody['forecast']['forecastday'].length; n++) {
-    final var day = WapiDay.fromJson(wapiBody['forecast']['forecastday'][n], n,
+    final day = WapiDay.fromJson(wapiBody['forecast']['forecastday'][n], n,
         settings, approximateLocal, localizations);
     days.add(day);
 
@@ -820,7 +834,8 @@ Future<WeatherData> WapiGetWeatherData(
       isonline: isonline);
 }
 
-Future<dynamic> wapiGetCurrentResponse(Map<String, String> settings, placeName, lat, lon) async {
+Future<dynamic> wapiGetCurrentResponse(
+    Map<String, String> settings, placeName, lat, lon) async {
   final params = {
     'key': wapi_Key,
     'q': '$lat, $lon',
@@ -838,7 +853,7 @@ Future<LightCurrentWeatherData> wapiGetLightCurrentData(
     Map<String, String> settings, placeName, lat, lon) async {
   final item = await wapiGetCurrentResponse(settings, placeName, lat, lon);
 
-  final var now = DateTime.now();
+  final now = DateTime.now();
 
   return LightCurrentWeatherData(
     condition: textCorrection(item['current']['condition']['code'],
@@ -887,7 +902,7 @@ Future<LightHourlyForecastData> wapiGetLightHourlyData(
   for (var i = 0; i < item['forecast']['forecastday'][0]['hour'].length; i++) {
     final hour = item['forecast']['forecastday'][0]['hour'][i];
 
-    final var d = DateTime.parse(hour['time']);
+    final d = DateTime.parse(hour['time']);
 
     if (d.hour % 6 == 0) {
       hourlyConditions.add(textCorrection(

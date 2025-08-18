@@ -26,12 +26,11 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:overmorrow/l10n/app_localizations.dart';
+import 'package:overmorrow/main.dart';
 import 'package:overmorrow/services/location_service.dart';
 import 'package:overmorrow/settings_page.dart';
 import 'package:overmorrow/ui_helper.dart';
-
-import 'package:overmorrow/l10n/app_localizations.dart';
-import 'package:overmorrow/main.dart';
 
 //before this the same place from 2 different providers would be registered as different,
 //I am trying to fix this with this
@@ -289,9 +288,9 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
     }
 
     try {
-      final var placemarks =
+      final placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
-      final var place = placemarks[0];
+      final place = placemarks[0];
 
       setState(() {
         placeName = place.locality ??
@@ -316,7 +315,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
   }
 
   Future<String> askGrantLocationPermission() async {
-    final var serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       setState(() {
         locationState = 'disabled';
@@ -325,7 +324,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
       });
       return 'disabled';
     }
-    final var permission = await Geolocator.requestPermission();
+    final permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.deniedForever) {
       setState(() {
         locationState = 'deniedForever';
@@ -334,14 +333,14 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
       });
       return 'disabled';
     }
-    final var x = await checkIflocationState(true);
+    final x = await checkIflocationState(true);
     if (x == 'enabled') {
       await findCurrentPosition();
     }
   }
 
   Future<String> checkIflocationState([bool afterAsk = false]) async {
-    final var serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       setState(() {
         locationState = 'disabled';
@@ -351,7 +350,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
       return 'disabled';
     }
 
-    final var permission = await Geolocator.checkPermission();
+    final permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.deniedForever) {
       setState(() {
         locationState = 'deniedForever';
@@ -686,8 +685,7 @@ Widget buildSearchResults(
       builder: (context, value, child) {
         final rec = value;
         return Padding(
-          padding:
-              const EdgeInsets.only(bottom: 30, left: 30, right: 30),
+          padding: const EdgeInsets.only(bottom: 30, left: 30, right: 30),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(30),
             child: AnimatedSwitcher(
@@ -745,7 +743,8 @@ Widget buildSearchResults(
                                 onPressed: () {
                                   if (contained) {
                                     HapticFeedback.mediumImpact();
-                                    final var z = favoriteNarrow.indexOf(simplifier);
+                                    final z =
+                                        favoriteNarrow.indexOf(simplifier);
                                     favorites.removeAt(z);
                                     onFavChanged(favorites);
                                   } else {
@@ -882,8 +881,15 @@ Widget CurrentLocationWidget(
   );
 }
 
-Widget favoritesOrReorder(bool isEditing, favorites, Map<String, String> settings, onFavChanged,
-    ColorScheme palette, updateLocation, BuildContext context, bool isTabletMode) {
+Widget favoritesOrReorder(
+    bool isEditing,
+    favorites,
+    Map<String, String> settings,
+    onFavChanged,
+    ColorScheme palette,
+    updateLocation,
+    BuildContext context,
+    bool isTabletMode) {
   if (isEditing) {
     return reorderFavorites(
         favorites, settings, onFavChanged, palette, isTabletMode);
@@ -893,8 +899,13 @@ Widget favoritesOrReorder(bool isEditing, favorites, Map<String, String> setting
   }
 }
 
-Widget buildFavorites(ColorScheme palette, List<String> favorites,
-    updateLocation, Map<String, String> settings, BuildContext context, bool isTabletMode) {
+Widget buildFavorites(
+    ColorScheme palette,
+    List<String> favorites,
+    updateLocation,
+    Map<String, String> settings,
+    BuildContext context,
+    bool isTabletMode) {
   return SingleChildScrollView(
     child: Container(
         key: const ValueKey<String>('normal'),
@@ -947,8 +958,8 @@ Widget buildFavorites(ColorScheme palette, List<String> favorites,
   );
 }
 
-Widget reorderFavorites(
-    items, Map<String, String> settings, onFavChanged, ColorScheme palette, bool isTabletMode) {
+Widget reorderFavorites(items, Map<String, String> settings, onFavChanged,
+    ColorScheme palette, bool isTabletMode) {
   return Container(
     key: const ValueKey<String>('editing'),
     decoration: BoxDecoration(

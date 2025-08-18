@@ -56,8 +56,7 @@ class ImageColorList {
     final imageProvider = imageWidget.image;
 
     final completer = Completer<ImageInfo>();
-    final listener =
-        ImageStreamListener((ImageInfo info, bool _) {
+    final listener = ImageStreamListener((ImageInfo info, bool _) {
       if (!completer.isCompleted) {
         completer.complete(info);
       }
@@ -98,7 +97,7 @@ class ImageColorList {
       maximumColorCount: 4,
       filters: [],
     );
-    final var imageColors = await PaletteGenerator.fromImage(
+    final imageColors = await PaletteGenerator.fromImage(
       imageInfo.image,
       maximumColorCount: 4,
       filters: [],
@@ -265,7 +264,7 @@ class ColorPalette {
     }
 
     //generate color palette with that seedColor
-    final var palette = ColorScheme.fromSeed(
+    final palette = ColorScheme.fromSeed(
         seedColor: seedColor,
         brightness: theme == 'light' ? Brightness.light : Brightness.dark);
 
@@ -300,7 +299,7 @@ class ColorPalette {
   }
 
   static ColorScheme getCustomColorPalette(String theme, settings) {
-    final var mainColor = Color(getColorFromHex(settings['Custom color']));
+    final mainColor = Color(getColorFromHex(settings['Custom color']));
 
     if (theme == 'auto') {
       final brightness =
@@ -330,7 +329,7 @@ class ColorPalette {
       theme = brightness == Brightness.dark ? 'dark' : 'light';
     }
 
-    final var palette = ColorScheme.fromSeed(
+    final palette = ColorScheme.fromSeed(
         seedColor: Colors.deepPurple,
         brightness: theme == 'light' ? Brightness.light : Brightness.dark);
 

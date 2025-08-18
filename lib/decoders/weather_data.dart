@@ -20,7 +20,6 @@ import 'dart:async';
 
 import 'package:overmorrow/decoders/decode_OM.dart';
 import 'package:overmorrow/decoders/decode_mn.dart';
-
 import 'package:overmorrow/decoders/decode_wapi.dart';
 import 'package:overmorrow/l10n/app_localizations.dart';
 
@@ -73,7 +72,12 @@ class WeatherData {
       required this.dailyMinMaxTemp});
 
   static Future<WeatherData> getFullData(
-      Map<String, String> settings, placeName, realLoc, latlong, String provider, AppLocalizations localizations) async {
+      Map<String, String> settings,
+      placeName,
+      realLoc,
+      latlong,
+      String provider,
+      AppLocalizations localizations) async {
     final List<String> split = latlong.split(',');
     final lat = double.parse(split[0]);
     final lng = double.parse(split[1]);
@@ -110,7 +114,7 @@ class LightCurrentWeatherData {
   static Future<LightCurrentWeatherData> getLightCurrentWeatherData(
       placeName, latlong, provider, Map<String, String> settings) async {
     final List<String> split = latlong.split(',');
-    final var lat = double.parse(split[0]);
+    final lat = double.parse(split[0]);
     final lng = double.parse(split[1]);
 
     switch (provider) {

@@ -20,7 +20,6 @@ import 'dart:convert';
 
 import 'package:overmorrow/caching.dart';
 
-
 class RainviewerRadar {
   final List<String> images;
   final List<String> times;
@@ -50,7 +49,7 @@ class RainviewerRadar {
     final future = data['radar']['nowcast'];
 
     for (final x in past) {
-      final var time = DateTime.fromMillisecondsSinceEpoch(x['time'] * 1000);
+      final time = DateTime.fromMillisecondsSinceEpoch(x['time'] * 1000);
       images.add(host + x['path']);
       times.add('${time.hour}h ${time.minute}m');
     }
@@ -64,7 +63,10 @@ class RainviewerRadar {
       times.add('${time.hour}h ${time.minute}m');
     }
 
-    return RainviewerRadar(images: images, times: times, real_hour: realHour, starting_index: startingIndex);
+    return RainviewerRadar(
+        images: images,
+        times: times,
+        real_hour: realHour,
+        starting_index: startingIndex);
   }
 }
-

@@ -75,7 +75,7 @@ List<double> omGetMaxMinTempForDaily(days) {
 
 String OMamPmTime(String time) {
   final a = time.split('T')[1];
-  final var num = a.split(':');
+  final num = a.split(':');
   final hour = int.parse(num[0]);
   final minute = int.parse(num[1]);
 
@@ -120,12 +120,14 @@ DateTime OMGetLocalTime(item) {
 double OMGetSunStatus(item) {
   final localtime = OMGetLocalTime(item);
 
-  final List<String> splitted1 = item['daily']['sunrise'][0].split('T')[1].split(':');
-  final var sunrise = localtime.copyWith(
+  final List<String> splitted1 =
+      item['daily']['sunrise'][0].split('T')[1].split(':');
+  final sunrise = localtime.copyWith(
       hour: int.parse(splitted1[0]), minute: int.parse(splitted1[1]));
 
-  final List<String> splitted2 = item['daily']['sunset'][0].split('T')[1].split(':');
-  final var sunset = localtime.copyWith(
+  final List<String> splitted2 =
+      item['daily']['sunset'][0].split('T')[1].split(':');
+  final sunset = localtime.copyWith(
       hour: int.parse(splitted2[0]), minute: int.parse(splitted2[1]));
 
   final total = sunset.difference(sunrise).inMinutes;
@@ -188,11 +190,12 @@ Future<List<dynamic>> OMRequestData(
   return [OMData, fetchDatetime, isonline];
 }
 
-String oMGetName(index, settings, item, dayDif, AppLocalizations localizations) {
+String oMGetName(
+    index, settings, item, dayDif, AppLocalizations localizations) {
   final String x = item['daily']['time'][index].split('T')[0];
   final z = x.split('-');
-  final var time = DateTime(int.parse(z[0]), int.parse(z[1]), int.parse(z[2]));
-  final var weeks = <String>[
+  final time = DateTime(int.parse(z[0]), int.parse(z[1]), int.parse(z[2]));
+  final weeks = <String>[
     localizations.mon,
     localizations.tue,
     localizations.wed,
@@ -239,15 +242,15 @@ String oMCurrentTextCorrection(int code, absoluteSunriseSunset, time) {
   final hour = int.parse(t.split(':')[0]);
 
   final List<String> x = absoluteSunriseSunset.split('/');
-  final var upH = int.parse(x[0].split(':')[0]);
-  final var upM = int.parse(x[0].split(':')[1]);
+  final upH = int.parse(x[0].split(':')[0]);
+  final upM = int.parse(x[0].split(':')[1]);
 
-  final var downH = int.parse(x[1].split(':')[0]);
-  final var donwM = int.parse(x[1].split(':')[1]);
+  final downH = int.parse(x[1].split(':')[0]);
+  final donwM = int.parse(x[1].split(':')[1]);
 
-  final var aCurrent = hour + minute / 60;
-  final var aUp = upH + upM / 60;
-  final var aDown = downH + donwM / 60;
+  final aCurrent = hour + minute / 60;
+  final aUp = upH + upM / 60;
+  final aDown = downH + donwM / 60;
 
   //return textBackground.keys.toList()[0]; // used for testing color combinations
 
@@ -310,8 +313,8 @@ class OMCurrent {
     required this.debugColors,
   });
 
-  static Future<OMCurrent> fromJson(item, settings, sunstatus, timenow,
-      realLoc, lat, lng, start, dayDif, AppLocalizations context, bool isonline) async {
+  static Future<OMCurrent> fromJson(item, settings, sunstatus, timenow, realLoc,
+      lat, lng, start, dayDif, AppLocalizations context, bool isonline) async {
     var currentCondition = oMCurrentTextCorrection(
         item['current']['weather_code'],
         sunstatus.absoluteSunriseSunset,
@@ -325,8 +328,8 @@ class OMCurrent {
           timenow);
     }
 
-    final imageService = await ImageService.getImageService(
-        currentCondition, realLoc, settings);
+    final imageService =
+        await ImageService.getImageService(currentCondition, realLoc, settings);
     final colorPalette = await ColorPalette.getColorPalette(
         imageService.image, settings['Color mode'], settings);
 
@@ -443,8 +446,8 @@ class OMDay {
     return null;
   }
 
-  static List<OMHour> buildHours(index, getRidFirst, item, settings,
-      sunstatus, approximatelocal, AppLocalizations localizations) {
+  static List<OMHour> buildHours(index, getRidFirst, item, settings, sunstatus,
+      approximatelocal, AppLocalizations localizations) {
     final hourly = <OMHour>[];
 
     final int l = item['hourly']['weather_code'].length;
@@ -452,8 +455,7 @@ class OMDay {
     for (var i = 0; i < 24; i++) {
       final int j = index * 24 + i;
       final hour = DateTime.parse(item['hourly']['time'][j]);
-      if ((approximatelocal.difference(hour).inMinutes <= 0 ||
-              !getRidFirst) &&
+      if ((approximatelocal.difference(hour).inMinutes <= 0 || !getRidFirst) &&
           l > j) {
         hourly
             .add(OMHour.fromJson(item, j, settings, sunstatus, localizations));
@@ -514,7 +516,7 @@ class OM15MinutePrecip {
         if (end == 1) {
           tMinus = localizations.rainInHalfHour;
         } else if (end <= 2) {
-          final var x = [15, 30, 45][end];
+          final x = [15, 30, 45][end];
           tMinus = localizations.rainInMinutes(x);
         } else if (end ~/ 4 == 1) {
           tMinus = localizations.rainInOneHour;
@@ -576,7 +578,8 @@ class OMHour {
     required this.precip_prob,
   });
 
-  static OMHour fromJson(item, index, settings, sunstatus, AppLocalizations localizations) =>
+  static OMHour fromJson(
+          item, index, settings, sunstatus, AppLocalizations localizations) =>
       OMHour(
         temp: unit_coversion(item['hourly']['temperature_2m'][index],
                 settings['Temperature'])
@@ -651,7 +654,8 @@ class OMAqi {
     required this.aqi_index,
   });
 
-  static Future<OMAqi> fromJson(lat, lng, settings, AppLocalizations localizations) async {
+  static Future<OMAqi> fromJson(
+      lat, lng, settings, AppLocalizations localizations) async {
     final params = {
       'latitude': lat.toString(),
       'longitude': lng.toString(),
@@ -805,10 +809,9 @@ class OMExtendedAqi {
     final response = await file[0].readAsString();
     final item = jsonDecode(response);
 
-    final no2H = List<double>.from(
-        (item['hourly']['nitrogen_dioxide'] as List?)
-                ?.map((e) => (e as double?) ?? 0.0) ??
-            []);
+    final no2H = List<double>.from((item['hourly']['nitrogen_dioxide'] as List?)
+            ?.map((e) => (e as double?) ?? 0.0) ??
+        []);
     final o3H = List<double>.from(
         (item['hourly']['ozone'] as List?)?.map((e) => (e as double?) ?? 0.0) ??
             []);
@@ -855,11 +858,9 @@ class OMExtendedAqi {
       //the division by 1000 is because is because we're converting micrograms to grams
 
       final values = <double>[
-        double.parse((o3H.getRange(i * 24, (i + 1) * 24).reduce(max) *
-                24.45 /
-                48 /
-                1000)
-            .toStringAsFixed(3)),
+        double.parse(
+            (o3H.getRange(i * 24, (i + 1) * 24).reduce(max) * 24.45 / 48 / 1000)
+                .toStringAsFixed(3)),
         double.parse(pm25H
             .getRange(i * 24, (i + 1) * 24)
             .reduce(max)
@@ -908,8 +909,7 @@ class OMExtendedAqi {
         }
 
         final finalIndex =
-            (((iHi - iLo) / (bpHi - bpLo)) * (current - bpLo) + iLo)
-                .round();
+            (((iHi - iLo) / (bpHi - bpLo)) * (current - bpLo) + iLo).round();
         finalIndexes.add(finalIndex);
       }
       final biggest = finalIndexes.reduce(max);
@@ -1028,14 +1028,19 @@ class OMExtendedAqi {
 }
 
 Future<WeatherData> OMGetWeatherData(
-    lat, lng, realLoc, Map<String, String> settings, placeName, AppLocalizations localizations) async {
+    lat,
+    lng,
+    realLoc,
+    Map<String, String> settings,
+    placeName,
+    AppLocalizations localizations) async {
   final OM = await OMRequestData(lat, lng, realLoc);
   final oMBody = OM[0];
 
   final DateTime fetchDatetime = OM[1];
   final bool isonline = OM[2];
 
-  final var localtime = OMGetLocalTime(oMBody);
+  final localtime = OMGetLocalTime(oMBody);
 
   final realTime = 'jT${localtime.hour}:${localtime.minute}';
 
@@ -1066,7 +1071,7 @@ Future<WeatherData> OMGetWeatherData(
   final hourly72 = <dynamic>[];
 
   for (var n = 0; n < 14; n++) {
-    final var day = OMDay.build(oMBody, settings, n, sunstatus, approximateLocal,
+    final day = OMDay.build(oMBody, settings, n, sunstatus, approximateLocal,
         dayDif, localizations);
     if (day != null) {
       days.add(day);
@@ -1130,9 +1135,9 @@ Future<LightCurrentWeatherData> omGetLightCurrentData(
 
   final item = jsonDecode(response);
 
-  final var localtime = OMGetLocalTime(item);
+  final localtime = OMGetLocalTime(item);
   final realTime = 'jT${localtime.hour}:${localtime.minute}';
-  final var now = DateTime.now();
+  final now = DateTime.now();
 
   final absoluteSunriseSunset = "${OMConvertTime(item["daily"]["sunrise"][0])}/"
       "${OMConvertTime(item["daily"]["sunset"][0])}";
@@ -1186,8 +1191,8 @@ Future<LightHourlyForecastData> omGetHourlyForecast(
 
   final item = jsonDecode(response);
 
-  final var localtime = OMGetLocalTime(item);
-  final var realTime = 'jT${localtime.hour}:${localtime.minute}';
+  final localtime = OMGetLocalTime(item);
+  final realTime = 'jT${localtime.hour}:${localtime.minute}';
   final now = DateTime.now();
 
   final absoluteSunriseSunset = "${OMConvertTime(item["daily"]["sunrise"][0])}/"

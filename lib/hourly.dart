@@ -22,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:overmorrow/decoders/weather_data.dart';
-
 import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
 
@@ -142,7 +141,7 @@ Widget hourBoxes(hours, WeatherData data, value, bool elevated, context) {
             ),
           );
         }
-        final var childWidgets = <Widget>[
+        final childWidgets = <Widget>[
           buildHourlySum(hour, palette, data),
           buildHourlyPrecip(hour, palette, data),
           buildHourlyWind(hour, palette, data),
@@ -164,17 +163,17 @@ Widget hourBoxes(hours, WeatherData data, value, bool elevated, context) {
   );
 }
 
-Widget hourlyDataBuilder(
-    hour, ColorScheme palette, bool elevated, Widget childWidget, WeatherData data) {
+Widget hourlyDataBuilder(hour, ColorScheme palette, bool elevated,
+    Widget childWidget, WeatherData data) {
   return Padding(
     padding: const EdgeInsets.all(3),
     child: AnimatedSwitcher(
       duration: const Duration(milliseconds: 400),
       switchInCurve: Curves.decelerate,
       transitionBuilder: (Widget child, Animation<double> animation) {
-        final offsetAnimation = Tween<Offset>(
-                begin: const Offset(0, 1), end: const Offset(0, 0))
-            .animate(animation);
+        final offsetAnimation =
+            Tween<Offset>(begin: const Offset(0, 1), end: const Offset(0, 0))
+                .animate(animation);
         return ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: SlideTransition(
@@ -241,8 +240,7 @@ Widget buildHourlySum(var hour, ColorScheme palette, WeatherData data) {
               color: palette.primary, weight: FontWeight.w500)
         ],
       ),
-      comfortatext(hour.time, 14, data.settings,
-          color: palette.outline)
+      comfortatext(hour.time, 14, data.settings, color: palette.outline)
     ],
   );
 }
@@ -286,8 +284,7 @@ Widget buildHourlyPrecip(var hour, ColorScheme palette, WeatherData data) {
                   color: palette.primary, weight: FontWeight.w500)
             ],
           ),
-          comfortatext(hour.time, 14, data.settings,
-              color: palette.outline)
+          comfortatext(hour.time, 14, data.settings, color: palette.outline)
         ],
       ),
     ],
@@ -328,8 +325,7 @@ Widget buildHourlyWind(var hour, ColorScheme palette, WeatherData data) {
               color: palette.primary, weight: FontWeight.w500),
         ],
       ),
-      comfortatext(hour.time, 14, data.settings,
-          color: palette.outline)
+      comfortatext(hour.time, 14, data.settings, color: palette.outline)
     ],
   );
 }
@@ -380,8 +376,7 @@ Widget buildHourlyUv(var hour, ColorScheme palette, WeatherData data) {
               }
             }),
       ),
-      comfortatext(hour.time, 14, data.settings,
-          color: palette.outline)
+      comfortatext(hour.time, 14, data.settings, color: palette.outline)
     ],
   );
 }

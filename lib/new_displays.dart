@@ -136,7 +136,7 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
-        final var now = DateTime.now();
+        final now = DateTime.now();
         final localTime = now.add(Duration(hours: hourdif));
 
         final double progress = widget.data.sunstatus.sunstatus;
@@ -246,7 +246,8 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
   }
 }
 
-Widget aqiWidget(WeatherData data, ColorScheme palette, BuildContext context, bool isTabletMode) {
+Widget aqiWidget(WeatherData data, ColorScheme palette, BuildContext context,
+    bool isTabletMode) {
   return Column(
     children: [
       Padding(
@@ -335,7 +336,8 @@ Widget aqiWidget(WeatherData data, ColorScheme palette, BuildContext context, bo
   );
 }
 
-Widget alertWidget(WeatherData data, BuildContext context, ColorScheme palette) {
+Widget alertWidget(
+    WeatherData data, BuildContext context, ColorScheme palette) {
   if (data.alerts.length > 0) {
     return Padding(
         padding:
@@ -416,7 +418,8 @@ Widget alertWidget(WeatherData data, BuildContext context, ColorScheme palette) 
   return Container();
 }
 
-Widget rain15MinuteChart(WeatherData data, ColorScheme palette, BuildContext context) {
+Widget rain15MinuteChart(
+    WeatherData data, ColorScheme palette, BuildContext context) {
   if (data.minutely_15_precip.t_minus != '') {
     return Container(
       margin: const EdgeInsets.only(left: 23, right: 23, top: 15, bottom: 30),

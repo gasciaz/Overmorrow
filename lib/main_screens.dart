@@ -124,8 +124,7 @@ class _NewMainState extends State<NewMain> {
 
   @override
   Widget build(BuildContext context) {
-    final view =
-        WidgetsBinding.instance.platformDispatcher.views.first;
+    final view = WidgetsBinding.instance.platformDispatcher.views.first;
     final size = (view.physicalSize) / view.devicePixelRatio;
 
     final widgetsMap = <String, Widget>{
@@ -264,11 +263,12 @@ class TabletLayout extends StatelessWidget {
   final WeatherData data;
   final updateLocation;
 
-  const TabletLayout({super.key, required this.data, required this.updateLocation});
+  const TabletLayout(
+      {super.key, required this.data, required this.updateLocation});
 
   @override
   Widget build(BuildContext context) {
-    final var view = WidgetsBinding.instance.platformDispatcher.views.first;
+    final view = WidgetsBinding.instance.platformDispatcher.views.first;
 
     final size = view.physicalSize / view.devicePixelRatio;
 

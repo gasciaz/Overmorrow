@@ -34,7 +34,8 @@ import 'package:overmorrow/services/image_service.dart';
 import 'package:overmorrow/ui_helper.dart';
 import 'package:overmorrow/weather_refact.dart';
 
-String metNTextCorrection(String text, bool shouldTranslate, AppLocalizations? localizations) {
+String metNTextCorrection(
+    String text, bool shouldTranslate, AppLocalizations? localizations) {
   var p = metNWeatherToText[text] ?? 'Clear Sky';
   if (shouldTranslate) {
     p = conditionTranslation(p, localizations!) ?? 'TranslationErr';
@@ -49,7 +50,7 @@ int metNCalculateHourDif(DateTime timeThere) {
 }
 
 Duration metNCalculateTimeOffset(DateTime timeThere) {
-  final var now = DateTime.now().toUtc();
+  final now = DateTime.now().toUtc();
   return now.difference(timeThere);
 }
 
@@ -61,7 +62,7 @@ int metNcalculateFeelsLike(double t, double r, double v) {
   if (t >= 24) {
     t = (t * 1.8) + 32;
 
-    final var heatIndex = -42.379 +
+    final heatIndex = -42.379 +
         (2.04901523 * t) +
         (10.14333127 * r) -
         (0.22475541 * t * r) -
@@ -86,16 +87,18 @@ int metNcalculateFeelsLike(double t, double r, double v) {
   }
 }
 
-String metNGetName(index, settings, item, start, hourDif, AppLocalizations localizations) {
-  final String x = item['properties']['timeseries'][start]['time'].split('T')[0];
+String metNGetName(
+    index, settings, item, start, hourDif, AppLocalizations localizations) {
+  final String x =
+      item['properties']['timeseries'][start]['time'].split('T')[0];
   final String hour = item['properties']['timeseries'][start]['time']
       .split('T')[1]
       .split(':')[0];
-  final var z = x.split('-');
+  final z = x.split('-');
   final timeBefore = DateTime(
       int.parse(z[0]), int.parse(z[1]), int.parse(z[2]), int.parse(hour));
-  final var time = timeBefore.add(-Duration(hours: hourDif));
-  final var weeks = <String>[
+  final time = timeBefore.add(-Duration(hours: hourDif));
+  final weeks = <String>[
     localizations.mon,
     localizations.tue,
     localizations.wed,
@@ -246,8 +249,8 @@ class MetNCurrent {
 
     final it = item['properties']['timeseries'][0]['data'];
 
-    final imageService = await ImageService.getImageService(
-        currentCondition, realLoc, settings);
+    final imageService =
+        await ImageService.getImageService(currentCondition, realLoc, settings);
     final colorPalette = await ColorPalette.getColorPalette(
         imageService.image, settings['Color mode'], settings);
 
@@ -321,15 +324,15 @@ class MetNDay {
     required this.wind_dir,
   });
 
-  static MetNDay fromJson(
-      item, settings, start, end, index, hourDif, AppLocalizations localizations) {
-    final var temperatures = <int>[];
-    final var rawTemps = <double>[];
-    final var windspeeds = <double>[];
+  static MetNDay fromJson(item, settings, start, end, index, hourDif,
+      AppLocalizations localizations) {
+    final temperatures = <int>[];
+    final rawTemps = <double>[];
+    final windspeeds = <double>[];
     final winddirs = <int>[];
-    final var precipMm = <double>[];
-    final var precip = <double>[];
-    final var uvs = <int>[];
+    final precipMm = <double>[];
+    final precip = <double>[];
+    final uvs = <int>[];
 
     var precipProb = -10;
 
@@ -365,8 +368,8 @@ class MetNDay {
       precipMm.add(hour.raw_precip);
       precip.add(hour.precip);
 
-      final var index = weatherNames.indexOf(hour.rawText);
-      final var value = weatherConditionBiassTable[hour.rawText] ?? 0;
+      final index = weatherNames.indexOf(hour.rawText);
+      final value = weatherConditionBiassTable[hour.rawText] ?? 0;
       oneSummary[index] += value;
 
       if (hour.precip_prob > precipProb) {
@@ -376,7 +379,7 @@ class MetNDay {
     }
 
     final largestValue = oneSummary.reduce(max);
-    final var BIndex = oneSummary.indexOf(largestValue);
+    final BIndex = oneSummary.indexOf(largestValue);
 
     return MetNDay(
         mm_precip: precipMm.reduce((a, b) => a + b),
@@ -438,7 +441,8 @@ class MetNHour {
     required this.rawText,
   });
 
-  static MetNHour fromJson(item, settings, hourDif, AppLocalizations localizations) {
+  static MetNHour fromJson(
+      item, settings, hourDif, AppLocalizations localizations) {
     final nextHours =
         item['data']['next_1_hours'] ?? item['data']['next_6_hours'];
 
@@ -631,21 +635,26 @@ class MetN15MinutePrecip {
 }
 
 Future<WeatherData> MetNGetWeatherData(
-    lat, lng, realLoc, Map<String, String> settings, placeName, AppLocalizations localizations) async {
+    lat,
+    lng,
+    realLoc,
+    Map<String, String> settings,
+    placeName,
+    AppLocalizations localizations) async {
   final Mn = await MetNMakeRequest(lat, lng, realLoc);
   final MnBody = Mn[0];
 
   //DateTime lastKnowTime = await MetNGetLocalTime(lat, lng);
-  final var lastKnowTime = DateTime.now();
+  final lastKnowTime = DateTime.now();
   final DateTime fetchDatetime = Mn[1];
 
   //this gives us the time passed since last fetch, this is all basically for offline mode
-  final var realTimeOffset = DateTime.now().difference(fetchDatetime);
+  final realTimeOffset = DateTime.now().difference(fetchDatetime);
 
   //now we just need to apply this time offset to get the real current time
-  final var localTime = lastKnowTime.add(realTimeOffset);
+  final localTime = lastKnowTime.add(realTimeOffset);
 
-  final var hourDif = metNCalculateHourDif(localTime);
+  final hourDif = metNCalculateHourDif(localTime);
 
   final bool isonline = Mn[2];
 
@@ -668,21 +677,21 @@ Future<WeatherData> MetNGetWeatherData(
   MnBody['properties']['timeseries'] =
       MnBody['properties']['timeseries'].sublist(start);
 
-  final var days = <MetNDay>[];
-  final var hourly72 = <dynamic>[];
+  final days = <MetNDay>[];
+  final hourly72 = <dynamic>[];
 
   var begin = 0;
   var index = 0;
 
   var previousHour = 0;
   for (var n = 0; n < MnBody['properties']['timeseries'].length; n++) {
-    final var hour = (int.parse(MnBody['properties']['timeseries'][n]['time']
+    final hour = (int.parse(MnBody['properties']['timeseries'][n]['time']
                 .split('T')[1]
                 .split(':')[0]) -
             hourDif) %
         24;
     if (n > 0 && hour - previousHour < 1) {
-      final var day = MetNDay.fromJson(
+      final day = MetNDay.fromJson(
           MnBody, settings, begin, n, index, hourDif, localizations);
       days.add(day);
 
@@ -791,8 +800,8 @@ Future<LightHourlyForecastData> metNGetLightHourlyData(
     settings, placeName, lat, lon) async {
   final item = await metNGetLightResponse(settings, placeName, lat, lon);
 
-  final var hourlyConditions = <String>[];
-  final var hourlyTemps = <int>[];
+  final hourlyConditions = <String>[];
+  final hourlyTemps = <int>[];
   final hourlyNames = <String>[];
 
   final now = DateTime.now();

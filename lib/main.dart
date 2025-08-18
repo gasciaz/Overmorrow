@@ -133,15 +133,14 @@ void callbackDispatcher() {
           print(
               'HEEEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRRRRRRRREEEEEEEEEEEEEEEEEEE');
 
-          final installedWidgets =
-              await HomeWidget.getInstalledWidgets();
+          final installedWidgets = await HomeWidget.getInstalledWidgets();
 
           if (installedWidgets.isEmpty) {
             print('no widgets installed, skipping update');
             return Future.value(true);
           }
 
-          final var settings = await getSettingsUsed();
+          final settings = await getSettingsUsed();
 
           for (final widgetInfo in installedWidgets) {
             final widgetId = widgetInfo.androidWidgetId!;
@@ -152,14 +151,14 @@ void callbackDispatcher() {
             final latLonKey = 'current.latLon.$widgetId';
             final providerKey = 'current.provider.$widgetId';
 
-            final widgetLocation =
-                (await HomeWidget.getWidgetData<String>(locationKey,
-                        defaultValue: 'unknown')) ??
-                    'unknown';
-            final widgetProvider =
-                (await HomeWidget.getWidgetData<String>(providerKey,
-                        defaultValue: 'unknown')) ??
-                    'unknown';
+            final widgetLocation = (await HomeWidget.getWidgetData<String>(
+                    locationKey,
+                    defaultValue: 'unknown')) ??
+                'unknown';
+            final widgetProvider = (await HomeWidget.getWidgetData<String>(
+                    providerKey,
+                    defaultValue: 'unknown')) ??
+                'unknown';
 
             if (widgetLocation == 'unknown') continue;
 
@@ -186,14 +185,13 @@ void callbackDispatcher() {
 
               await WidgetService.syncCurrentDataToWidget(data, widgetId);
             } else if (widgetClassName == windWidgetReceiver) {
-              final var data = await LightWindData.getLightWindData(
+              final data = await LightWindData.getLightWindData(
                   placeName, latLon, widgetProvider, settings);
 
               await WidgetService.syncWindDataToWidget(data, widgetId);
             } else if (widgetClassName == forecastWidgetReceiver) {
-              final var data =
-                  await LightHourlyForecastData.getLightForecastData(
-                      placeName, latLon, widgetProvider, settings);
+              final data = await LightHourlyForecastData.getLightForecastData(
+                  placeName, latLon, widgetProvider, settings);
 
               await WidgetService.syncHourlyForecastDataToWidget(
                   data, widgetId);
@@ -278,8 +276,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> setPreferedLocale() async {
-    final var loc = await getLanguageUsed();
-    final var to = languageNameToLocale[loc] ?? const Locale('en');
+    final loc = await getLanguageUsed();
+    final to = languageNameToLocale[loc] ?? const Locale('en');
 
     setState(() {
       _locale = to;
@@ -288,8 +286,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final systemGestureInsets =
-        MediaQuery.of(context).systemGestureInsets;
+    final systemGestureInsets = MediaQuery.of(context).systemGestureInsets;
     if (systemGestureInsets.left > 0) {
       SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(
@@ -330,17 +327,17 @@ class _HomePageState extends State<HomePage> {
     return safe.length > 100 ? safe.substring(0, 100) : safe;
   }
 
-  Future<Widget> getDays(bool recall, proposedLoc, backupName, bool startup) async {
+  Future<Widget> getDays(
+      bool recall, proposedLoc, backupName, bool startup) async {
     try {
       final localizations = AppLocalizations.of(context)!;
 
-      final var settings = await getSettingsUsed();
+      final settings = await getSettingsUsed();
       final weatherProvider = await getWeatherProvider();
       backupName = _sanitizePlaceName(backupName);
 
       if (startup) {
-        final n =
-            await getLastPlace(); //loads the last place you visited
+        final n = await getLastPlace(); //loads the last place you visited
         proposedLoc = n[1];
         backupName = n[0];
         startup = false;
@@ -389,7 +386,7 @@ class _HomePageState extends State<HomePage> {
             final placemarks = await placemarkFromCoordinates(
                     position.latitude, position.longitude)
                 .timeout(const Duration(seconds: 3));
-            final var place = placemarks[0];
+            final place = placemarks[0];
 
             backupName = place.locality ??
                 place.subLocality ??
@@ -439,7 +436,7 @@ class _HomePageState extends State<HomePage> {
         }
       }
 
-      final var RealName = backupName.toString();
+      final RealName = backupName.toString();
       if (isItCurrentLocation) {
         backupName = 'CurrentLocation';
       }
@@ -508,7 +505,7 @@ class _HomePageState extends State<HomePage> {
       return WeatherPage(data: weatherData, updateLocation: updateLocation);
     } catch (e, stacktrace) {
       final settings = await getSettingsUsed();
-      final var weatherProvider = await getWeatherProvider();
+      final weatherProvider = await getWeatherProvider();
 
       if (kDebugMode) {
         debugPrint('Error fetching weather data: $e');

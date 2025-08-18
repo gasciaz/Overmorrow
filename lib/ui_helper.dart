@@ -118,7 +118,7 @@ Color lighten2(Color c, [double amount = 0.1]) {
 }
 
 Color lightAccent(Color color, int intensity) {
-  final var x = intensity / (color.r + color.g + color.b);
+  final x = intensity / (color.r + color.g + color.b);
   return Color.fromRGBO(sqrt(color.r * x).toInt(), sqrt(color.g * x).toInt(),
       sqrt(color.b * x).toInt(), 1);
 }
@@ -256,7 +256,7 @@ class _MySearchParentState extends State<MySearchParent> {
             child: ErrorWidget(snapshot.error!),
           );
         }
-        final var favorites = getFavorites(snapshot.data);
+        final favorites = getFavorites(snapshot.data);
         //return buildWholeThing(snapshot.data);
         return MySearchWidget(
             updateLocation: widget.updateLocation,
