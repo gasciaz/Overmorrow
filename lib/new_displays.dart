@@ -24,6 +24,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:overmorrow/alerts_page.dart';
 import 'package:overmorrow/aqi_page.dart';
 import 'package:overmorrow/decoders/decode_OM.dart';
+import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
 
@@ -245,7 +246,7 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
   }
 }
 
-Widget aqiWidget(var data, ColorScheme palette, BuildContext context, bool isTabletMode) {
+Widget aqiWidget(WeatherData data, ColorScheme palette, BuildContext context, bool isTabletMode) {
   return Column(
     children: [
       Padding(
@@ -334,7 +335,7 @@ Widget aqiWidget(var data, ColorScheme palette, BuildContext context, bool isTab
   );
 }
 
-Widget alertWidget(var data, BuildContext context, ColorScheme palette) {
+Widget alertWidget(WeatherData data, BuildContext context, ColorScheme palette) {
   if (data.alerts.length > 0) {
     return Padding(
         padding:

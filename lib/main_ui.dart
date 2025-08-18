@@ -23,6 +23,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:overmorrow/api_key.dart';
+import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/main_screens.dart';
 import 'package:overmorrow/services/color_service.dart';
@@ -39,7 +40,7 @@ Future<void> _launchUrl(String url) async {
 }
 
 class WeatherPage extends StatelessWidget {
-  final data;
+  final WeatherData data;
   final updateLocation;
 
   const WeatherPage({super.key, required this.data, required this.updateLocation});

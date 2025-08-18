@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/new_displays.dart';
 import 'package:overmorrow/ui_helper.dart';
@@ -48,7 +49,7 @@ Widget alertBadge(name, text, data, ColorScheme palette) {
 }
 
 class AlertsPage extends StatefulWidget {
-  final data;
+  final WeatherData data;
 
   const AlertsPage({super.key, required this.data});
 
@@ -57,7 +58,7 @@ class AlertsPage extends StatefulWidget {
 }
 
 class _AlertsPageState extends State<AlertsPage> {
-  final data;
+  final WeatherData data;
 
   _AlertsPageState({required this.data});
 
