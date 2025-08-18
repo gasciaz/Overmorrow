@@ -780,7 +780,7 @@ Widget CurrentLocationWidget(
     String region,
     Function updateLocation,
     BuildContext context,
-    isTabletMode) {
+    bool isTabletMode) {
   if (locationState == 'denied') {
     return GestureDetector(
       onTap: () {
