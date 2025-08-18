@@ -47,18 +47,17 @@ double difFromBackColors(Color front, List<Color> backs) {
 
 class ImageColorList {
   final List<Color> imageColors; //a list of colors for the whole image
-  final List<Color> regionColors; //a list of colors for the region where the text will appear
+  final List<Color>
+      regionColors; //a list of colors for the region where the text will appear
 
-  const ImageColorList({
-    required this.imageColors,
-    required this.regionColors
-  });
+  const ImageColorList({required this.imageColors, required this.regionColors});
 
   static Future<ImageColorList> getImageColorList(Image imageWidget) async {
     final ImageProvider imageProvider = imageWidget.image;
 
     final Completer<ImageInfo> completer = Completer();
-    final ImageStreamListener listener = ImageStreamListener((ImageInfo info, bool _) {
+    final ImageStreamListener listener =
+        ImageStreamListener((ImageInfo info, bool _) {
       if (!completer.isCompleted) {
         completer.complete(info);
       }
@@ -70,7 +69,8 @@ class ImageColorList {
     final int imageHeight = imageInfo.image.height;
     final int imageWidth = imageInfo.image.height;
 
-    const int desiredSquare = 400; //approximation because the top half image cropped is almost a square
+    const int desiredSquare =
+        400; //approximation because the top half image cropped is almost a square
 
     final double cropX = desiredSquare / imageWidth;
     final double cropY = desiredSquare / imageHeight;
@@ -107,16 +107,16 @@ class ImageColorList {
     imageProvider.resolve(const ImageConfiguration()).removeListener(listener);
 
     return ImageColorList(
-      imageColors: imageColors.colors.toList(),
-      regionColors: regionColors.colors.toList()
-    );
+        imageColors: imageColors.colors.toList(),
+        regionColors: regionColors.colors.toList());
   }
 }
 
 class ColorPalette {
   final ColorScheme palette;
   final Color colorPop; //The color that is applied to the temperature display
-  final Color descColor; //the color that is applied to the description under the temperature
+  final Color
+      descColor; //the color that is applied to the description under the temperature
 
   //used for debugging to see what colors the palette generator sees
   final List<Color> imageColors;
@@ -140,15 +140,14 @@ class ColorPalette {
     if (s < 0.2) return 0.1;
 
     //distance from blue
-    final dist = ( (h - 240).abs() % 360 ).clamp(0.0, 180.0) / 180;
+    final dist = ((h - 240).abs() % 360).clamp(0.0, 180.0) / 180;
     final hueWeight = 0.5 + (dist * 0.5);
     return hueWeight * (0.5 + 0.5 * s);
   }
 
-
   //make sure the temperature and description text remain readable
-  static List<Color> checkTextContrast(List<Color> regionColors, ColorScheme palette) {
-
+  static List<Color> checkTextContrast(
+      List<Color> regionColors, ColorScheme palette) {
     //the intended look is temperature with primaryFixedDim and description with surface
     //though that can be adjusted to help contrast
 
@@ -157,8 +156,14 @@ class ColorPalette {
     bool descUnique = surfaceDif >= 1.9;
 
     //predefined list of colors in order that still match the color scheme
-    final colorList = [palette.primaryFixedDim, palette.surface, palette.secondaryContainer,
-      palette.primaryContainer, palette.primary, palette.secondary, palette.onSurface
+    final colorList = [
+      palette.primaryFixedDim,
+      palette.surface,
+      palette.secondaryContainer,
+      palette.primaryContainer,
+      palette.primary,
+      palette.secondary,
+      palette.onSurface
     ];
 
     double dif;
@@ -183,7 +188,8 @@ class ColorPalette {
       newColor = lighten(palette.primaryContainer, i / 4);
       dif = difFromBackColors(newColor, regionColors);
       if (dif > bestDif) {
-        if (dif >= 1.9) { //try to keep it close as possible to the palette while still readable
+        if (dif >= 1.9) {
+          //try to keep it close as possible to the palette while still readable
           return [newColor, newColor];
         }
         bestDif = dif;
@@ -194,7 +200,8 @@ class ColorPalette {
       newColor = darken(palette.primaryContainer, i / 4);
       dif = difFromBackColors(newColor, regionColors);
       if (dif > bestDif) {
-        if (dif >= 1.9) { //try to keep it close as possible to the palette while still readable
+        if (dif >= 1.9) {
+          //try to keep it close as possible to the palette while still readable
           return [newColor, newColor];
         }
         bestDif = dif;
@@ -205,26 +212,25 @@ class ColorPalette {
     return [bestColor, bestColor];
   }
 
-  static Future<ColorPalette> getColorPalette(Image image, String theme, settings) async {
-
+  static Future<ColorPalette> getColorPalette(
+      Image image, String theme, settings) async {
     ImageColorList colorList = await ImageColorList.getImageColorList(image);
     List<Color> regionColors = colorList.regionColors;
     List<Color> imageColors = colorList.imageColors;
 
     if (theme == "auto") {
-      var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
-      theme= brightness == Brightness.dark ? "dark" : "light";
+      var brightness =
+          SchedulerBinding.instance.platformDispatcher.platformBrightness;
+      theme = brightness == Brightness.dark ? "dark" : "light";
     }
 
     ColorScheme palette;
 
     if (settings["Color source"] == "wallpaper") {
       palette = await getWallpaperPalette(theme);
-    }
-    else if (settings["Color source"] == "custom") {
+    } else if (settings["Color source"] == "custom") {
       palette = getCustomColorPalette(theme, settings);
-    }
-    else {
+    } else {
       palette = getImagePalette(theme, imageColors);
     }
 
@@ -240,7 +246,6 @@ class ColorPalette {
   }
 
   static ColorScheme getImagePalette(String theme, List<Color> imageColors) {
-
     Color seedColor = Colors.blue;
     double bestValue = -1;
 
@@ -254,18 +259,17 @@ class ColorPalette {
     }
 
     if (theme == "auto") {
-      var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
-      theme= brightness == Brightness.dark ? "dark" : "light";
+      var brightness =
+          SchedulerBinding.instance.platformDispatcher.platformBrightness;
+      theme = brightness == Brightness.dark ? "dark" : "light";
     }
 
     //generate color palette with that seedColor
     ColorScheme palette = ColorScheme.fromSeed(
         seedColor: seedColor,
-        brightness: theme == 'light' ? Brightness.light : Brightness.dark
-    );
+        brightness: theme == 'light' ? Brightness.light : Brightness.dark);
 
     return palette;
-
   }
 
   static Future<ColorScheme> getWallpaperPalette(String theme) async {
@@ -279,15 +283,17 @@ class ColorPalette {
     }
 
     if (theme == "auto") {
-      var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
-      theme= brightness == Brightness.dark ? "dark" : "light";
+      var brightness =
+          SchedulerBinding.instance.platformDispatcher.platformBrightness;
+      theme = brightness == Brightness.dark ? "dark" : "light";
     }
 
     final ColorScheme palette = ColorScheme.fromSeed(
       seedColor: mainColor,
       brightness: theme == 'light' ? Brightness.light : Brightness.dark,
-      dynamicSchemeVariant: theme == 'original' || theme == 'mono' ? DynamicSchemeVariant.tonalSpot :
-      DynamicSchemeVariant.tonalSpot,
+      dynamicSchemeVariant: theme == 'original' || theme == 'mono'
+          ? DynamicSchemeVariant.tonalSpot
+          : DynamicSchemeVariant.tonalSpot,
     );
 
     return palette;
@@ -297,15 +303,17 @@ class ColorPalette {
     Color mainColor = Color(getColorFromHex(settings["Custom color"]));
 
     if (theme == "auto") {
-      var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
-      theme= brightness == Brightness.dark ? "dark" : "light";
+      var brightness =
+          SchedulerBinding.instance.platformDispatcher.platformBrightness;
+      theme = brightness == Brightness.dark ? "dark" : "light";
     }
 
     final ColorScheme palette = ColorScheme.fromSeed(
       seedColor: mainColor,
       brightness: theme == 'light' ? Brightness.light : Brightness.dark,
-      dynamicSchemeVariant: theme == 'original' || theme == 'mono' ? DynamicSchemeVariant.tonalSpot :
-      DynamicSchemeVariant.tonalSpot,
+      dynamicSchemeVariant: theme == 'original' || theme == 'mono'
+          ? DynamicSchemeVariant.tonalSpot
+          : DynamicSchemeVariant.tonalSpot,
     );
 
     return palette;
@@ -313,18 +321,19 @@ class ColorPalette {
 
   //i specifically made this because it's always the same,
   // so there's no point in loading it from the image every time
-  static ColorScheme getErrorPagePalette(theme,) {
+  static ColorScheme getErrorPagePalette(
+    theme,
+  ) {
     if (theme == "auto") {
-      var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
-      theme= brightness == Brightness.dark ? "dark" : "light";
+      var brightness =
+          SchedulerBinding.instance.platformDispatcher.platformBrightness;
+      theme = brightness == Brightness.dark ? "dark" : "light";
     }
 
     ColorScheme palette = ColorScheme.fromSeed(
         seedColor: Colors.deepPurple,
-        brightness: theme == 'light' ? Brightness.light : Brightness.dark
-    );
+        brightness: theme == 'light' ? Brightness.light : Brightness.dark);
 
     return palette;
   }
-
 }
