@@ -314,8 +314,8 @@ class WapiCurrent {
     required this.descColor,
   });
 
-  static Future<WapiCurrent> fromJson(item, settings, String realLoc, lat, lng,
-      start, AppLocalizations localizations) async {
+  static Future<WapiCurrent> fromJson(item, settings, String realLoc,
+      double lat, double lng, start, AppLocalizations localizations) async {
     final currentCondition = textCorrection(
         item['hour'][start]['condition']['code'],
         item['hour'][start]['is_day'],
@@ -732,8 +732,8 @@ class Wapi15MinutePrecip {
 }
 
 Future<WeatherData> WapiGetWeatherData(
-    lat,
-    lng,
+    double lat,
+    double lng,
     String realLoc,
     Map<String, String> settings,
     String placeName,
@@ -834,8 +834,8 @@ Future<WeatherData> WapiGetWeatherData(
       isonline: isonline);
 }
 
-Future<dynamic> wapiGetCurrentResponse(
-    Map<String, String> settings, String placeName, lat, lon) async {
+Future<dynamic> wapiGetCurrentResponse(Map<String, String> settings,
+    String placeName, double lat, double lon) async {
   final params = {
     'key': wapi_Key,
     'q': '$lat, $lon',
@@ -850,7 +850,10 @@ Future<dynamic> wapiGetCurrentResponse(
 }
 
 Future<LightCurrentWeatherData> wapiGetLightCurrentData(
-    Map<String, String> settings, String placeName, lat, lon) async {
+    Map<String, String> settings,
+    String placeName,
+    double lat,
+    double lon) async {
   final item = await wapiGetCurrentResponse(settings, placeName, lat, lon);
 
   final now = DateTime.now();
@@ -866,8 +869,8 @@ Future<LightCurrentWeatherData> wapiGetLightCurrentData(
   );
 }
 
-Future<LightWindData> wapiGetLightWindData(
-    Map<String, String> settings, String placeName, lat, lon) async {
+Future<LightWindData> wapiGetLightWindData(Map<String, String> settings,
+    String placeName, double lat, double lon) async {
   final item = await wapiGetCurrentResponse(settings, placeName, lat, lon);
 
   return LightWindData(
@@ -879,7 +882,10 @@ Future<LightWindData> wapiGetLightWindData(
 }
 
 Future<LightHourlyForecastData> wapiGetLightHourlyData(
-    Map<String, String> settings, String placeName, lat, lon) async {
+    Map<String, String> settings,
+    String placeName,
+    double lat,
+    double lon) async {
   final params = {
     'key': wapi_Key,
     'q': '$lat, $lon',

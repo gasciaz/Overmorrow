@@ -239,8 +239,8 @@ class MetNCurrent {
     required this.descColor,
   });
 
-  static Future<MetNCurrent> fromJson(item, settings, String realLoc, lat, lng,
-      AppLocalizations localizations) async {
+  static Future<MetNCurrent> fromJson(item, settings, String realLoc,
+      double lat, double lng, AppLocalizations localizations) async {
     final currentCondition = metNTextCorrection(
         item['properties']['timeseries'][0]['data']['next_1_hours']['summary']
             ['symbol_code'],
@@ -496,8 +496,8 @@ class MetNSunstatus {
     required this.absoluteSunriseSunset,
   });
 
-  static Future<MetNSunstatus> fromJson(item, settings, lat, lng, int dif,
-      DateTime timeThere, DateTime fetchDate) async {
+  static Future<MetNSunstatus> fromJson(item, settings, double lat, double lng,
+      int dif, DateTime timeThere, DateTime fetchDate) async {
     final MnParams = {
       'lat': lat.toString(),
       'lon': lng.toString(),
@@ -635,8 +635,8 @@ class MetN15MinutePrecip {
 }
 
 Future<WeatherData> MetNGetWeatherData(
-    lat,
-    lng,
+    double lat,
+    double lng,
     String realLoc,
     Map<String, String> settings,
     String placeName,
@@ -738,7 +738,7 @@ Future<WeatherData> MetNGetWeatherData(
 }
 
 Future<dynamic> metNGetLightResponse(
-    settings, String placeName, lat, lon) async {
+    settings, String placeName, double lat, double lon) async {
   final params = {
     'lat': lat.toString(),
     'lon': lon.toString(),
@@ -757,7 +757,7 @@ Future<dynamic> metNGetLightResponse(
 }
 
 Future<LightCurrentWeatherData> metNGetLightCurrentData(
-    settings, String placeName, lat, lon) async {
+    settings, String placeName, double lat, double lon) async {
   final item = await metNGetLightResponse(settings, placeName, lat, lon);
 
   final now = DateTime.now();
@@ -780,7 +780,7 @@ Future<LightCurrentWeatherData> metNGetLightCurrentData(
 }
 
 Future<LightWindData> metNGetLightWindData(
-    settings, String placeName, lat, lon) async {
+    settings, String placeName, double lat, double lon) async {
   final item = await metNGetLightResponse(settings, placeName, lat, lon);
 
   return LightWindData(
@@ -798,7 +798,7 @@ Future<LightWindData> metNGetLightWindData(
 }
 
 Future<LightHourlyForecastData> metNGetLightHourlyData(
-    settings, String placeName, lat, lon) async {
+    settings, String placeName, double lat, double lon) async {
   final item = await metNGetLightResponse(settings, placeName, lat, lon);
 
   final hourlyConditions = <String>[];

@@ -319,8 +319,8 @@ class OMCurrent {
       sunstatus,
       timenow,
       String realLoc,
-      lat,
-      lng,
+      double lat,
+      double lng,
       start,
       dayDif,
       AppLocalizations context,
@@ -665,7 +665,7 @@ class OMAqi {
   });
 
   static Future<OMAqi> fromJson(
-      lat, lng, settings, AppLocalizations localizations) async {
+      double lat, double lng, settings, AppLocalizations localizations) async {
     final params = {
       'latitude': lat.toString(),
       'longitude': lng.toString(),
@@ -776,7 +776,7 @@ class OMExtendedAqi {
   });
 
   static Future<OMExtendedAqi> fromJson(
-      lat, lng, settings, AppLocalizations localizations) async {
+      double lat, double lng, settings, AppLocalizations localizations) async {
     final params = {
       'latitude': lat.toString(),
       'longitude': lng.toString(),
@@ -1038,8 +1038,8 @@ class OMExtendedAqi {
 }
 
 Future<WeatherData> OMGetWeatherData(
-    lat,
-    lng,
+    double lat,
+    double lng,
     String realLoc,
     Map<String, String> settings,
     String placeName,
@@ -1130,7 +1130,7 @@ Future<WeatherData> OMGetWeatherData(
 }
 
 Future<LightCurrentWeatherData> omGetLightCurrentData(
-    settings, String placeName, lat, lon) async {
+    settings, String placeName, double lat, double lon) async {
   final oMParams = {
     'latitude': lat.toString(),
     'longitude': lon.toString(),
@@ -1164,7 +1164,8 @@ Future<LightCurrentWeatherData> omGetLightCurrentData(
   );
 }
 
-Future<LightWindData> omGetLightWindData(settings, lat, lon) async {
+Future<LightWindData> omGetLightWindData(
+    settings, double lat, double lon) async {
   final oMParams = {
     'latitude': lat.toString(),
     'longitude': lon.toString(),
@@ -1185,7 +1186,7 @@ Future<LightWindData> omGetLightWindData(settings, lat, lon) async {
 }
 
 Future<LightHourlyForecastData> omGetHourlyForecast(
-    settings, String placeName, lat, lon) async {
+    settings, String placeName, double lat, double lon) async {
   final oMParams = {
     'latitude': lat.toString(),
     'longitude': lon.toString(),
