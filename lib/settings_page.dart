@@ -84,7 +84,7 @@ Map<String, List<String>> settingSwitches = {
   'Radar haptics': ['on', 'off'],
 };
 
-Future<List<dynamic>> getSettingsAndColors(image) async {
+Future<List<dynamic>> getSettingsAndColors(Image image) async {
   final settings = await getSettingsUsed();
   final colorPalette = await ColorPalette.getColorPalette(
       image, settings['Color mode']!, settings);
@@ -310,7 +310,7 @@ Widget settingEntry(icon, text, Map<String, String> settings,
 }
 
 class SettingsPage extends StatefulWidget {
-  final image;
+  final Image image;
 
   const SettingsPage({super.key, required this.image});
 
@@ -319,7 +319,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final image;
+  final Image image:
 
   String _locale = 'English';
   //this is so that appearance page setting changes take effect in place rather that having to exit the page
@@ -394,7 +394,7 @@ class SettingsMain extends StatelessWidget {
   final VoidCallback goBack;
   final Map<String, String> settings;
   final void Function(String, String) updatePage;
-  final image;
+  final Image image:
   final colornotify;
 
   const SettingsMain(

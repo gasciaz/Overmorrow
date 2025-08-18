@@ -198,7 +198,7 @@ Widget NewSettings(
 
 class AppearancePage extends StatefulWidget {
   final Map<String, String> settings;
-  final image;
+  final Image image:
   final colornotify;
   final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
@@ -221,7 +221,7 @@ class AppearancePage extends StatefulWidget {
 }
 
 class _AppearancePageState extends State<AppearancePage> {
-  final image;
+  final Image image:
   final Map<String, String> settings;
   final colornotify;
   final void Function(String, String) updateMainPage;
@@ -272,7 +272,7 @@ class _AppearancePageState extends State<AppearancePage> {
 }
 
 class AppearanceSelector extends StatelessWidget {
-  final image;
+  final Image image:
   final Map<String, String> settings;
   final ColorPalette colorPalette;
   final Function updatePage;
@@ -484,7 +484,7 @@ class AppearanceSelector extends StatelessWidget {
 
 class UnitsPage extends StatefulWidget {
   final Map<String, String> settings;
-  final image;
+  final Image image:
   final palette;
   final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
@@ -507,7 +507,7 @@ class UnitsPage extends StatefulWidget {
 }
 
 class _UnitsPageState extends State<UnitsPage> {
-  final image;
+  final Image image:
   final Map<String, String> settings;
   final ColorScheme palette;
   final void Function(String, String) updateMainPage;
@@ -604,7 +604,7 @@ class _UnitsPageState extends State<UnitsPage> {
 
 class GeneralSettingsPage extends StatefulWidget {
   final Map<String, String> settings;
-  final image;
+  final Image image:
   final palette;
   final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
@@ -627,7 +627,7 @@ class GeneralSettingsPage extends StatefulWidget {
 }
 
 class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
-  final image;
+  final Image image:
   final Map<String, String> settings;
   final ColorScheme palette;
   final void Function(String, String) updateMainPage;
@@ -746,7 +746,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
 
 class LangaugePage extends StatefulWidget {
   final Map<String, String> settings;
-  final image;
+  final Image image:
   final palette;
   final void Function(String, String) updateMainPage;
 
@@ -766,7 +766,7 @@ class LangaugePage extends StatefulWidget {
 }
 
 class _LangaugePageState extends State<LangaugePage> {
-  final image;
+  final Image image:
   final Map<String, String> settings;
   final ColorScheme palette;
   final void Function(String, String) updateMainPage;
@@ -941,7 +941,7 @@ class TranslationSelection extends StatelessWidget {
 
 class LayoutPage extends StatefulWidget {
   final Map<String, String> settings;
-  final image;
+  final Image image:
   final ColorScheme palette;
   final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
@@ -964,7 +964,7 @@ class LayoutPage extends StatefulWidget {
 }
 
 class _LayoutPageState extends State<LayoutPage> {
-  final image;
+  final Image image:
   final Map<String, String> settings;
   final ColorScheme palette;
   final void Function(String, String) updateMainPage;

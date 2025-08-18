@@ -175,7 +175,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
   final ValueListenable<List<String>> favorites;
   final void Function(List<String>) updateFav;
   final bool isTabletMode;
-  final image;
+  final Image image;
 
   _HeroSearchPageState(
       {required this.palette,
