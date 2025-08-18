@@ -21,12 +21,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:overmorrow/hourly.dart';
-
 import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
 
 Widget dayStat(data, IconData icon, number, addon,
-    {addWind = false, windDir = 0, iconSize = 16.0}) {
+    {bool addWind = false, windDir = 0, iconSize = 16.0}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
@@ -246,8 +245,7 @@ Widget dailyCollapsed(var data, var day, ColorScheme palette, int index,
             width: 40,
             child: Align(
                 alignment: Alignment.centerRight,
-                child: comfortatext(
-                    '${day.minTemp}°', 18, data.settings,
+                child: comfortatext('${day.minTemp}°', 18, data.settings,
                     color: palette.primary, weight: FontWeight.w500)),
           ),
           Expanded(

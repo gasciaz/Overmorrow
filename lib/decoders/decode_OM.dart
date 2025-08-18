@@ -311,7 +311,7 @@ class OMCurrent {
   });
 
   static Future<OMCurrent> fromJson(item, settings, sunstatus, timenow,
-      realLoc, lat, lng, start, dayDif, context, isonline) async {
+      realLoc, lat, lng, start, dayDif, context, bool isonline) async {
     var currentCondition = oMCurrentTextCorrection(
         item['current']['weather_code'],
         sunstatus.absoluteSunriseSunset,

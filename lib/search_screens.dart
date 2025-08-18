@@ -175,7 +175,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
   final updateLocation;
   final favorites;
   final updateFav;
-  final isTabletMode;
+  final bool isTabletMode;
   final image;
 
   _HeroSearchPageState(
@@ -675,7 +675,7 @@ Widget buildSearchResults(
     updateLocation,
     onFavChanged,
     settings,
-    isTabletMode) {
+    bool isTabletMode) {
   final favoriteNarrow = <String>[];
   for (var i = 0; i < favorites.length; i++) {
     final d = jsonDecode(favorites[i]);
@@ -882,8 +882,8 @@ Widget CurrentLocationWidget(
   );
 }
 
-Widget favoritesOrReorder(isEditing, favorites, settings, onFavChanged,
-    ColorScheme palette, updateLocation, BuildContext context, isTabletMode) {
+Widget favoritesOrReorder(bool isEditing, favorites, settings, onFavChanged,
+    ColorScheme palette, updateLocation, BuildContext context, bool isTabletMode) {
   if (isEditing) {
     return reorderFavorites(
         favorites, settings, onFavChanged, palette, isTabletMode);
@@ -894,7 +894,7 @@ Widget favoritesOrReorder(isEditing, favorites, settings, onFavChanged,
 }
 
 Widget buildFavorites(ColorScheme palette, List<String> favorites,
-    updateLocation, settings, BuildContext context, isTabletMode) {
+    updateLocation, settings, BuildContext context, bool isTabletMode) {
   return SingleChildScrollView(
     child: Container(
         key: const ValueKey<String>('normal'),
@@ -948,7 +948,7 @@ Widget buildFavorites(ColorScheme palette, List<String> favorites,
 }
 
 Widget reorderFavorites(
-    items, settings, onFavChanged, ColorScheme palette, isTabletMode) {
+    items, settings, onFavChanged, ColorScheme palette, bool isTabletMode) {
   return Container(
     key: const ValueKey<String>('editing'),
     decoration: BoxDecoration(
@@ -983,7 +983,7 @@ Widget reorderFavorites(
 }
 
 Widget reorderableItem(List<dynamic> items, index, settings,
-    ColorScheme palette, onFavChanged, isTabletMode) {
+    ColorScheme palette, onFavChanged, bool isTabletMode) {
   final split = json.decode(items[index]);
   final String name = split['name'];
   final country = generateAbbreviation(split['country']);

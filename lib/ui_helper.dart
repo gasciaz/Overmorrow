@@ -312,7 +312,7 @@ class _MySearchWidgetState extends State<MySearchWidget> {
   final prefs;
   final settings;
   final Image image;
-  final isTabletMode;
+  final bool isTabletMode;
 
   final List<String> beginFavorites;
 

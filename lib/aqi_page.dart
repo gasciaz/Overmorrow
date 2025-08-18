@@ -200,7 +200,7 @@ Widget pollutantWidget(data, name, value, percent, ColorScheme palette) {
 
 class AllergensPage extends StatefulWidget {
   final data;
-  final isTabletMode;
+  final bool isTabletMode;
 
   const AllergensPage(
       {super.key, required this.data, required this.isTabletMode});

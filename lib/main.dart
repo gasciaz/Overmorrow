@@ -330,7 +330,7 @@ class _HomePageState extends State<HomePage> {
     return safe.length > 100 ? safe.substring(0, 100) : safe;
   }
 
-  Future<Widget> getDays(bool recall, proposedLoc, backupName, startup) async {
+  Future<Widget> getDays(bool recall, proposedLoc, backupName, bool startup) async {
     try {
       final localizations = AppLocalizations.of(context)!;
 
@@ -549,7 +549,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> updateLocation(proposedLoc, backupName,
-      {time = 0, startup = false}) async {
+      {time = 0, bool startup = false}) async {
     setState(() {
       HapticFeedback.lightImpact();
       if (startup) {

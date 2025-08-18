@@ -322,7 +322,7 @@ class _FadingWidgetState extends State<FadingWidget>
 class SinceLastUpdate extends StatefulWidget {
   final split;
   final data;
-  final isVisible;
+  final bool isVisible;
 
   const SinceLastUpdate(
       {super.key,

@@ -44,7 +44,7 @@ class _NewHourlyState extends State<NewHourly>
     with AutomaticKeepAliveClientMixin {
   final data;
   final hours;
-  final elevated;
+  final bool elevated;
 
   int _value = 0;
 
@@ -164,7 +164,7 @@ Widget hourBoxes(hours, data, value, elevated, context) {
 }
 
 Widget hourlyDataBuilder(
-    hour, ColorScheme palette, elevated, childWidget, data) {
+    hour, ColorScheme palette, bool elevated, childWidget, data) {
   return Padding(
     padding: const EdgeInsets.all(3),
     child: AnimatedSwitcher(
