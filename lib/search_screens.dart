@@ -242,7 +242,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
     });
   }
 
-  Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> findCurrentPosition() async {
+  Future<String> findCurrentPosition() async {
     Position position;
 
     //start by getting the last position, so there is always some place showing, and then update it later
@@ -315,7 +315,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
     }
   }
 
-  Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> askGrantLocationPermission() async {
+  Future<String> askGrantLocationPermission() async {
     final var serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       setState(() {

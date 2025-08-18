@@ -16,19 +16,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:overmorrow/services/color_service.dart';
-import 'package:overmorrow/settings_screens.dart';
-import 'package:overmorrow/weather_refact.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/main.dart';
+import 'package:overmorrow/services/color_service.dart';
+import 'package:overmorrow/settings_screens.dart';
 import 'package:overmorrow/ui_helper.dart';
+import 'package:overmorrow/weather_refact.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Map<String, List<String>> settingSwitches = {
   'Language': [
@@ -138,7 +139,7 @@ Future<List<String>> getLastPlace() async {
   return [place, cord];
 }
 
-Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> setLastPlace(String place, String cord) async {
+Future<void> setLastPlace(String place, String cord) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('LastPlaceN', place);
   await prefs.setString('LastCord', cord);
@@ -152,7 +153,7 @@ Future<List<String>> getLastKnownLocation() async {
   return [place, cord];
 }
 
-Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> setLastKnownLocation(String place, String cord) async {
+Future<void> setLastKnownLocation(String place, String cord) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('LastKnownPositionName', place);
   await prefs.setString('LastKnownPositionCord', cord);
@@ -172,7 +173,7 @@ Future<String> getLanguageUsed() async {
   return used;
 }
 
-Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> SetData(String name, String to) async {
+Future<void> SetData(String name, String to) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString(name, to);
 }
@@ -232,8 +233,7 @@ Widget settingEntry(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding:
-                            const EdgeInsets.only(bottom: 20, top: 10),
+                        padding: const EdgeInsets.only(bottom: 20, top: 10),
                         child: comfortatext(text, 22, settings,
                             color: palette.onSurface),
                       ),
