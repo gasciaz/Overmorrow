@@ -20,16 +20,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:overmorrow/Icons/overmorrow_weather_icons3_icons.dart';
+import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../l10n/app_localizations.dart';
-
 Future<void> _launchUrl(String url) async {
-  final Uri _url = Uri.parse(url);
-  if (!await launchUrl(_url)) {
-    throw Exception('Could not launch $_url');
+  final url0 = Uri.parse(url);
+  if (!await launchUrl(url0)) {
+    throw Exception('Could not launch $url0');
   }
 }
 
@@ -37,8 +36,7 @@ class AboutPage extends StatefulWidget {
   final settings;
   final ColorScheme palette;
 
-  const AboutPage({Key? key, required this.settings, required this.palette})
-      : super(key: key);
+  const AboutPage({super.key, required this.settings, required this.palette});
 
   @override
   _AboutPageState createState() =>
@@ -49,8 +47,8 @@ class _AboutPageState extends State<AboutPage> {
   final settings;
   final ColorScheme palette;
 
-  String version = "--";
-  String buildNumber = "--";
+  String version = '--';
+  String buildNumber = '--';
 
   _AboutPageState({required this.settings, required this.palette});
 
@@ -82,9 +80,7 @@ class _AboutPageState extends State<AboutPage> {
                   Icons.arrow_back,
                   color: palette.primary,
                 ),
-                onPressed: () {
-                  goBack();
-                }),
+                onPressed: goBack),
             title: comfortatext(
                 AppLocalizations.of(context)!.about, 30, settings,
                 color: palette.primary),
@@ -100,7 +96,7 @@ class _AboutPageState extends State<AboutPage> {
                     children: AnimationConfiguration.toStaggeredList(
                       duration: const Duration(milliseconds: 500),
                       childAnimationBuilder: (widget) => SlideAnimation(
-                        horizontalOffset: 80.0,
+                        horizontalOffset: 80,
                         child: FadeInAnimation(
                           child: widget,
                         ),
@@ -124,21 +120,21 @@ class _AboutPageState extends State<AboutPage> {
                           ),
                         ),
                         Center(
-                            child: comfortatext("Overmorrow", 30, settings,
+                            child: comfortatext('Overmorrow', 30, settings,
                                 color: palette.primary,
                                 weight: FontWeight.w500)),
                         const SizedBox(
                           height: 45,
                         ),
                         Wrap(
-                          spacing: 6.0,
-                          runSpacing: 6.0,
+                          spacing: 6,
+                          runSpacing: 6,
                           children: [
                             GestureDetector(
                               onTap: () {
                                 HapticFeedback.mediumImpact();
                                 _launchUrl(
-                                    "https://github.com/bmaroti9/Overmorrow");
+                                    'https://github.com/bmaroti9/Overmorrow');
                               },
                               behavior: HitTestBehavior.translucent,
                               child: Container(
@@ -169,7 +165,7 @@ class _AboutPageState extends State<AboutPage> {
                             GestureDetector(
                               onTap: () {
                                 HapticFeedback.mediumImpact();
-                                final Uri emailLaunchUri = Uri(
+                                final emailLaunchUri = Uri(
                                   scheme: 'mailto',
                                   path: 'maroti.devel@gmail.com',
                                 );
@@ -206,7 +202,7 @@ class _AboutPageState extends State<AboutPage> {
                               onTap: () {
                                 HapticFeedback.mediumImpact();
                                 _launchUrl(
-                                    "https://github.com/bmaroti9/Overmorrow/issues");
+                                    'https://github.com/bmaroti9/Overmorrow/issues');
                               },
                               behavior: HitTestBehavior.translucent,
                               child: Container(
@@ -241,7 +237,7 @@ class _AboutPageState extends State<AboutPage> {
                             GestureDetector(
                               onTap: () {
                                 HapticFeedback.mediumImpact();
-                                _launchUrl("https://paypal.me/miklosmaroti");
+                                _launchUrl('https://paypal.me/miklosmaroti');
                               },
                               behavior: HitTestBehavior.translucent,
                               child: Container(
@@ -305,7 +301,7 @@ class _AboutPageState extends State<AboutPage> {
                                 children: [
                                   comfortatext(version, 18, settings,
                                       color: palette.primary),
-                                  comfortatext("+$buildNumber", 15, settings,
+                                  comfortatext('+$buildNumber', 15, settings,
                                       color: palette.outline),
                                 ],
                               ),
@@ -372,7 +368,7 @@ class _AboutPageState extends State<AboutPage> {
                                   settings,
                                   color: palette.onSurface),
                               const Spacer(),
-                              comfortatext("GPL-3.0 license", 18, settings,
+                              comfortatext('GPL-3.0 license', 18, settings,
                                   color: palette.outline),
                             ],
                           ),
@@ -393,8 +389,7 @@ class ApiAndServicesPage extends StatefulWidget {
   final ColorScheme palette;
 
   const ApiAndServicesPage(
-      {Key? key, required this.settings, required this.palette})
-      : super(key: key);
+      {super.key, required this.settings, required this.palette});
 
   @override
   _ApiAndServicesPageState createState() =>
@@ -423,9 +418,7 @@ class _ApiAndServicesPageState extends State<ApiAndServicesPage> {
                   Icons.arrow_back,
                   color: palette.primary,
                 ),
-                onPressed: () {
-                  goBack();
-                }),
+                onPressed: goBack),
             title: comfortatext(
                 AppLocalizations.of(context)!.apiAndServices, 30, settings,
                 color: palette.primary),
@@ -459,9 +452,9 @@ class _ApiAndServicesPageState extends State<ApiAndServicesPage> {
                         GestureDetector(
                           onTap: () {
                             HapticFeedback.selectionClick();
-                            _launchUrl("https://open-meteo.com");
+                            _launchUrl('https://open-meteo.com');
                           },
-                          child: comfortatext("open-meteo", 17, settings,
+                          child: comfortatext('open-meteo', 17, settings,
                               color: palette.secondary,
                               decoration: TextDecoration.underline),
                         ),
@@ -471,9 +464,9 @@ class _ApiAndServicesPageState extends State<ApiAndServicesPage> {
                         GestureDetector(
                           onTap: () {
                             HapticFeedback.selectionClick();
-                            _launchUrl("https://www.weatherapi.com/");
+                            _launchUrl('https://www.weatherapi.com/');
                           },
-                          child: comfortatext("weatherapi", 17, settings,
+                          child: comfortatext('weatherapi', 17, settings,
                               color: palette.secondary,
                               decoration: TextDecoration.underline),
                         ),
@@ -483,9 +476,9 @@ class _ApiAndServicesPageState extends State<ApiAndServicesPage> {
                         GestureDetector(
                           onTap: () {
                             HapticFeedback.selectionClick();
-                            _launchUrl("https://api.met.no/");
+                            _launchUrl('https://api.met.no/');
                           },
-                          child: comfortatext("met-norway", 17, settings,
+                          child: comfortatext('met-norway', 17, settings,
                               color: palette.secondary,
                               decoration: TextDecoration.underline),
                         ),
@@ -511,9 +504,9 @@ class _ApiAndServicesPageState extends State<ApiAndServicesPage> {
                         GestureDetector(
                           onTap: () {
                             HapticFeedback.selectionClick();
-                            _launchUrl("https://www.rainviewer.com/api.html");
+                            _launchUrl('https://www.rainviewer.com/api.html');
                           },
-                          child: comfortatext("rainviewer", 17, settings,
+                          child: comfortatext('rainviewer', 17, settings,
                               color: palette.secondary,
                               decoration: TextDecoration.underline),
                         ),
@@ -523,9 +516,9 @@ class _ApiAndServicesPageState extends State<ApiAndServicesPage> {
                         GestureDetector(
                           onTap: () {
                             HapticFeedback.selectionClick();
-                            _launchUrl("https://carto.com/");
+                            _launchUrl('https://carto.com/');
                           },
-                          child: comfortatext("carto", 17, settings,
+                          child: comfortatext('carto', 17, settings,
                               color: palette.secondary,
                               decoration: TextDecoration.underline),
                         ),
@@ -553,9 +546,9 @@ class _ApiAndServicesPageState extends State<ApiAndServicesPage> {
                         GestureDetector(
                           onTap: () {
                             HapticFeedback.selectionClick();
-                            _launchUrl("https://unsplash.com/");
+                            _launchUrl('https://unsplash.com/');
                           },
-                          child: comfortatext("unsplash", 17, settings,
+                          child: comfortatext('unsplash', 17, settings,
                               color: palette.secondary,
                               decoration: TextDecoration.underline),
                         ),

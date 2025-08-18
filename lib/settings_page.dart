@@ -26,9 +26,9 @@ import 'package:overmorrow/settings_screens.dart';
 import 'package:overmorrow/weather_refact.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../l10n/app_localizations.dart';
-import 'main.dart';
-import 'ui_helper.dart';
+import 'package:overmorrow/l10n/app_localizations.dart';
+import 'package:overmorrow/main.dart';
+import 'package:overmorrow/ui_helper.dart';
 
 Map<String, List<String>> settingSwitches = {
   'Language': [
@@ -79,20 +79,20 @@ Map<String, List<String>> settingSwitches = {
     '#ffab40',
   ],
   'Search provider': ['weatherapi', 'open-meteo'],
-  'Layout': ["sunstatus,rain indicator,hourly,alerts,radar,daily,air quality"],
-  'Radar haptics': ["on", "off"],
+  'Layout': ['sunstatus,rain indicator,hourly,alerts,radar,daily,air quality'],
+  'Radar haptics': ['on', 'off'],
 };
 
 Future<List<dynamic>> getSettingsAndColors(image) async {
-  Map<String, String> settings = await getSettingsUsed();
-  ColorPalette colorPalette = await ColorPalette.getColorPalette(
-      image, settings["Color mode"]!, settings);
+  final settings = await getSettingsUsed();
+  final colorPalette = await ColorPalette.getColorPalette(
+      image, settings['Color mode']!, settings);
   return [settings, colorPalette];
 }
 
 Future<Map<String, String>> getSettingsUsed() async {
-  Map<String, String> settings = {};
-  for (var v in settingSwitches.entries) {
+  final settings = <String, String>{};
+  for (final v in settingSwitches.entries) {
     final prefs = await SharedPreferences.getInstance();
     final ifnot = v.value[0];
     final used = prefs.getString('setting${v.key}') ?? ifnot;
@@ -107,12 +107,12 @@ Future<Map<String, String>> getSettingsUsed() async {
 }
 
 Future<String> isLocationSafe(translationProv) async {
-  bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  final serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
     return translationProv.locationServicesAreDisabled;
   }
 
-  LocationPermission permission = await Geolocator.checkPermission();
+  var permission = await Geolocator.checkPermission();
   if (permission == LocationPermission.denied) {
     permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
@@ -124,7 +124,7 @@ Future<String> isLocationSafe(translationProv) async {
   }
   if (permission == LocationPermission.whileInUse ||
       permission == LocationPermission.always) {
-    return "enabled";
+    return 'enabled';
   }
   return translationProv.failedToAccessGps;
 }
@@ -138,7 +138,7 @@ Future<List<String>> getLastPlace() async {
   return [place, cord];
 }
 
-setLastPlace(String place, String cord) async {
+Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> setLastPlace(String place, String cord) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('LastPlaceN', place);
   await prefs.setString('LastCord', cord);
@@ -152,11 +152,11 @@ Future<List<String>> getLastKnownLocation() async {
   return [place, cord];
 }
 
-setLastKnownLocation(String place, String cord) async {
+Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> setLastKnownLocation(String place, String cord) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('LastKnownPositionName', place);
   await prefs.setString('LastKnownPositionCord', cord);
-  WidgetService.saveData("widget.lastKnownPlace",
+  WidgetService.saveData('widget.lastKnownPlace',
       place); //save the name of the place to the widgets
 }
 
@@ -172,14 +172,14 @@ Future<String> getLanguageUsed() async {
   return used;
 }
 
-SetData(String name, String to) async {
+Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> Future<void> SetData(String name, String to) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString(name, to);
 }
 
 Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
     settings, textcolor, Color primary, rawName) {
-  List<String> Items = settingSwitches[rawName] ?? ['˚C', '˚F'];
+  final Items = settingSwitches[rawName] ?? ['˚C', '˚F'];
 
   return DropdownButton(
       elevation: 0,
@@ -195,7 +195,7 @@ Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
       ),
       style: GoogleFonts.comfortaa(
         color: textcolor,
-        fontSize: 19 * getFontSize(settings["Font size"]),
+        fontSize: 19 * getFontSize(settings['Font size']),
         fontWeight: FontWeight.w300,
       ),
       alignment: Alignment.centerRight,
@@ -222,7 +222,7 @@ Widget settingEntry(
       showDialog<String>(
           context: context,
           builder: (BuildContext context) {
-            List<String> options = settingSwitches[rawText] ?? [""];
+            final options = settingSwitches[rawText] ?? [''];
             return AlertDialog(
               backgroundColor: palette.surface,
               content: StatefulBuilder(
@@ -233,7 +233,7 @@ Widget settingEntry(
                     children: [
                       Padding(
                         padding:
-                            const EdgeInsets.only(bottom: 20, top: 10, left: 0),
+                            const EdgeInsets.only(bottom: 20, top: 10),
                         child: comfortatext(text, 22, settings,
                             color: palette.onSurface),
                       ),
@@ -312,7 +312,7 @@ Widget settingEntry(
 class SettingsPage extends StatefulWidget {
   final image;
 
-  const SettingsPage({Key? key, required this.image}) : super(key: key);
+  const SettingsPage({super.key, required this.image});
 
   @override
   _SettingsPageState createState() => _SettingsPageState(image: image);
@@ -336,7 +336,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void updatePage(String name, String to) {
     setState(() {
       SetData('setting$name', to);
-      if (name == "Language") {
+      if (name == 'Language') {
         _locale = to;
       }
     });
@@ -364,10 +364,10 @@ class _SettingsPageState extends State<SettingsPage> {
             print((snapshot.error, snapshot.stackTrace));
           }
           return Center(
-            child: ErrorWidget(snapshot.error as Object),
+            child: ErrorWidget(snapshot.error!),
           );
         }
-        _locale = snapshot.data?[0]["Language"];
+        _locale = snapshot.data?[0]['Language'];
         //this is needed so flutter wont complain about setstate during build
         WidgetsBinding.instance.addPostFrameCallback((_) {
           colornotify.value = snapshot.data?[1];

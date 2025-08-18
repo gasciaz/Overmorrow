@@ -21,7 +21,7 @@ import 'dart:async';
 import 'package:overmorrow/decoders/decode_OM.dart';
 import 'package:overmorrow/decoders/decode_mn.dart';
 
-import 'decode_wapi.dart';
+import 'package:overmorrow/decoders/decode_wapi.dart';
 
 class WeatherData {
   final Map<String, String> settings;
@@ -72,20 +72,20 @@ class WeatherData {
       required this.dailyMinMaxTemp});
 
   static Future<WeatherData> getFullData(
-      settings, placeName, real_loc, latlong, provider, localizations) async {
-    List<String> split = latlong.split(",");
-    double lat = double.parse(split[0]);
-    double lng = double.parse(split[1]);
+      settings, placeName, realLoc, latlong, provider, localizations) async {
+    final List<String> split = latlong.split(',');
+    final var lat = double.parse(split[0]);
+    final lng = double.parse(split[1]);
 
     if (provider == 'weatherapi.com') {
       return WapiGetWeatherData(
-          lat, lng, real_loc, settings, placeName, localizations);
-    } else if (provider == "met norway") {
+          lat, lng, realLoc, settings, placeName, localizations);
+    } else if (provider == 'met norway') {
       return MetNGetWeatherData(
-          lat, lng, real_loc, settings, placeName, localizations);
+          lat, lng, realLoc, settings, placeName, localizations);
     } else {
       return OMGetWeatherData(
-          lat, lng, real_loc, settings, placeName, localizations);
+          lat, lng, realLoc, settings, placeName, localizations);
     }
   }
 }
@@ -108,14 +108,14 @@ class LightCurrentWeatherData {
 
   static Future<LightCurrentWeatherData> getLightCurrentWeatherData(
       placeName, latlong, provider, settings) async {
-    List<String> split = latlong.split(",");
-    double lat = double.parse(split[0]);
-    double lng = double.parse(split[1]);
+    final List<String> split = latlong.split(',');
+    final var lat = double.parse(split[0]);
+    final lng = double.parse(split[1]);
 
     switch (provider) {
-      case "weatherapi":
+      case 'weatherapi':
         return wapiGetLightCurrentData(settings, placeName, lat, lng);
-      case "met-norway":
+      case 'met-norway':
         return metNGetLightCurrentData(settings, placeName, lat, lng);
       default:
         return omGetLightCurrentData(settings, placeName, lat, lng);
@@ -136,14 +136,14 @@ class LightWindData {
 
   static Future<LightWindData> getLightWindData(
       placeName, latlong, provider, settings) async {
-    List<String> split = latlong.split(",");
-    double lat = double.parse(split[0]);
-    double lon = double.parse(split[1]);
+    final List<String> split = latlong.split(',');
+    final lat = double.parse(split[0]);
+    final lon = double.parse(split[1]);
 
     switch (provider) {
-      case "weatherapi":
+      case 'weatherapi':
         return wapiGetLightWindData(settings, placeName, lat, lon);
-      case "met-norway":
+      case 'met-norway':
         return metNGetLightWindData(settings, placeName, lat, lon);
       default:
         return omGetLightWindData(settings, lat, lon);
@@ -171,14 +171,14 @@ class LightHourlyForecastData {
 
   static Future<LightHourlyForecastData> getLightForecastData(
       placeName, latLon, provider, settings) async {
-    List<String> split = latLon.split(",");
-    double lat = double.parse(split[0]);
-    double lon = double.parse(split[1]);
+    final List<String> split = latLon.split(',');
+    final lat = double.parse(split[0]);
+    final lon = double.parse(split[1]);
 
     switch (provider) {
-      case "weatherapi":
+      case 'weatherapi':
         return wapiGetLightHourlyData(settings, placeName, lat, lon);
-      case "met-norway":
+      case 'met-norway':
         return metNGetLightHourlyData(settings, placeName, lat, lon);
       default:
         return omGetHourlyForecast(settings, placeName, lat, lon);

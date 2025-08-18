@@ -30,18 +30,17 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:overmorrow/caching.dart';
+import 'package:overmorrow/decoders/weather_data.dart';
+import 'package:overmorrow/l10n/app_localizations.dart';
+import 'package:overmorrow/main_ui.dart';
 import 'package:overmorrow/services/location_service.dart';
+import 'package:overmorrow/settings_page.dart';
 import 'package:overmorrow/ui_helper.dart';
 import 'package:overmorrow/weather_refact.dart';
 import 'package:workmanager/workmanager.dart';
 
-import '../l10n/app_localizations.dart';
-import 'caching.dart';
-import 'decoders/weather_data.dart';
-import 'main_ui.dart';
-import 'settings_page.dart';
-
-const updateWeatherDataKey = "com.marotidev.overmorrow.updateWeatherData";
+const updateWeatherDataKey = 'com.marotidev.overmorrow.updateWeatherData';
 
 const currentWidgetReceiver =
     'com.marotidev.overmorrow.receivers.CurrentWidgetReceiver';
@@ -55,39 +54,39 @@ const forecastWidgetReceiver =
 class WidgetService {
   static Future<void> saveData(String id, value) async {
     await HomeWidget.saveWidgetData(id, value);
-    print(("Saved", id, value));
+    print(('Saved', id, value));
   }
 
   static Future<void> syncCurrentDataToWidget(
       LightCurrentWeatherData data, int widgetId) async {
-    await saveData("current.temp.$widgetId", data.temp);
-    await saveData("current.condition.$widgetId", data.condition);
-    await saveData("current.updatedTime.$widgetId", data.updatedTime);
-    await saveData("current.place.$widgetId", data.place);
-    await saveData("current.date.$widgetId", data.dateString);
+    await saveData('current.temp.$widgetId', data.temp);
+    await saveData('current.condition.$widgetId', data.condition);
+    await saveData('current.updatedTime.$widgetId', data.updatedTime);
+    await saveData('current.place.$widgetId', data.place);
+    await saveData('current.date.$widgetId', data.dateString);
 
     //place is the name of the city while location can include currentLocation
   }
 
   static Future<void> syncWindDataToWidget(
       LightWindData data, int widgetId) async {
-    await saveData("wind.windSpeed.$widgetId", data.windSpeed);
-    await saveData("wind.windDirAngle.$widgetId", data.windDirAngle);
-    await saveData("wind.windUnit.$widgetId", data.windUnit);
+    await saveData('wind.windSpeed.$widgetId', data.windSpeed);
+    await saveData('wind.windDirAngle.$widgetId', data.windDirAngle);
+    await saveData('wind.windUnit.$widgetId', data.windUnit);
   }
 
   static Future<void> syncHourlyForecastDataToWidget(
       LightHourlyForecastData data, int widgetId) async {
-    await saveData("hourlyForecast.currentTemp.$widgetId", data.currentTemp);
+    await saveData('hourlyForecast.currentTemp.$widgetId', data.currentTemp);
     await saveData(
-        "hourlyForecast.currentCondition.$widgetId", data.currentCondition);
-    await saveData("hourlyForecast.updatedTime.$widgetId", data.updatedTime);
-    await saveData("hourlyForecast.place.$widgetId", data.place);
+        'hourlyForecast.currentCondition.$widgetId', data.currentCondition);
+    await saveData('hourlyForecast.updatedTime.$widgetId', data.updatedTime);
+    await saveData('hourlyForecast.place.$widgetId', data.place);
 
-    await saveData("hourlyForecast.hourlyTemps.$widgetId", data.hourlyTemps);
+    await saveData('hourlyForecast.hourlyTemps.$widgetId', data.hourlyTemps);
     await saveData(
-        "hourlyForecast.hourlyConditions.$widgetId", data.hourlyConditions);
-    await saveData("hourlyForecast.hourlyNames.$widgetId", data.hourlyNames);
+        'hourlyForecast.hourlyConditions.$widgetId', data.hourlyConditions);
+    await saveData('hourlyForecast.hourlyNames.$widgetId', data.hourlyNames);
   }
 
   static Future<void> reloadWidgets() async {
@@ -113,10 +112,10 @@ class WidgetService {
 //this is the best solution i found to trigger an update of the data after the preferences have been changed
 @pragma('vm:entry-point')
 Future<void> interactiveCallback(Uri? uri) async {
-  print("INTERACTIVE CALLBACK, ${uri.toString()}");
+  print('INTERACTIVE CALLBACK, $uri');
   if (uri?.host == 'update') {
     await Workmanager().registerOneOffTask(
-        "test_task_${DateTime.now().millisecondsSinceEpoch}",
+        'test_task_${DateTime.now().millisecondsSinceEpoch}',
         updateWeatherDataKey);
   }
 }
@@ -126,73 +125,73 @@ Future<void> interactiveCallback(Uri? uri) async {
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     print(
-        "Native called background task: $task"); //simpleTask will be emitted here.
+        'Native called background task: $task'); //simpleTask will be emitted here.
 
     switch (task) {
       case updateWeatherDataKey:
         try {
           print(
-              "HEEEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRRRRRRRREEEEEEEEEEEEEEEEEEE");
+              'HEEEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRRRRRRRREEEEEEEEEEEEEEEEEEE');
 
-          final List<HomeWidgetInfo> installedWidgets =
+          final installedWidgets =
               await HomeWidget.getInstalledWidgets();
 
           if (installedWidgets.isEmpty) {
-            print("no widgets installed, skipping update");
+            print('no widgets installed, skipping update');
             return Future.value(true);
           }
 
-          Map<String, String> settings = await getSettingsUsed();
+          final var settings = await getSettingsUsed();
 
-          for (HomeWidgetInfo widgetInfo in installedWidgets) {
-            final int widgetId = widgetInfo.androidWidgetId!;
-            final String widgetClassName = widgetInfo.androidClassName!;
-            print(("classname", widgetClassName));
+          for (final widgetInfo in installedWidgets) {
+            final widgetId = widgetInfo.androidWidgetId!;
+            final widgetClassName = widgetInfo.androidClassName!;
+            print(('classname', widgetClassName));
 
-            final String locationKey = "current.location.$widgetId";
-            final String latLonKey = "current.latLon.$widgetId";
-            final String providerKey = "current.provider.$widgetId";
+            final locationKey = 'current.location.$widgetId';
+            final latLonKey = 'current.latLon.$widgetId';
+            final providerKey = 'current.provider.$widgetId';
 
-            final String widgetLocation =
+            final widgetLocation =
                 (await HomeWidget.getWidgetData<String>(locationKey,
-                        defaultValue: "unknown")) ??
-                    "unknown";
-            final String widgetProvider =
+                        defaultValue: 'unknown')) ??
+                    'unknown';
+            final widgetProvider =
                 (await HomeWidget.getWidgetData<String>(providerKey,
-                        defaultValue: "unknown")) ??
-                    "unknown";
+                        defaultValue: 'unknown')) ??
+                    'unknown';
 
-            if (widgetLocation == "unknown") continue;
+            if (widgetLocation == 'unknown') continue;
 
             String placeName;
             String latLon;
 
-            if (widgetLocation == "currentLocation") {
-              List<String> lastKnown = await getLastKnownLocation();
+            if (widgetLocation == 'currentLocation') {
+              final lastKnown = await getLastKnownLocation();
               placeName = lastKnown[0];
               latLon = lastKnown[1];
             } else {
               placeName = widgetLocation;
               latLon = (await HomeWidget.getWidgetData<String>(latLonKey,
-                      defaultValue: "unknown")) ??
-                  "unknown";
+                      defaultValue: 'unknown')) ??
+                  'unknown';
             }
 
             //these two are so similar that i'm updating them with the same logic
             if (widgetClassName == currentWidgetReceiver ||
                 widgetClassName == dateCurrentWidgetReceiver) {
-              LightCurrentWeatherData data =
+              final data =
                   await LightCurrentWeatherData.getLightCurrentWeatherData(
                       placeName, latLon, widgetProvider, settings);
 
               await WidgetService.syncCurrentDataToWidget(data, widgetId);
             } else if (widgetClassName == windWidgetReceiver) {
-              LightWindData data = await LightWindData.getLightWindData(
+              final var data = await LightWindData.getLightWindData(
                   placeName, latLon, widgetProvider, settings);
 
               await WidgetService.syncWindDataToWidget(data, widgetId);
             } else if (widgetClassName == forecastWidgetReceiver) {
-              LightHourlyForecastData data =
+              final var data =
                   await LightHourlyForecastData.getLightForecastData(
                       placeName, latLon, widgetProvider, settings);
 
@@ -205,7 +204,7 @@ void callbackDispatcher() {
         } catch (e, stacktrace) {
           if (kDebugMode) {
             print(
-                "ERRRRRRRRRRRRRRRRRRRRRRRRROOOOOOOOOOOOOOOOOOOOOOOOOOORRRRRRRRRRRRRRRRRRRRRR");
+                'ERRRRRRRRRRRRRRRRRRRRRRRRROOOOOOOOOOOOOOOOOOOOOOOOOOORRRRRRRRRRRRRRRRRRRRRR');
             print((e, stacktrace));
           }
           return Future.value(false);
@@ -228,14 +227,14 @@ void main() {
   HomeWidget.registerInteractivityCallback(interactiveCallback);
 
   if (kDebugMode) {
-    print("thissssssssssssssssssssssssssssssssss");
+    print('thissssssssssssssssssssssssssssssssss');
     Workmanager().registerOneOffTask(
-        "test_task_${DateTime.now().millisecondsSinceEpoch}",
+        'test_task_${DateTime.now().millisecondsSinceEpoch}',
         updateWeatherDataKey);
   }
 
   Workmanager().registerPeriodicTask(
-    "updateWeatherWidget",
+    'updateWeatherWidget',
     updateWeatherDataKey,
     frequency: const Duration(hours: 1),
     constraints: Constraints(
@@ -278,9 +277,9 @@ class _MyAppState extends State<MyApp> {
     setPreferedLocale();
   }
 
-  void setPreferedLocale() async {
-    String loc = await getLanguageUsed();
-    Locale to = languageNameToLocale[loc] ?? const Locale('en');
+  Future<void> setPreferedLocale() async {
+    final var loc = await getLanguageUsed();
+    final var to = languageNameToLocale[loc] ?? const Locale('en');
 
     setState(() {
       _locale = to;
@@ -289,7 +288,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final EdgeInsets systemGestureInsets =
+    final systemGestureInsets =
         MediaQuery.of(context).systemGestureInsets;
     if (systemGestureInsets.left > 0) {
       SystemChrome.setSystemUIOverlayStyle(
@@ -333,14 +332,14 @@ class _HomePageState extends State<HomePage> {
 
   Future<Widget> getDays(bool recall, proposedLoc, backupName, startup) async {
     try {
-      AppLocalizations localizations = AppLocalizations.of(context)!;
+      final localizations = AppLocalizations.of(context)!;
 
-      Map<String, String> settings = await getSettingsUsed();
-      String weatherProvider = await getWeatherProvider();
+      final var settings = await getSettingsUsed();
+      final weatherProvider = await getWeatherProvider();
       backupName = _sanitizePlaceName(backupName);
 
       if (startup) {
-        List<String> n =
+        final n =
             await getLastPlace(); //loads the last place you visited
         proposedLoc = n[1];
         backupName = n[0];
@@ -348,11 +347,11 @@ class _HomePageState extends State<HomePage> {
       }
 
       String absoluteProposed = proposedLoc;
-      bool isItCurrentLocation = false;
+      var isItCurrentLocation = false;
 
       if (backupName == 'CurrentLocation') {
-        String loc_status = await isLocationSafe(localizations);
-        if (loc_status == "enabled") {
+        final locStatus = await isLocationSafe(localizations);
+        if (locStatus == 'enabled') {
           Position position;
           try {
             position = await Geolocator.getCurrentPosition(
@@ -387,27 +386,27 @@ class _HomePageState extends State<HomePage> {
           isItCurrentLocation = true;
 
           try {
-            List<Placemark> placemarks = await placemarkFromCoordinates(
+            final placemarks = await placemarkFromCoordinates(
                     position.latitude, position.longitude)
                 .timeout(const Duration(seconds: 3));
-            Placemark place = placemarks[0];
+            final var place = placemarks[0];
 
             backupName = place.locality ??
                 place.subLocality ??
                 place.thoroughfare ??
                 place.subThoroughfare ??
-                "";
-            absoluteProposed = "${position.latitude}, ${position.longitude}";
+                '';
+            absoluteProposed = '${position.latitude}, ${position.longitude}';
 
             //update the last known position for the home screen widgets
             setLastKnownLocation(backupName, absoluteProposed);
           } on Error {
             backupName =
-                "${position.latitude.toStringAsFixed(2)}, ${position.longitude.toStringAsFixed(2)}";
+                '${position.latitude.toStringAsFixed(2)}, ${position.longitude.toStringAsFixed(2)}';
           }
         } else {
           return ErrorPage(
-            errorMessage: loc_status,
+            errorMessage: locStatus,
             updateLocation: updateLocation,
             icon: Icons.gps_off,
             place: backupName,
@@ -419,13 +418,13 @@ class _HomePageState extends State<HomePage> {
       }
 
       if (proposedLoc == 'query') {
-        List<dynamic> suggestedLocations =
+        final List<dynamic> suggestedLocations =
             await LocationService.getRecommendation(
-                backupName, settings["Search provider"], settings);
+                backupName, settings['Search provider'], settings);
         if (suggestedLocations.isNotEmpty) {
-          var split = json.decode(suggestedLocations[0]);
+          final split = json.decode(suggestedLocations[0]);
           absoluteProposed = "${split["lat"]},${split["lon"]}";
-          backupName = split["name"];
+          backupName = split['name'];
         } else {
           return ErrorPage(
             errorMessage: '${localizations.placeNotFound}: \n $backupName',
@@ -440,7 +439,7 @@ class _HomePageState extends State<HomePage> {
         }
       }
 
-      String RealName = backupName.toString();
+      final var RealName = backupName.toString();
       if (isItCurrentLocation) {
         backupName = 'CurrentLocation';
       }
@@ -463,14 +462,14 @@ class _HomePageState extends State<HomePage> {
         );
       } on HttpExceptionWithStatus catch (hihi) {
         return ErrorPage(
-          errorMessage: "general error at place 1: ${hihi.toString()}",
+          errorMessage: 'general error at place 1: $hihi',
           updateLocation: updateLocation,
           icon: Icons.bug_report,
           place: backupName,
           settings: settings,
           provider: weatherProvider,
           latlng: absoluteProposed,
-          shouldAdd: "Please try another weather provider!",
+          shouldAdd: 'Please try another weather provider!',
         );
       } on SocketException {
         return ErrorPage(
@@ -488,14 +487,14 @@ class _HomePageState extends State<HomePage> {
           debugPrint('Stack trace: $stacktrace');
         }
         return ErrorPage(
-          errorMessage: "general error at place 1: ${e.toString()}",
+          errorMessage: 'general error at place 1: $e',
           updateLocation: updateLocation,
           icon: Icons.bug_report,
           place: backupName,
           settings: settings,
           provider: weatherProvider,
           latlng: absoluteProposed,
-          shouldAdd: "Please try another weather provider!",
+          shouldAdd: 'Please try another weather provider!',
         );
       }
 
@@ -508,8 +507,8 @@ class _HomePageState extends State<HomePage> {
 
       return WeatherPage(data: weatherData, updateLocation: updateLocation);
     } catch (e, stacktrace) {
-      Map<String, String> settings = await getSettingsUsed();
-      String weatherProvider = await getWeatherProvider();
+      final settings = await getSettingsUsed();
+      final var weatherProvider = await getWeatherProvider();
 
       if (kDebugMode) {
         debugPrint('Error fetching weather data: $e');
@@ -520,14 +519,14 @@ class _HomePageState extends State<HomePage> {
 
       if (recall) {
         return ErrorPage(
-          errorMessage: "An error occurred while fetching data",
+          errorMessage: 'An error occurred while fetching data',
           updateLocation: updateLocation,
           icon: Icons.bug_report,
           place: backupName,
           settings: settings,
           provider: weatherProvider,
           latlng: 'query',
-          shouldAdd: "Please try another weather provider!",
+          shouldAdd: 'Please try another weather provider!',
         );
       } else {
         //retry after clearing cache
@@ -545,7 +544,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     //defaults to new york when no previous location was found
-    updateLocation('40.7128, -74.0060', "New York",
+    updateLocation('40.7128, -74.0060', 'New York',
         time: 300, startup: true); //just for testing
   }
 
@@ -564,7 +563,7 @@ class _HomePageState extends State<HomePage> {
     if (!mounted) return;
 
     try {
-      Widget screen = await getDays(false, proposedLoc, backupName, startup);
+      final screen = await getDays(false, proposedLoc, backupName, startup);
 
       setState(() {
         w1 = screen;
@@ -602,7 +601,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           w1,
           if (isLoading)
-            Container(
+            ColoredBox(
               color: startup2 ? colors[0] : const Color.fromRGBO(0, 0, 0, 0.7),
               child: Center(
                 child: LoadingAnimationWidget.staggeredDotsWave(
@@ -618,11 +617,11 @@ class _HomePageState extends State<HomePage> {
 }
 
 List<Color> getStartBackColor() {
-  var brightness =
+  final brightness =
       SchedulerBinding.instance.platformDispatcher.platformBrightness;
-  bool isDarkMode = brightness == Brightness.dark;
-  Color back = isDarkMode ? BLACK : WHITE;
-  Color front = isDarkMode
+  final isDarkMode = brightness == Brightness.dark;
+  final back = isDarkMode ? BLACK : WHITE;
+  final front = isDarkMode
       ? const Color.fromRGBO(250, 250, 250, 0.7)
       : const Color.fromRGBO(0, 0, 0, 0.3);
   return [back, front];

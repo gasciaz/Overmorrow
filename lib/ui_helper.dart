@@ -32,11 +32,11 @@ const WHITE = Color(0xffFFFFFF);
 const BLACK = Color(0xff000000);
 
 double getFontSize(String set) {
-  double x = Platform.isLinux ? 0.85 : 0.92;
+  var x = Platform.isLinux ? 0.85 : 0.92;
 
-  if (set == "small") {
+  if (set == 'small') {
     x = 0.85 * x;
-  } else if (set == "very small") {
+  } else if (set == 'very small') {
     x = 0.75 * x;
   } else if (set == 'big') {
     x = 1.1 * x;
@@ -50,7 +50,7 @@ Widget comfortatext(String text, double size, settings,
     weight = FontWeight.w400,
     decoration = TextDecoration.none,
     maxLines = 40}) {
-  double x = getFontSize(settings["Font size"]);
+  final x = getFontSize(settings['Font size']);
   final baseStyle = GoogleFonts.outfit(
     color: color,
     fontSize: size * x * 1.1,
@@ -76,9 +76,9 @@ Widget comfortatext(String text, double size, settings,
 }
 
 bool estimateBrightnessForColor(Color color) {
-  final double relativeLuminance = color.computeLuminance();
+  final relativeLuminance = color.computeLuminance();
 
-  const double kThreshold = 0.15;
+  const kThreshold = 0.15;
   return (relativeLuminance + 0.05) * (relativeLuminance + 0.05) > kThreshold;
 }
 
@@ -102,7 +102,7 @@ Color lighten(Color color, [double amount = .1]) {
 
 Color darken2(Color c, [double amount = 0.1]) {
   assert(0 <= amount && amount <= 1);
-  var f = 1 - amount;
+  final f = 1 - amount;
   return Color.fromARGB(
       c.a.toInt(), (c.r * f).round(), (c.g * f).round(), (c.b * f).round());
 }
@@ -117,7 +117,7 @@ Color lighten2(Color c, [double amount = 0.1]) {
 }
 
 Color lightAccent(Color color, int intensity) {
-  double x = intensity / (color.r + color.g + color.b);
+  final var x = intensity / (color.r + color.g + color.b);
   return Color.fromRGBO(sqrt(color.r * x).toInt(), sqrt(color.g * x).toInt(),
       sqrt(color.b * x).toInt(), 1);
 }
@@ -132,7 +132,7 @@ Widget NewAqiDataPoints(String name, double value, var data,
           align: TextAlign.end,
           weight: FontWeight.w500),
       Padding(
-        padding: const EdgeInsets.all(3.0),
+        padding: const EdgeInsets.all(3),
         child: Container(
           width: 2.5,
           height: 2.5,
@@ -155,13 +155,13 @@ bool isUppercase(String str) {
 }
 
 String generateAbbreviation(String countryName) {
-  List<String> words = countryName.split(' ');
+  final words = countryName.split(' ');
 
   if (words.length == 1) {
     return countryName;
   } else {
-    String abbreviation = '';
-    for (String word in words) {
+    var abbreviation = '';
+    for (final word in words) {
       if (word.isNotEmpty && isUppercase(word[0])) {
         abbreviation += word[0];
       }
@@ -222,10 +222,10 @@ class _MySearchParentState extends State<MySearchParent> {
 
   List<String> getFavorites(SharedPreferences? prefs) {
     final ifnot = [
-      "{\n        \"id\": 2651922,\n        \"name\": \"Nashville\",\n        \"region\": \"Tennessee\",\n        \"country\": \"United States of America\",\n        \"lat\": 36.17,\n        \"lon\": -86.78,\n        \"url\": \"nashville-tennessee-united-states-of-america\"\n    }"
+      '{\n        "id": 2651922,\n        "name": "Nashville",\n        "region": "Tennessee",\n        "country": "United States of America",\n        "lat": 36.17,\n        "lon": -86.78,\n        "url": "nashville-tennessee-united-states-of-america"\n    }'
     ];
     final used = prefs?.getStringList('favorites') ?? ifnot;
-    int n = 0;
+    var n = 0;
     while (n < used.length) {
       try {
         jsonDecode(used[n]);
@@ -252,10 +252,10 @@ class _MySearchParentState extends State<MySearchParent> {
             print(snapshot.error);
           }
           return Center(
-            child: ErrorWidget(snapshot.error as Object),
+            child: ErrorWidget(snapshot.error!),
           );
         }
-        List<String> favorites = getFavorites(snapshot.data);
+        final var favorites = getFavorites(snapshot.data);
         //return buildWholeThing(snapshot.data);
         return MySearchWidget(
             updateLocation: widget.updateLocation,
@@ -339,7 +339,7 @@ class _MySearchWidgetState extends State<MySearchWidget> {
     prefs.setStringList('favorites', fav);
 
     //Save the favorites so the widgts can access them when selecting location
-    String jsonString = jsonEncode(fav);
+    final jsonString = jsonEncode(fav);
     WidgetService.saveData('widget.favorites', jsonString);
 
     setState(() {

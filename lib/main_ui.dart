@@ -22,20 +22,19 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:overmorrow/api_key.dart';
+import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/main_screens.dart';
 import 'package:overmorrow/services/color_service.dart';
 import 'package:overmorrow/settings_page.dart';
+import 'package:overmorrow/ui_helper.dart';
 import 'package:stretchy_header/stretchy_header.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../l10n/app_localizations.dart';
-import 'api_key.dart';
-import 'ui_helper.dart';
-
 Future<void> _launchUrl(String url) async {
-  final Uri _url = Uri.parse(url);
-  if (!await launchUrl(_url)) {
-    throw Exception('Could not launch $_url');
+  final url0 = Uri.parse(url);
+  if (!await launchUrl(url0)) {
+    throw Exception('Could not launch $url0');
   }
 }
 
@@ -43,7 +42,7 @@ class WeatherPage extends StatelessWidget {
   final data;
   final updateLocation;
 
-  WeatherPage({super.key, required this.data, required this.updateLocation});
+  const WeatherPage({super.key, required this.data, required this.updateLocation});
 
   void openDrawer(BuildContext context) {
     Scaffold.of(context).openDrawer();
@@ -51,14 +50,14 @@ class WeatherPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
-    Size size = view.physicalSize / view.devicePixelRatio;
+    final view = WidgetsBinding.instance.platformDispatcher.views.first;
+    final size = view.physicalSize / view.devicePixelRatio;
 
     if (size.width > 950) {
       return TabletLayout(
         data: data,
         updateLocation: updateLocation,
-        key: Key("${data.place}, ${data.provider} ${data.updatedTime}"),
+        key: Key('${data.place}, ${data.provider} ${data.updatedTime}'),
       );
     }
 
@@ -68,7 +67,7 @@ class WeatherPage extends StatelessWidget {
       data: data,
       updateLocation: updateLocation,
       context: context,
-      key: Key("${data.place}, ${data.provider} ${data.updatedTime}"),
+      key: Key('${data.place}, ${data.provider} ${data.updatedTime}'),
     );
   }
 }
@@ -78,17 +77,16 @@ class ParrallaxBackground extends StatelessWidget {
   final Color color;
 
   const ParrallaxBackground(
-      {Key? key, required this.image, required this.color})
-      : super(key: key);
+      {super.key, required this.image, required this.color});
 
   @override
   Widget build(BuildContext context) {
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 1500),
-      tween: Tween<double>(begin: 0, end: 1.0),
+      tween: Tween<double>(begin: 0, end: 1),
       curve: Curves.decelerate,
       builder: (context, value, child) {
-        return Container(
+        return ColoredBox(
           color: color,
           child: Opacity(
             opacity: value,
@@ -124,14 +122,14 @@ Widget Circles(var data, double bottom, context, ColorScheme palette) {
         DescriptionCircle(
             text: '${data.current.precip}',
             undercaption: AppLocalizations.of(context)!.precipCapital,
-            extra: data.settings["Precipitation"],
+            extra: data.settings['Precipitation'],
             settings: data.settings,
             dir: -1,
             palette: palette),
         DescriptionCircle(
             text: '${data.current.wind}',
             undercaption: AppLocalizations.of(context)!.windCapital,
-            extra: data.settings["Wind"],
+            extra: data.settings['Wind'],
             settings: data.settings,
             dir: data.current.wind_dir + 180,
             palette: palette),
@@ -178,11 +176,10 @@ class DescriptionCircle extends StatelessWidget {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           comfortatext(text, 20, settings,
-                              color: palette.primary, weight: FontWeight.w400),
+                              color: palette.primary),
                           Flexible(
                               child: comfortatext(extra, 16, settings,
-                                  color: palette.primary,
-                                  weight: FontWeight.w400)),
+                                  color: palette.primary)),
                         ],
                       ),
                     )),
@@ -272,22 +269,22 @@ class _FadingWidgetState extends State<FadingWidget>
 
     final dif = widget.time.difference(widget.data.fetch_datetime).inMinutes;
 
-    String text = AppLocalizations.of(context)!.updatedJustNow;
+    var text = AppLocalizations.of(context)!.updatedJustNow;
 
     if (dif > 0 && dif < 45) {
       text = AppLocalizations.of(context)!.updatedXMinutesAgo(dif);
     } else if (dif >= 45 && dif < 1440) {
-      int hour = (dif + 30) ~/ 60;
+      final int hour = (dif + 30) ~/ 60;
       text = AppLocalizations.of(context)!.updatedXHoursAgo(hour);
     } else if (dif >= 1440) {
       //number of minutes in a day
-      int day = (dif + 720) ~/ 1440;
+      final int day = (dif + 720) ~/ 1440;
       text = AppLocalizations.of(context)!.updatedXDaysAgo(day);
     }
 
-    List<String> split = text.split(',');
+    final split = text.split(',');
 
-    ColorScheme palette = widget.data.current.palette;
+    final ColorScheme palette = widget.data.current.palette;
 
     return Container(
       color:
@@ -300,11 +297,11 @@ class _FadingWidgetState extends State<FadingWidget>
         transitionBuilder: (Widget child, Animation<double> animation) {
           final inAnimation = CurvedAnimation(
             parent: animation,
-            curve: const Interval(0.5, 1.0, curve: Curves.easeIn),
+            curve: const Interval(0.5, 1, curve: Curves.easeIn),
           );
           final outAnimation = CurvedAnimation(
             parent: animation,
-            curve: const Interval(1.0, 0.5, curve: Curves.easeOut),
+            curve: const Interval(1, 0.5, curve: Curves.easeOut),
           );
           return FadeTransition(
             opacity: _isVisible ? outAnimation : inAnimation,
@@ -327,12 +324,11 @@ class SinceLastUpdate extends StatefulWidget {
   final data;
   final isVisible;
 
-  SinceLastUpdate(
-      {Key? key,
+  const SinceLastUpdate(
+      {super.key,
       required this.data,
       required this.split,
-      required this.isVisible})
-      : super(key: key);
+      required this.isVisible});
 
   @override
   _SinceLastUpdateState createState() => _SinceLastUpdateState();
@@ -341,10 +337,10 @@ class SinceLastUpdate extends StatefulWidget {
 class _SinceLastUpdateState extends State<SinceLastUpdate> {
   @override
   Widget build(BuildContext context) {
-    Color text = widget.data.isonline
+    final Color text = widget.data.isonline
         ? widget.data.current.palette.onSurface
         : widget.data.current.palette.onPrimaryContainer;
-    Color highlight = widget.data.isonline
+    final Color highlight = widget.data.isonline
         ? widget.data.current.palette.primary
         : widget.data.current.palette.onPrimaryContainer;
 
@@ -390,7 +386,7 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
                 weight: FontWeight.w300,
               ),
               comfortatext(
-                widget.split.length > 1 ? widget.split[1] : "",
+                widget.split.length > 1 ? widget.split[1] : '',
                 14,
                 widget.data.settings,
                 color: text,
@@ -401,8 +397,8 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
         ),
       );
     } else {
-      List<String> split =
-          AppLocalizations.of(context)!.photoByXOnUnsplash.split(",");
+      final var split =
+          AppLocalizations.of(context)!.photoByXOnUnsplash.split(',');
       return SizedBox(
         height: 21,
         child: Padding(
@@ -429,7 +425,7 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
               TextButton(
                 onPressed: () async {
                   await _launchUrl(widget.data.current.imageService.photolink +
-                      "?utm_source=overmorrow&utm_medium=referral");
+                      '?utm_source=overmorrow&utm_medium=referral');
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(1),
@@ -446,7 +442,7 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
               TextButton(
                 onPressed: () async {
                   await _launchUrl(widget.data.current.imageService.userlink +
-                      "?utm_source=overmorrow&utm_medium=referral");
+                      '?utm_source=overmorrow&utm_medium=referral');
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(1),
@@ -464,7 +460,7 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
               TextButton(
                 onPressed: () async {
                   await _launchUrl(
-                      "https://unsplash.com/?utm_source=overmorrow&utm_medium=referral");
+                      'https://unsplash.com/?utm_source=overmorrow&utm_medium=referral');
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(1),
@@ -485,14 +481,14 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
 }
 
 Widget providerSelector(settings, updateLocation, ColorScheme palette, provider,
-    latlng, real_loc, context) {
+    latlng, realLoc, context) {
   return Padding(
     padding: const EdgeInsets.only(left: 25, right: 25, bottom: 80, top: 35),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 2, top: 0),
+          padding: const EdgeInsets.only(left: 2),
           child: comfortatext(
               AppLocalizations.of(context)!.weatherProvderLowercase,
               17,
@@ -511,9 +507,7 @@ Widget providerSelector(settings, updateLocation, ColorScheme palette, provider,
                 const EdgeInsets.only(left: 16, right: 16, top: 7, bottom: 7),
             child: DropdownButton(
               underline: Container(),
-              onTap: () {
-                HapticFeedback.mediumImpact();
-              },
+              onTap: HapticFeedback.mediumImpact,
               borderRadius: BorderRadius.circular(18),
               icon: Padding(
                 padding: const EdgeInsets.only(right: 8),
@@ -537,7 +531,7 @@ Widget providerSelector(settings, updateLocation, ColorScheme palette, provider,
               onChanged: (String? value) async {
                 HapticFeedback.mediumImpact();
                 SetData('weather_provider', value!);
-                await updateLocation(latlng, real_loc);
+                await updateLocation(latlng, realLoc);
               },
               itemHeight: 55,
               isExpanded: true,
@@ -561,7 +555,7 @@ class ErrorPage extends StatelessWidget {
   final latlng;
   final shouldAdd;
 
-  ErrorPage(
+  const ErrorPage(
       {super.key,
       required this.errorMessage,
       required this.updateLocation,
@@ -574,20 +568,20 @@ class ErrorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
+    final view = WidgetsBinding.instance.platformDispatcher.views.first;
 
-    Size size = view.physicalSize / view.devicePixelRatio;
+    final size = view.physicalSize / view.devicePixelRatio;
 
-    const replacement = "<api_key>";
-    String newStr = errorMessage.toString().replaceAll(wapi_Key, replacement);
+    const replacement = '<api_key>';
+    var newStr = errorMessage.toString().replaceAll(wapi_Key, replacement);
     newStr = newStr.replaceAll(access_key, replacement);
     //newStr = newStr.replaceAll(timezonedbKey, replacement);
 
-    Image image = Image.asset("assets/backdrops/grayscale_snow2.jpg",
+    final image = Image.asset('assets/backdrops/grayscale_snow2.jpg',
         fit: BoxFit.cover, width: double.infinity, height: double.infinity);
 
-    ColorScheme palette =
-        ColorPalette.getErrorPagePalette(settings["Color mode"]);
+    final palette =
+        ColorPalette.getErrorPagePalette(settings['Color mode']);
 
     return Scaffold(
       backgroundColor: palette.surface,
@@ -602,7 +596,7 @@ class ErrorPage extends StatelessWidget {
                 400), //we don't want it to be smaller than 400
             header: ParrallaxBackground(
                 image: Image.asset(
-                  "assets/backdrops/grayscale_snow2.jpg",
+                  'assets/backdrops/grayscale_snow2.jpg',
                   fit: BoxFit.cover,
                 ),
                 key: Key(place),
@@ -614,7 +608,6 @@ class ErrorPage extends StatelessWidget {
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 50, bottom: 20),
@@ -643,11 +636,10 @@ class ErrorPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: comfortatext(
-                shouldAdd ?? "",
+                shouldAdd ?? '',
                 16,
                 settings,
                 color: palette.onSurface,
-                weight: FontWeight.w400,
               ),
             ),
             Padding(

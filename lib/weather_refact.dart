@@ -19,7 +19,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
 import 'package:overmorrow/Icons/overmorrow_weather_icons3_icons.dart';
 
-import 'ui_helper.dart';
+import 'package:overmorrow/ui_helper.dart';
 
 Map<String, Locale> languageNameToLocale = {
   'English': const Locale('en'),

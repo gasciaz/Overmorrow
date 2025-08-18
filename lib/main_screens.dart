@@ -16,30 +16,26 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:overmorrow/daily.dart';
+import 'package:overmorrow/hourly.dart';
+import 'package:overmorrow/main_ui.dart';
+import 'package:overmorrow/new_displays.dart';
 import 'package:overmorrow/radar.dart';
+import 'package:overmorrow/ui_helper.dart';
 import 'package:stretchy_header/stretchy_header.dart';
-
-import 'hourly.dart';
-import 'main_ui.dart';
-import 'new_displays.dart';
-import 'ui_helper.dart';
 
 class NewMain extends StatefulWidget {
   final data;
   final updateLocation;
   final context;
 
-  NewMain(
-      {Key? key,
+  const NewMain(
+      {super.key,
       required this.data,
       required this.updateLocation,
-      required this.context})
-      : super(key: key);
+      required this.context});
 
   @override
   _NewMainState createState() => _NewMainState(data, updateLocation, context);
@@ -48,6 +44,7 @@ class NewMain extends StatefulWidget {
 class _NewMainState extends State<NewMain> {
   final data;
   final updateLocation;
+  @override
   final context;
 
   _NewMainState(this.data, this.updateLocation, this.context);
@@ -126,11 +123,11 @@ class _NewMainState extends State<NewMain> {
 
   @override
   Widget build(BuildContext context) {
-    final FlutterView view =
+    final view =
         WidgetsBinding.instance.platformDispatcher.views.first;
-    final Size size = (view.physicalSize) / view.devicePixelRatio;
+    final size = (view.physicalSize) / view.devicePixelRatio;
 
-    final Map<String, Widget> widgetsMap = {
+    final widgetsMap = <String, Widget>{
       'sunstatus': NewSunriseSunset(
         data: data,
         key: Key(data.place),
@@ -149,17 +146,17 @@ class _NewMainState extends State<NewMain> {
     };
 
     final List<String> order =
-        data.settings["Layout"] == "" ? [] : data.settings["Layout"].split(",");
-    List<Widget> orderedWidgets = [];
-    if (order.isNotEmpty && order[0] != "") {
+        data.settings['Layout'] == '' ? [] : data.settings['Layout'].split(',');
+    var orderedWidgets = <Widget>[];
+    if (order.isNotEmpty && order[0] != '') {
       orderedWidgets = order.map((name) => widgetsMap[name]!).toList();
     }
 
-    String colorMode = data.settings["Color mode"];
-    if (colorMode == "auto") {
-      var brightness =
+    String colorMode = data.settings['Color mode'];
+    if (colorMode == 'auto') {
+      final brightness =
           SchedulerBinding.instance.platformDispatcher.platformBrightness;
-      colorMode = brightness == Brightness.dark ? "dark" : "light";
+      colorMode = brightness == Brightness.dark ? 'dark' : 'light';
     }
 
     return Scaffold(
@@ -167,7 +164,7 @@ class _NewMainState extends State<NewMain> {
       body: StretchyHeader.listView(
         displacement: 130,
         onRefresh: () async {
-          await updateLocation("${data.lat}, ${data.lng}", data.real_loc,
+          await updateLocation('${data.lat}, ${data.lng}', data.real_loc,
               time: 400);
         },
         headerData: HeaderData(
@@ -188,14 +185,13 @@ class _NewMainState extends State<NewMain> {
                     children: [
                       const Spacer(),
                       comfortatext(
-                        "${data.current.temp}°",
+                        '${data.current.temp}°',
                         75,
                         data.settings,
                         color: data.current.colorPop,
                         weight: FontWeight.w200,
                       ),
                       comfortatext(data.current.text, 33, data.settings,
-                          weight: FontWeight.w400,
                           color: data.current.descColor)
                     ],
                   ),
@@ -254,7 +250,7 @@ class _NewMainState extends State<NewMain> {
               updateLocation,
               data.current.palette,
               data.provider,
-              "${data.lat}, ${data.lng}",
+              '${data.lat}, ${data.lng}',
               data.real_loc,
               context),
         ],
@@ -267,17 +263,17 @@ class TabletLayout extends StatelessWidget {
   final data;
   final updateLocation;
 
-  TabletLayout({super.key, required this.data, required this.updateLocation});
+  const TabletLayout({super.key, required this.data, required this.updateLocation});
 
   @override
   Widget build(BuildContext context) {
-    FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
+    final var view = WidgetsBinding.instance.platformDispatcher.views.first;
 
-    Size size = view.physicalSize / view.devicePixelRatio;
+    final size = view.physicalSize / view.devicePixelRatio;
 
-    double panelWidth = size.width * 0.29;
+    final panelWidth = size.width * 0.29;
 
-    ColorScheme palette = data.current.palette;
+    final ColorScheme palette = data.current.palette;
 
     return Scaffold(
         backgroundColor: palette.surface,
@@ -302,7 +298,7 @@ class TabletLayout extends StatelessWidget {
                   displacement: 130,
                   onRefresh: () async {
                     await updateLocation(
-                        "${data.lat}, ${data.lng}", data.real_loc,
+                        '${data.lat}, ${data.lng}', data.real_loc,
                         time: 400);
                   },
                   headerData: HeaderData(
@@ -347,7 +343,7 @@ class TabletLayout extends StatelessWidget {
                           key: Key(data.updatedTime.toString())),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 0),
+                      padding: const EdgeInsets.only(),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -357,13 +353,12 @@ class TabletLayout extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 comfortatext(
-                                    "${data.current.temp}°", 72, data.settings,
+                                    '${data.current.temp}°', 72, data.settings,
                                     color: palette.primary,
                                     weight: FontWeight.w200),
                                 comfortatext(
                                     data.current.text, 27, data.settings,
-                                    color: palette.onSurface,
-                                    weight: FontWeight.w400),
+                                    color: palette.onSurface),
                               ],
                             ),
                           ),
@@ -404,7 +399,7 @@ class TabletLayout extends StatelessWidget {
                                   updateLocation,
                                   data.current.palette,
                                   data.provider,
-                                  "${data.lat}, ${data.lng}",
+                                  '${data.lat}, ${data.lng}',
                                   data.real_loc,
                                   context),
                             ],

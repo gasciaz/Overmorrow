@@ -24,9 +24,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:overmorrow/decoders/decode_OM.dart';
+import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
-
-import '../l10n/app_localizations.dart';
 
 class SquigglyCirclePainter extends CustomPainter {
   final Color circleColor;
@@ -35,25 +34,25 @@ class SquigglyCirclePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
+    final paint = Paint()
       ..color = circleColor
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 3;
 
-    final Path path = Path();
-    double radius = size.width / 2;
-    double centerX = size.width / 2;
-    double centerY = size.height / 2;
+    final path = Path();
+    final radius = size.width / 2;
+    final centerX = size.width / 2;
+    final centerY = size.height / 2;
 
-    double waves = 12;
-    double waveAmplitude = size.width / 52;
+    const double waves = 12;
+    final waveAmplitude = size.width / 52;
 
     for (double i = 0; i <= 360; i += 0.1) {
-      double angle = i * pi / 180;
-      double x =
+      final angle = i * pi / 180;
+      final x =
           centerX + (radius + waveAmplitude * sin(waves * angle)) * cos(angle);
-      double y =
+      final y =
           centerY + (radius + waveAmplitude * sin(waves * angle)) * sin(angle);
 
       if (i == 0) {
@@ -74,16 +73,16 @@ class SquigglyCirclePainter extends CustomPainter {
 Widget pollenWidget(
     IconData icon, String name, double value, data, ColorScheme palette) {
   const categoryBoundaries = [-1, 0, 20, 80, 200];
-  const categoryNames = ["--", "none", "low", "medium", "high"];
+  const categoryNames = ['--', 'none', 'low', 'medium', 'high'];
 
-  int categoryIndex = 0;
-  for (int i = 0; i < categoryBoundaries.length; i++) {
+  var categoryIndex = 0;
+  for (var i = 0; i < categoryBoundaries.length; i++) {
     if (value >= categoryBoundaries[i]) {
       categoryIndex = i;
     }
   }
 
-  String severity = categoryNames[categoryIndex];
+  final severity = categoryNames[categoryIndex];
 
   return Padding(
     padding: const EdgeInsets.only(top: 5, bottom: 5),
@@ -129,13 +128,13 @@ class ThreeQuarterCirclePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    double angle = 2 *
+    final angle = 2 *
         3.14159265359 *
         (max(min(percentage, 100), 0) / 100) *
         0.75; // 3 quarters of a circle
 
     // Background Circle
-    Paint baseCircle = Paint()
+    final var baseCircle = Paint()
       ..color = secondColor
       ..strokeWidth = 10
       ..strokeCap = StrokeCap.round
@@ -149,7 +148,7 @@ class ThreeQuarterCirclePainter extends CustomPainter {
     );
 
     // Foreground Circle
-    Paint progressCircle = Paint()
+    final var progressCircle = Paint()
       ..color = color
       ..strokeWidth = 9
       ..strokeCap = StrokeCap.round
@@ -173,11 +172,10 @@ Widget pollutantWidget(data, name, value, percent, ColorScheme palette) {
   return Padding(
     padding: const EdgeInsets.all(14),
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(top: 0, bottom: 0),
+            padding: const EdgeInsets.only(),
             child: Center(
               child: AspectRatio(
                 aspectRatio: 1,
@@ -205,8 +203,7 @@ class AllergensPage extends StatefulWidget {
   final isTabletMode;
 
   const AllergensPage(
-      {Key? key, required this.data, required this.isTabletMode})
-      : super(key: key);
+      {super.key, required this.data, required this.isTabletMode});
 
   @override
   _AllergensPageState createState() => _AllergensPageState(data: data);
@@ -224,7 +221,7 @@ class _AllergensPageState extends State<AllergensPage> {
 
   @override
   Widget build(BuildContext context) {
-    ColorScheme palette = data.current.palette;
+    final ColorScheme palette = data.current.palette;
     return Material(
       color: palette.surface,
       child: CustomScrollView(
@@ -232,9 +229,7 @@ class _AllergensPageState extends State<AllergensPage> {
           SliverAppBar.large(
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: palette.primary),
-              onPressed: () {
-                goBack();
-              },
+              onPressed: goBack,
             ),
             title: comfortatext(
                 AppLocalizations.of(context)!.airQuality, 30, data.settings,
@@ -263,20 +258,20 @@ class _AllergensPageState extends State<AllergensPage> {
                     print((snapshot.error, snapshot.stackTrace));
                   }
                   //this was the best way i found to detect no wifi
-                  if (snapshot.error.toString().contains("Socket")) {
+                  if (snapshot.error.toString().contains('Socket')) {
                     return Padding(
                       padding: const EdgeInsets.only(top: 100),
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(14.0),
+                            padding: const EdgeInsets.all(14),
                             child: Icon(
                               Icons.wifi_off_rounded,
                               color: palette.primary,
                               size: 23,
                             ),
                           ),
-                          comfortatext("no wifi connection", 18, data.settings,
+                          comfortatext('no wifi connection', 18, data.settings,
                               color: palette.onSurface),
                         ],
                       ),
@@ -287,20 +282,20 @@ class _AllergensPageState extends State<AllergensPage> {
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(14.0),
+                          padding: const EdgeInsets.all(14),
                           child: Icon(
                             Icons.wifi_off_rounded,
                             color: palette.primary,
                             size: 23,
                           ),
                         ),
-                        comfortatext("unable to load air quality data", 18,
+                        comfortatext('unable to load air quality data', 18,
                             data.settings,
                             color: palette.onSurface),
                         Padding(
-                          padding: const EdgeInsets.all(30.0),
+                          padding: const EdgeInsets.all(30),
                           child: comfortatext(
-                              "${snapshot.error} ${snapshot.stackTrace}",
+                              '${snapshot.error} ${snapshot.stackTrace}',
                               15,
                               data.settings,
                               color: palette.outline,
@@ -310,7 +305,7 @@ class _AllergensPageState extends State<AllergensPage> {
                     ),
                   );
                 }
-                final OMExtendedAqi extendedAqi = snapshot.data!;
+                final extendedAqi = snapshot.data!;
                 final highestAqi = extendedAqi.dailyAqi.reduce(max);
 
                 if (widget.isTabletMode) {
@@ -359,7 +354,6 @@ class _AllergensPageState extends State<AllergensPage> {
                           ],
                         ),
                         Align(
-                          alignment: Alignment.center,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 70, bottom: 70),
                             child: comfortatext(
@@ -381,7 +375,7 @@ class _AllergensPageState extends State<AllergensPage> {
                         children: AnimationConfiguration.toStaggeredList(
                           duration: const Duration(milliseconds: 500),
                           childAnimationBuilder: (widget) => SlideAnimation(
-                            verticalOffset: 100.0,
+                            verticalOffset: 100,
                             child: FadeInAnimation(
                               child: widget,
                             ),
@@ -401,7 +395,6 @@ class _AllergensPageState extends State<AllergensPage> {
                             dustAndAODIndicators(
                                 data, extendedAqi, palette, context),
                             Align(
-                              alignment: Alignment.center,
                               child: Padding(
                                 padding:
                                     const EdgeInsets.only(top: 70, bottom: 70),
@@ -435,7 +428,7 @@ Widget aqiCircleAndDesc(data, ColorScheme palette) {
           widthFactor: 0.77,
           alignment: FractionalOffset.center,
           child: Padding(
-            padding: const EdgeInsets.all(5.0),
+            padding: const EdgeInsets.all(5),
             child: AspectRatio(
               aspectRatio: 1,
               child: CustomPaint(
@@ -450,7 +443,7 @@ Widget aqiCircleAndDesc(data, ColorScheme palette) {
                           color: palette.secondary, weight: FontWeight.w200),
                     ),
                     comfortatext(data.aqi.aqi_title, 23, data.settings,
-                        color: palette.secondary, weight: FontWeight.w400),
+                        color: palette.secondary),
                   ],
                 ),
               ),
@@ -459,10 +452,9 @@ Widget aqiCircleAndDesc(data, ColorScheme palette) {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.only(top: 0, bottom: 30, left: 30, right: 30),
+        padding: const EdgeInsets.only(bottom: 30, left: 30, right: 30),
         child: comfortatext(data.aqi.aqi_desc, 17, data.settings,
             color: palette.outline,
-            weight: FontWeight.w400,
             align: TextAlign.center),
       ),
     ],
@@ -563,17 +555,17 @@ Widget pollutantIndicators(data, extendedAqi, ColorScheme palette) {
         childAspectRatio: 0.9,
         children: <Widget>[
           pollutantWidget(
-              data, "pm2.5", extendedAqi.pm2_5, extendedAqi.pm2_5_p, palette),
+              data, 'pm2.5', extendedAqi.pm2_5, extendedAqi.pm2_5_p, palette),
           pollutantWidget(
-              data, "pm10", extendedAqi.pm10, extendedAqi.pm10_p, palette),
+              data, 'pm10', extendedAqi.pm10, extendedAqi.pm10_p, palette),
           pollutantWidget(
-              data, "o3", extendedAqi.o3, extendedAqi.o3_p, palette),
+              data, 'o3', extendedAqi.o3, extendedAqi.o3_p, palette),
           pollutantWidget(
-              data, "no2", extendedAqi.no2, extendedAqi.no2_p, palette),
+              data, 'no2', extendedAqi.no2, extendedAqi.no2_p, palette),
           pollutantWidget(
-              data, "co", extendedAqi.co, extendedAqi.co_p, palette),
+              data, 'co', extendedAqi.co, extendedAqi.co_p, palette),
           pollutantWidget(
-              data, "so2", extendedAqi.so2, extendedAqi.so2_p, palette),
+              data, 'so2', extendedAqi.so2, extendedAqi.so2_p, palette),
         ],
       ),
     ),
@@ -582,11 +574,10 @@ Widget pollutantIndicators(data, extendedAqi, ColorScheme palette) {
 
 Widget europeanAndUsAqi(data, extendedAqi, ColorScheme palette, context) {
   return Padding(
-    padding: const EdgeInsets.only(top: 10, bottom: 0),
+    padding: const EdgeInsets.only(top: 10),
     child: Row(
       children: [
         Expanded(
-            flex: 1,
             child: Padding(
               padding: const EdgeInsets.only(right: 4),
               child: Container(
@@ -605,7 +596,7 @@ Widget europeanAndUsAqi(data, extendedAqi, ColorScheme palette, context) {
                     const Spacer(),
                     comfortatext(
                         extendedAqi.european_aqi.toString(), 25, data.settings,
-                        color: palette.primary, weight: FontWeight.w400),
+                        color: palette.primary),
                     Padding(
                       padding: const EdgeInsets.only(left: 2, top: 1),
                       child: comfortatext(
@@ -617,7 +608,6 @@ Widget europeanAndUsAqi(data, extendedAqi, ColorScheme palette, context) {
               ),
             )),
         Expanded(
-            flex: 1,
             child: Padding(
               padding: const EdgeInsets.only(left: 4),
               child: Container(
@@ -636,7 +626,7 @@ Widget europeanAndUsAqi(data, extendedAqi, ColorScheme palette, context) {
                     const Spacer(),
                     comfortatext(
                         extendedAqi.us_aqi.toString(), 25, data.settings,
-                        color: palette.primary, weight: FontWeight.w400),
+                        color: palette.primary),
                     Padding(
                       padding: const EdgeInsets.only(left: 2, top: 1),
                       child: comfortatext(
@@ -705,7 +695,7 @@ Widget dailyAqi(data, extendedAqi, ColorScheme palette, context, highestAqi) {
                 comfortatext(
                     index == 0
                         ? AppLocalizations.of(context)!.now
-                        : "$index${AppLocalizations.of(context)!.d}",
+                        : '$index${AppLocalizations.of(context)!.d}',
                     14,
                     data.settings,
                     color: palette.outline)
@@ -721,7 +711,7 @@ Widget dailyAqi(data, extendedAqi, ColorScheme palette, context, highestAqi) {
 
 Widget dustAndAODIndicators(data, extendedAqi, ColorScheme palette, context) {
   return Padding(
-    padding: const EdgeInsets.only(top: 10, bottom: 0),
+    padding: const EdgeInsets.only(top: 10),
     child: Row(
       children: [
         Expanded(
@@ -739,7 +729,6 @@ Widget dustAndAODIndicators(data, extendedAqi, ColorScheme palette, context) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(Icons.grain, size: 18, color: palette.secondary),
                         Padding(
@@ -754,10 +743,10 @@ Widget dustAndAODIndicators(data, extendedAqi, ColorScheme palette, context) {
                     ),
                     const Spacer(),
                     comfortatext(extendedAqi.dust.toString(), 25, data.settings,
-                        color: palette.primary, weight: FontWeight.w400),
+                        color: palette.primary),
                     Padding(
                       padding: const EdgeInsets.only(left: 2, top: 1),
-                      child: comfortatext("μg/m³", 15, data.settings,
+                      child: comfortatext('μg/m³', 15, data.settings,
                           color: palette.outline, weight: FontWeight.w600),
                     ),
                   ],
@@ -779,7 +768,6 @@ Widget dustAndAODIndicators(data, extendedAqi, ColorScheme palette, context) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(Icons.grain, size: 18, color: palette.secondary),
                         Expanded(
@@ -797,7 +785,7 @@ Widget dustAndAODIndicators(data, extendedAqi, ColorScheme palette, context) {
                     ),
                     const Spacer(),
                     comfortatext(extendedAqi.aod.toString(), 25, data.settings,
-                        color: palette.primary, weight: FontWeight.w400),
+                        color: palette.primary),
                     Padding(
                       padding: const EdgeInsets.only(left: 2, top: 1),
                       child: comfortatext(
@@ -817,8 +805,7 @@ class NewHourlyAqi extends StatefulWidget {
   final data;
   final extendedAqi;
 
-  NewHourlyAqi({Key? key, required this.data, required this.extendedAqi})
-      : super(key: key);
+  const NewHourlyAqi({super.key, required this.data, required this.extendedAqi});
 
   @override
   _NewHourlyAqiState createState() => _NewHourlyAqiState(data, extendedAqi);
@@ -844,12 +831,12 @@ class _NewHourlyAqiState extends State<NewHourlyAqi>
   void initState() {
     super.initState();
     _value = [
-      "pm2.5",
-      "pm10",
-      "ozone",
-      "carbon monoxide",
-      "sulphur dioxide",
-      "nitrogen dioxide"
+      'pm2.5',
+      'pm10',
+      'ozone',
+      'carbon monoxide',
+      'sulphur dioxide',
+      'nitrogen dioxide'
     ].indexOf(extendedAqi.mainPollutant);
     _pageController = PageController(initialPage: _value);
   }
@@ -863,7 +850,7 @@ class _NewHourlyAqiState extends State<NewHourlyAqi>
   Widget build(BuildContext context) {
     super.build(context);
 
-    ColorScheme palette = data.current.palette;
+    final ColorScheme palette = data.current.palette;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -876,29 +863,29 @@ class _NewHourlyAqiState extends State<NewHourlyAqi>
               physics: const NeverScrollableScrollPhysics(),
               controller: _pageController,
               children: <Widget>[
-                HourlyQqi(data, extendedAqi.pm2_5_h, "PM2.5", extendedAqi,
+                HourlyQqi(data, extendedAqi.pm2_5_h, 'PM2.5', extendedAqi,
                     context, palette),
-                HourlyQqi(data, extendedAqi.pm10_h, "PM10", extendedAqi,
+                HourlyQqi(data, extendedAqi.pm10_h, 'PM10', extendedAqi,
                     context, palette),
-                HourlyQqi(data, extendedAqi.o3_h, "O3", extendedAqi, context,
+                HourlyQqi(data, extendedAqi.o3_h, 'O3', extendedAqi, context,
                     palette),
-                HourlyQqi(data, extendedAqi.no2_h, "NO2", extendedAqi, context,
+                HourlyQqi(data, extendedAqi.no2_h, 'NO2', extendedAqi, context,
                     palette),
-                HourlyQqi(data, extendedAqi.co_h, "CO", extendedAqi, context,
+                HourlyQqi(data, extendedAqi.co_h, 'CO', extendedAqi, context,
                     palette),
-                HourlyQqi(data, extendedAqi.so2_h, "SO2", extendedAqi, context,
+                HourlyQqi(data, extendedAqi.so2_h, 'SO2', extendedAqi, context,
                     palette),
               ],
             ),
           ),
         ),
         Wrap(
-          spacing: 5.0,
+          spacing: 5,
           children: List<Widget>.generate(
             6,
             (int index) {
               return ChoiceChip(
-                elevation: 0.0,
+                elevation: 0,
                 checkmarkColor: palette.onSecondaryContainer,
                 color: WidgetStateProperty.resolveWith((states) {
                   if (index == _value) {
@@ -950,12 +937,12 @@ class AQIGraphPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 2.5;
 
-    final double chartHeight = size.height;
-    final double chartWidth = size.width;
-    final double yScale = chartHeight / maxAQI;
-    final double xSpacing = chartWidth / (aqiData.length - 1);
+    final chartHeight = size.height;
+    final chartWidth = size.width;
+    final yScale = chartHeight / maxAQI;
+    final xSpacing = chartWidth / (aqiData.length - 1);
 
-    for (int i = 0; i < aqiData.length - 1; i++) {
+    for (var i = 0; i < aqiData.length - 1; i++) {
       final startX = i * xSpacing;
       final startY = chartHeight - (aqiData[i] * yScale);
       final endX = (i + 1) * xSpacing;
@@ -972,7 +959,7 @@ class AQIGraphPainter extends CustomPainter {
 
 Widget HourlyQqi(
     data, hourValues, name, extendedAqi, context, ColorScheme palette) {
-  const List<List<int>> chartTypes = [
+  const chartTypes = <List<int>>[
     [0, 2, 4, 6, 8, 10],
     [0, 5, 10, 15, 20, 25],
     [0, 10, 20, 30, 40, 50],
@@ -983,17 +970,17 @@ Widget HourlyQqi(
     [0, 200, 400, 600, 800, 1000]
   ];
 
-  double valueMax = hourValues.reduce((a, b) => max<double>(a, b));
-  int currentChart = 0;
+  final double valueMax = hourValues.reduce((a, b) => max<double>(a, b));
+  var currentChart = 0;
 
-  for (int i = 0; i < chartTypes.length; i++) {
+  for (var i = 0; i < chartTypes.length; i++) {
     if (valueMax * 1.3 > chartTypes[i][chartTypes[i].length - 1]) {
       //because it looks weird if it is close to the top
       currentChart = min(i + 1, chartTypes.length - 1); //just for null safety
     }
   }
 
-  int len = chartTypes[currentChart].length;
+  final var len = chartTypes[currentChart].length;
 
   return Column(children: [
     Padding(
@@ -1048,21 +1035,21 @@ Widget HourlyQqi(
                 color: palette.secondary),
             child: const SizedBox(
               width: double.infinity,
-              height: 220.0,
+              height: 220,
             ),
           ),
         ),
       ],
     ),
     Padding(
-      padding: const EdgeInsets.only(top: 7, bottom: 0),
+      padding: const EdgeInsets.only(top: 7),
       child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List.generate(extendedAqi.dailyAqi.length, (index) {
             return comfortatext(
                 index == 0
                     ? AppLocalizations.of(context)!.now
-                    : "$index${AppLocalizations.of(context)!.d}",
+                    : '$index${AppLocalizations.of(context)!.d}',
                 14,
                 data.settings,
                 color: palette.outline);

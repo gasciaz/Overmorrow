@@ -22,8 +22,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:overmorrow/hourly.dart';
 
-import 'l10n/app_localizations.dart';
-import 'ui_helper.dart';
+import 'package:overmorrow/l10n/app_localizations.dart';
+import 'package:overmorrow/ui_helper.dart';
 
 Widget dayStat(data, IconData icon, number, addon,
     {addWind = false, windDir = 0, iconSize = 16.0}) {
@@ -57,7 +57,7 @@ Widget dayStat(data, IconData icon, number, addon,
 class buildDays extends StatefulWidget {
   final data;
 
-  buildDays({Key? key, required this.data}) : super(key: key);
+  const buildDays({super.key, required this.data});
 
   @override
   _buildDaysState createState() => _buildDaysState(data);
@@ -82,7 +82,7 @@ class _buildDaysState extends State<buildDays>
     } else {
       daysToShow = data.days.length;
     }
-    for (int i = 0; i < data.days.length; i++) {
+    for (var i = 0; i < data.days.length; i++) {
       expand.add(false);
     }
   }
@@ -132,7 +132,7 @@ class _buildDaysState extends State<buildDays>
             child: ListView.builder(
                 key: ValueKey(daysToShow),
                 shrinkWrap: true,
-                padding: const EdgeInsets.only(top: 0, bottom: 0),
+                padding: const EdgeInsets.only(),
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: daysToShow,
                 itemBuilder: (context, index) {
@@ -170,9 +170,7 @@ class _buildDaysState extends State<buildDays>
           if (isDaysExpandable)
             GestureDetector(
               behavior: HitTestBehavior.translucent,
-              onTap: () {
-                toggleMoreDays();
-              },
+              onTap: toggleMoreDays,
               child: Container(
                 decoration: BoxDecoration(
                     color: data.current.palette.secondaryContainer,
@@ -232,9 +230,9 @@ Widget dailyCollapsed(var data, var day, ColorScheme palette, int index,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                comfortatext(day.name.split(", ")[0], 19, data.settings,
+                comfortatext(day.name.split(', ')[0], 19, data.settings,
                     color: palette.secondary),
-                comfortatext(day.name.split(", ")[1], 12, data.settings,
+                comfortatext(day.name.split(', ')[1], 12, data.settings,
                     color: palette.outline, weight: FontWeight.w500),
               ],
             ),
@@ -249,7 +247,7 @@ Widget dailyCollapsed(var data, var day, ColorScheme palette, int index,
             child: Align(
                 alignment: Alignment.centerRight,
                 child: comfortatext(
-                    "${day.minTemp.toString()}°", 18, data.settings,
+                    '${day.minTemp}°', 18, data.settings,
                     color: palette.primary, weight: FontWeight.w500)),
           ),
           Expanded(
@@ -261,7 +259,7 @@ Widget dailyCollapsed(var data, var day, ColorScheme palette, int index,
                 color: palette.surfaceContainerHighest),
             child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
-              final double width = constraints.maxWidth;
+              final width = constraints.maxWidth;
 
               final lowest = data.dailyMinMaxTemp[0];
               final highest = data.dailyMinMaxTemp[1];
@@ -284,7 +282,7 @@ Widget dailyCollapsed(var data, var day, ColorScheme palette, int index,
               );
             }),
           )),
-          comfortatext("${day.maxTemp.toString()}°", 18, data.settings,
+          comfortatext('${day.maxTemp}°', 18, data.settings,
               color: palette.primary, weight: FontWeight.w500),
           const SizedBox(
             width: 12,
@@ -303,7 +301,7 @@ Widget dailyCollapsed(var data, var day, ColorScheme palette, int index,
 Widget dailyExpanded(
     var day, data, ColorScheme palette, onExpandTapped, index) {
   return Padding(
-    padding: const EdgeInsets.only(left: 13, right: 13, top: 0, bottom: 16),
+    padding: const EdgeInsets.only(left: 13, right: 13, bottom: 16),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -322,7 +320,7 @@ Widget dailyExpanded(
                 ),
                 comfortatext("${day.name.split(", ")[0]}, ", 19, data.settings,
                     color: palette.secondary),
-                comfortatext(day.name.split(", ")[1], 14, data.settings,
+                comfortatext(day.name.split(', ')[1], 14, data.settings,
                     color: palette.outline),
                 const Spacer(),
                 Icon(
@@ -357,7 +355,7 @@ Widget dailyExpanded(
                 size: 16,
                 color: palette.outline,
               ),
-              comfortatext("${day.minTemp.toString()}°", 19, data.settings,
+              comfortatext('${day.minTemp}°', 19, data.settings,
                   color: palette.primary),
               const SizedBox(
                 width: 6,
@@ -367,7 +365,7 @@ Widget dailyExpanded(
                 size: 16,
                 color: palette.outline,
               ),
-              comfortatext("${day.maxTemp.toString()}°", 19, data.settings,
+              comfortatext('${day.maxTemp}°', 19, data.settings,
                   color: palette.primary)
             ],
           ),
@@ -384,13 +382,13 @@ Widget dailyExpanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              dayStat(data, Icons.umbrella_rounded, day.precip_prob, "%"),
+              dayStat(data, Icons.umbrella_rounded, day.precip_prob, '%'),
               dayStat(data, Icons.water_drop_outlined, day.total_precip,
-                  data.settings["Precipitation"],
+                  data.settings['Precipitation'],
                   iconSize: 16.5),
-              dayStat(data, Icons.air, day.windspeed, data.settings["Wind"],
+              dayStat(data, Icons.air, day.windspeed, data.settings['Wind'],
                   addWind: true, windDir: day.wind_dir),
-              dayStat(data, Icons.wb_sunny_outlined, day.uv, "uv"),
+              dayStat(data, Icons.wb_sunny_outlined, day.uv, 'uv'),
             ],
           ),
         ),

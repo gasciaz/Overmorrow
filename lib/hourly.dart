@@ -22,20 +22,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
-import 'l10n/app_localizations.dart';
-import 'ui_helper.dart';
+import 'package:overmorrow/l10n/app_localizations.dart';
+import 'package:overmorrow/ui_helper.dart';
 
 class NewHourly extends StatefulWidget {
   final data;
   final hours;
   final elevated;
 
-  NewHourly(
-      {Key? key,
+  const NewHourly(
+      {super.key,
       required this.data,
       required this.hours,
-      required this.elevated})
-      : super(key: key);
+      required this.elevated});
 
   @override
   _NewHourlyState createState() => _NewHourlyState(data, hours, elevated);
@@ -58,11 +57,11 @@ class _NewHourlyState extends State<NewHourly>
   Widget build(BuildContext context) {
     super.build(context);
 
-    ColorScheme palette = data.current.palette;
+    final ColorScheme palette = data.current.palette;
     return Padding(
       padding: elevated
           ? const EdgeInsets.all(0)
-          : const EdgeInsets.only(left: 21, right: 21, top: 0, bottom: 15),
+          : const EdgeInsets.only(left: 21, right: 21, bottom: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -71,14 +70,14 @@ class _NewHourlyState extends State<NewHourly>
             child: hourBoxes(hours, data, _value, elevated, context),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 15, bottom: 0, left: 5),
+            padding: const EdgeInsets.only(top: 15, left: 5),
             child: Wrap(
-              spacing: 5.0,
+              spacing: 5,
               children: List<Widget>.generate(
                 4,
                 (int index) {
                   return ChoiceChip(
-                    elevation: 0.0,
+                    elevation: 0,
                     checkmarkColor: palette.onSecondaryContainer,
                     color: WidgetStateProperty.resolveWith((states) {
                       if (index == _value) {
@@ -123,26 +122,26 @@ class _NewHourlyState extends State<NewHourly>
   }
 }
 
-Widget hourBoxes(hours, data, _value, elevated, context) {
-  ColorScheme palette = data.current.palette;
+Widget hourBoxes(hours, data, value, elevated, context) {
+  final ColorScheme palette = data.current.palette;
 
   return AnimationLimiter(
     child: ListView.builder(
       itemCount: hours.length,
       scrollDirection: Axis.horizontal,
       itemBuilder: (BuildContext context, int index) {
-        var hour = hours[index];
+        final hour = hours[index];
         if (hour is String) {
           return AnimationConfiguration.staggeredList(
             position: index,
             duration: const Duration(milliseconds: 500),
             child: SlideAnimation(
-              horizontalOffset: 100.0,
+              horizontalOffset: 100,
               child: FadeInAnimation(child: dividerWidget(palette, hour, data)),
             ),
           );
         }
-        List<Widget> childWidgets = [
+        final var childWidgets = <Widget>[
           buildHourlySum(hour, palette, data),
           buildHourlyPrecip(hour, palette, data),
           buildHourlyWind(hour, palette, data),
@@ -153,10 +152,10 @@ Widget hourBoxes(hours, data, _value, elevated, context) {
           position: index,
           duration: const Duration(milliseconds: 500),
           child: SlideAnimation(
-            horizontalOffset: 100.0,
+            horizontalOffset: 100,
             child: FadeInAnimation(
                 child: hourlyDataBuilder(
-                    hour, palette, elevated, childWidgets[_value], data)),
+                    hour, palette, elevated, childWidgets[value], data)),
           ),
         );
       },
@@ -173,7 +172,7 @@ Widget hourlyDataBuilder(
       switchInCurve: Curves.decelerate,
       transitionBuilder: (Widget child, Animation<double> animation) {
         final offsetAnimation = Tween<Offset>(
-                begin: const Offset(0.0, 1.0), end: const Offset(0.0, 0.0))
+                begin: const Offset(0, 1), end: const Offset(0, 0))
             .animate(animation);
         return ClipRRect(
           borderRadius: BorderRadius.circular(10),
@@ -220,30 +219,29 @@ Widget dividerWidget(ColorScheme palette, name, data) {
 
 Widget buildHourlySum(var hour, ColorScheme palette, data) {
   return Column(
-    key: const ValueKey("sum"),
-    crossAxisAlignment: CrossAxisAlignment.center,
+    key: const ValueKey('sum'),
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
       Padding(
         padding: const EdgeInsets.only(left: 2),
-        child: comfortatext("${hour.temp}°", 18, data.settings,
+        child: comfortatext('${hour.temp}°', 18, data.settings,
             color: palette.primary, weight: FontWeight.w500),
       ),
       Icon(
         hour.icon,
         color: palette.onSurface,
-        size: 37.0,
+        size: 37,
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.umbrella, size: 14, color: palette.primary),
-          comfortatext("${hour.precip_prob}%", 14, data.settings,
+          comfortatext('${hour.precip_prob}%', 14, data.settings,
               color: palette.primary, weight: FontWeight.w500)
         ],
       ),
       comfortatext(hour.time, 14, data.settings,
-          color: palette.outline, weight: FontWeight.w400)
+          color: palette.outline)
     ],
   );
 }
@@ -252,12 +250,10 @@ Widget buildHourlyPrecip(var hour, ColorScheme palette, data) {
   return Stack(
     children: [
       Column(
-        key: const ValueKey("precip"),
-        crossAxisAlignment: CrossAxisAlignment.center,
+        key: const ValueKey('precip'),
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               comfortatext('${hour.precip}', 18, data.settings,
                   color: palette.primary, weight: FontWeight.w500),
@@ -285,12 +281,12 @@ Widget buildHourlyPrecip(var hour, ColorScheme palette, data) {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.umbrella, size: 14, color: palette.primary),
-              comfortatext("${hour.precip_prob}%", 14, data.settings,
+              comfortatext('${hour.precip_prob}%', 14, data.settings,
                   color: palette.primary, weight: FontWeight.w500)
             ],
           ),
           comfortatext(hour.time, 14, data.settings,
-              color: palette.outline, weight: FontWeight.w400)
+              color: palette.outline)
         ],
       ),
     ],
@@ -299,15 +295,13 @@ Widget buildHourlyPrecip(var hour, ColorScheme palette, data) {
 
 Widget buildHourlyWind(var hour, ColorScheme palette, data) {
   return Column(
-    key: const ValueKey("wind"),
-    crossAxisAlignment: CrossAxisAlignment.center,
+    key: const ValueKey('wind'),
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
       Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           comfortatext('${hour.wind}', 18, data.settings,
-              color: palette.primary, weight: FontWeight.w400),
+              color: palette.primary),
           comfortatext('${data.settings["Wind"]}', 9, data.settings,
               color: palette.primary, weight: FontWeight.w500),
         ],
@@ -326,7 +320,7 @@ Widget buildHourlyWind(var hour, ColorScheme palette, data) {
           Icon(Icons.trending_up, size: 13, color: palette.primary),
           Padding(
             padding: const EdgeInsets.only(left: 2),
-            child: comfortatext("${hour.wind_gusts}", 14, data.settings,
+            child: comfortatext('${hour.wind_gusts}', 14, data.settings,
                 color: palette.primary, weight: FontWeight.w500),
           ),
           comfortatext('${data.settings["Wind"]}', 9, data.settings,
@@ -334,19 +328,17 @@ Widget buildHourlyWind(var hour, ColorScheme palette, data) {
         ],
       ),
       comfortatext(hour.time, 14, data.settings,
-          color: palette.outline, weight: FontWeight.w400)
+          color: palette.outline)
     ],
   );
 }
 
 Widget buildHourlyUv(var hour, ColorScheme palette, data) {
   return Column(
-    key: const ValueKey("uv"),
-    crossAxisAlignment: CrossAxisAlignment.center,
+    key: const ValueKey('uv'),
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
       Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           comfortatext('${hour.uv}', 19, data.settings,
               color: palette.primary, weight: FontWeight.w500),
@@ -388,7 +380,7 @@ Widget buildHourlyUv(var hour, ColorScheme palette, data) {
             }),
       ),
       comfortatext(hour.time, 14, data.settings,
-          color: palette.outline, weight: FontWeight.w400)
+          color: palette.outline)
     ],
   );
 }

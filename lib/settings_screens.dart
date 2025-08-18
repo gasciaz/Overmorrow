@@ -20,20 +20,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:overmorrow/about_page.dart';
+import 'package:overmorrow/decoders/decode_wapi.dart';
+import 'package:overmorrow/l10n/app_localizations.dart';
+import 'package:overmorrow/main_ui.dart';
 import 'package:overmorrow/services/color_service.dart';
 import 'package:overmorrow/settings_page.dart';
 import 'package:overmorrow/ui_helper.dart';
 import 'package:overmorrow/weather_refact.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../l10n/app_localizations.dart';
-import 'decoders/decode_wapi.dart';
-import 'main_ui.dart';
-
 Future<void> _launchUrl(String url) async {
-  final Uri _url = Uri.parse(url);
-  if (!await launchUrl(_url)) {
-    throw Exception('Could not launch $_url');
+  final url0 = Uri.parse(url);
+  if (!await launchUrl(url0)) {
+    throw Exception('Could not launch $url0');
   }
 }
 
@@ -51,7 +50,6 @@ Widget mainSettingEntry(String title, String desc, ColorScheme palette,
       child: Padding(
         padding: const EdgeInsets.only(top: 13, bottom: 13),
         child: Row(
-          mainAxisSize: MainAxisSize.max,
           children: [
             Padding(
               padding: const EdgeInsets.only(right: 18, left: 15),
@@ -84,7 +82,7 @@ Widget mainSettingEntry(String title, String desc, ColorScheme palette,
 
 Widget NewSettings(Map<String, String> settings, Function updatePage,
     Image image, ColorScheme palette, context, colornotify) {
-  AppLocalizations localizations = AppLocalizations.of(context)!;
+  final localizations = AppLocalizations.of(context)!;
 
   return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 20),
@@ -93,7 +91,7 @@ Widget NewSettings(Map<String, String> settings, Function updatePage,
           children: AnimationConfiguration.toStaggeredList(
             duration: const Duration(milliseconds: 375),
             childAnimationBuilder: (widget) => SlideAnimation(
-              horizontalOffset: 50.0,
+              horizontalOffset: 50,
               child: FadeInAnimation(
                 child: widget,
               ),
@@ -173,7 +171,7 @@ Widget NewSettings(Map<String, String> settings, Function updatePage,
                   updatePage),
               mainSettingEntry(
                   localizations.about,
-                  "about this app",
+                  'about this app',
                   palette,
                   Icons.info_outline,
                   settings,
@@ -194,13 +192,12 @@ class AppearancePage extends StatefulWidget {
   final localizations;
 
   const AppearancePage(
-      {Key? key,
+      {super.key,
       required this.colornotify,
       required this.settings,
       required this.image,
       required this.updateMainPage,
-      required this.localizations})
-      : super(key: key);
+      required this.localizations});
 
   @override
   _AppearancePageState createState() => _AppearancePageState(
@@ -270,8 +267,8 @@ class AppearanceSelector extends StatelessWidget {
   final localizations;
   final goBack;
 
-  AppearanceSelector(
-      {required this.image,
+  const AppearanceSelector(
+      {super.key, required this.image,
       required this.settings,
       required this.colorPalette,
       required this.updatePage,
@@ -280,7 +277,7 @@ class AppearanceSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ColorScheme palette = colorPalette.palette;
+    final palette = colorPalette.palette;
 
     return Material(
       color: palette.surface,
@@ -292,9 +289,7 @@ class AppearanceSelector extends StatelessWidget {
                   Icons.arrow_back,
                   color: palette.primary,
                 ),
-                onPressed: () {
-                  goBack();
-                }),
+                onPressed: goBack),
             title: comfortatext(localizations.appearance, 30, settings,
                 color: palette.primary),
             backgroundColor: palette.surface,
@@ -309,7 +304,7 @@ class AppearanceSelector extends StatelessWidget {
                     children: AnimationConfiguration.toStaggeredList(
                       duration: const Duration(milliseconds: 500),
                       childAnimationBuilder: (widget) => SlideAnimation(
-                        horizontalOffset: 80.0,
+                        horizontalOffset: 80,
                         child: FadeInAnimation(
                           child: widget,
                         ),
@@ -342,8 +337,7 @@ class AppearanceSelector extends StatelessWidget {
                                             weight: FontWeight.w200),
                                         comfortatext(localizations.clearSky, 26,
                                             settings,
-                                            color: colorPalette.descColor,
-                                            weight: FontWeight.w400)
+                                            color: colorPalette.descColor)
                                       ],
                                     ),
                                   ),
@@ -357,16 +351,16 @@ class AppearanceSelector extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(
                                   left: 1, bottom: 14, top: 30),
-                              child: comfortatext("app theme", 17, settings,
+                              child: comfortatext('app theme', 17, settings,
                                   color: palette.onSurface),
                             ),
                           ],
                         ),
                         SegmentedButton(
-                          selected: <String>{settings["Color mode"]},
+                          selected: <String>{settings['Color mode']},
                           onSelectionChanged: (Set<String> newSelection) {
                             HapticFeedback.mediumImpact();
-                            updatePage("Color mode", newSelection.first);
+                            updatePage('Color mode', newSelection.first);
                           },
                           style: SegmentedButton.styleFrom(
                             backgroundColor: palette.surface,
@@ -377,18 +371,18 @@ class AppearanceSelector extends StatelessWidget {
                           segments: [
                             ButtonSegment(
                                 icon: const Icon(Icons.light_mode_outlined),
-                                value: "light",
-                                label: comfortatext("light", 18, settings,
+                                value: 'light',
+                                label: comfortatext('light', 18, settings,
                                     color: palette.onSurface)),
                             ButtonSegment(
                                 icon: const Icon(Icons.dark_mode_outlined),
-                                value: "dark",
-                                label: comfortatext("dark", 18, settings,
+                                value: 'dark',
+                                label: comfortatext('dark', 18, settings,
                                     color: palette.onSurface)),
                             ButtonSegment(
                                 icon: const Icon(Icons.brightness_6_outlined),
-                                value: "auto",
-                                label: comfortatext("auto", 18, settings,
+                                value: 'auto',
+                                label: comfortatext('auto', 18, settings,
                                     color: palette.onSurface)),
                           ],
                         ),
@@ -403,7 +397,7 @@ class AppearanceSelector extends StatelessWidget {
                             updatePage,
                             'Color source',
                             context),
-                        if (settings["Color source"] == "custom")
+                        if (settings['Color source'] == 'custom')
                           SizedBox(
                             height: 80,
                             child: ListView.builder(
@@ -412,18 +406,18 @@ class AppearanceSelector extends StatelessWidget {
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                               itemCount:
-                                  settingSwitches["Custom color"]!.length,
+                                  settingSwitches['Custom color']!.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return GestureDetector(
                                   onTap: () {
                                     HapticFeedback.mediumImpact();
                                     updatePage(
-                                        "Custom color",
-                                        settingSwitches["Custom color"]![
+                                        'Custom color',
+                                        settingSwitches['Custom color']![
                                             index]);
                                   },
                                   child: Padding(
-                                    padding: const EdgeInsets.all(3.0),
+                                    padding: const EdgeInsets.all(3),
                                     child: AspectRatio(
                                       aspectRatio: 1,
                                       child: Stack(
@@ -432,13 +426,13 @@ class AppearanceSelector extends StatelessWidget {
                                             decoration: BoxDecoration(
                                                 color: Color(getColorFromHex(
                                                     settingSwitches[
-                                                            "Custom color"]![
+                                                            'Custom color']![
                                                         index])),
                                                 borderRadius:
                                                     BorderRadius.circular(100)),
                                           ),
-                                          if (settings["Custom color"] ==
-                                              settingSwitches["Custom color"]![
+                                          if (settings['Custom color'] ==
+                                              settingSwitches['Custom color']![
                                                   index])
                                             const Center(
                                                 child: Icon(
@@ -483,13 +477,12 @@ class UnitsPage extends StatefulWidget {
   final localizations;
 
   const UnitsPage(
-      {Key? key,
+      {super.key,
       required this.palette,
       required this.settings,
       required this.image,
       required this.updateMainPage,
-      required this.localizations})
-      : super(key: key);
+      required this.localizations});
 
   @override
   _UnitsPageState createState() => _UnitsPageState(
@@ -547,9 +540,7 @@ class _UnitsPageState extends State<UnitsPage> {
                   Icons.arrow_back,
                   color: palette.primary,
                 ),
-                onPressed: () {
-                  goBack();
-                }),
+                onPressed: goBack),
             title: comfortatext(localizations.units, 30, settings,
                 color: palette.primary),
             backgroundColor: palette.surface,
@@ -563,7 +554,7 @@ class _UnitsPageState extends State<UnitsPage> {
                     children: AnimationConfiguration.toStaggeredList(
                   duration: const Duration(milliseconds: 500),
                   childAnimationBuilder: (widget) => SlideAnimation(
-                    horizontalOffset: 80.0,
+                    horizontalOffset: 80,
                     child: FadeInAnimation(
                       child: widget,
                     ),
@@ -606,13 +597,12 @@ class GeneralSettingsPage extends StatefulWidget {
   final localizations;
 
   const GeneralSettingsPage(
-      {Key? key,
+      {super.key,
       required this.palette,
       required this.settings,
       required this.image,
       required this.updateMainPage,
-      required this.localizations})
-      : super(key: key);
+      required this.localizations});
 
   @override
   _GeneralSettingsPageState createState() => _GeneralSettingsPageState(
@@ -670,9 +660,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                   Icons.arrow_back,
                   color: palette.primary,
                 ),
-                onPressed: () {
-                  goBack();
-                }),
+                onPressed: goBack),
             title: comfortatext(localizations.general, 30, settings,
                 color: palette.primary),
             backgroundColor: palette.surface,
@@ -686,7 +674,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                     children: AnimationConfiguration.toStaggeredList(
                   duration: const Duration(milliseconds: 500),
                   childAnimationBuilder: (widget) => SlideAnimation(
-                    horizontalOffset: 80.0,
+                    horizontalOffset: 80,
                     child: FadeInAnimation(
                       child: widget,
                     ),
@@ -750,12 +738,11 @@ class LangaugePage extends StatefulWidget {
   final updateMainPage;
 
   const LangaugePage(
-      {Key? key,
+      {super.key,
       required this.palette,
       required this.settings,
       required this.image,
-      required this.updateMainPage})
-      : super(key: key);
+      required this.updateMainPage});
 
   @override
   _LangaugePageState createState() => _LangaugePageState(
@@ -782,7 +769,7 @@ class _LangaugePageState extends State<LangaugePage> {
   @override
   void initState() {
     super.initState();
-    _locale = settings["Language"];
+    _locale = settings['Language'];
   }
 
   void goBack() {
@@ -792,15 +779,15 @@ class _LangaugePageState extends State<LangaugePage> {
 
   @override
   Widget build(BuildContext context) {
-    String selected = settings["Language"] ?? "English";
-    List<String> options = settingSwitches["Language"]!;
+    final String selected = settings['Language'] ?? 'English';
+    final options = settingSwitches['Language']!;
 
     void onTap(value) {
       setState(() {
         HapticFeedback.mediumImpact();
         if (value != null) {
-          settings["Language"] = value;
-          updateMainPage("Language", value);
+          settings['Language'] = value;
+          updateMainPage('Language', value);
           _locale = value;
         }
       });
@@ -849,9 +836,7 @@ class TranslationSelection extends StatelessWidget {
                   Icons.arrow_back,
                   color: palette.primary,
                 ),
-                onPressed: () {
-                  goBack();
-                }),
+                onPressed: goBack),
             title: comfortatext(
                 AppLocalizations.of(context)!.language, 30, settings,
                 color: palette.primary),
@@ -866,7 +851,7 @@ class TranslationSelection extends StatelessWidget {
                 onTap: () {
                   HapticFeedback.selectionClick();
                   _launchUrl(
-                      "https://hosted.weblate.org/engage/overmorrow-weather/");
+                      'https://hosted.weblate.org/engage/overmorrow-weather/');
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -874,7 +859,7 @@ class TranslationSelection extends StatelessWidget {
                     color: palette.primaryFixedDim,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(30.0),
+                    padding: const EdgeInsets.all(30),
                     child: Row(
                       children: [
                         comfortatext(
@@ -908,7 +893,7 @@ class TranslationSelection extends StatelessWidget {
                     position: index,
                     duration: const Duration(milliseconds: 375),
                     child: SlideAnimation(
-                      verticalOffset: 50.0,
+                      verticalOffset: 50,
                       child: FadeInAnimation(
                         child: ListTile(
                           onTap: () {
@@ -925,9 +910,7 @@ class TranslationSelection extends StatelessWidget {
                             fillColor: WidgetStateProperty.all(palette.primary),
                             value: options[index],
                             groupValue: selected,
-                            onChanged: (String? value) {
-                              onTap(value);
-                            },
+                            onChanged: onTap,
                           ),
                         ),
                       ),
@@ -951,13 +934,12 @@ class LayoutPage extends StatefulWidget {
   final localizations;
 
   const LayoutPage(
-      {Key? key,
+      {super.key,
       required this.palette,
       required this.settings,
       required this.image,
       required this.updateMainPage,
-      required this.localizations})
-      : super(key: key);
+      required this.localizations});
 
   @override
   _LayoutPageState createState() => _LayoutPageState(
@@ -986,13 +968,13 @@ class _LayoutPageState extends State<LayoutPage> {
 
   //also the default order
   static const allNames = [
-    "sunstatus",
-    "rain indicator",
-    "hourly",
-    "alerts",
-    "radar",
-    "daily",
-    "air quality"
+    'sunstatus',
+    'rain indicator',
+    'hourly',
+    'alerts',
+    'radar',
+    'daily',
+    'air quality'
   ];
 
   List<String> removed = [];
@@ -1000,9 +982,9 @@ class _LayoutPageState extends State<LayoutPage> {
   @override
   void initState() {
     super.initState();
-    _items = settings["Layout"] == "" ? [] : settings["Layout"].split(",");
+    _items = settings['Layout'] == '' ? [] : settings['Layout'].split(',');
 
-    for (int i = 0; i < allNames.length; i++) {
+    for (var i = 0; i < allNames.length; i++) {
       if (!_items.contains(allNames[i])) {
         removed.add(allNames[i]);
       }
@@ -1029,9 +1011,7 @@ class _LayoutPageState extends State<LayoutPage> {
           SliverAppBar.large(
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: palette.primary),
-              onPressed: () {
-                goBack();
-              },
+              onPressed: goBack,
             ),
             actions: [
               Padding(
@@ -1047,7 +1027,7 @@ class _LayoutPageState extends State<LayoutPage> {
                     setState(() {
                       _items = allNames.toList();
                       removed = [];
-                      updatePage('Layout', _items.join(","));
+                      updatePage('Layout', _items.join(','));
                     });
                   },
                 ),
@@ -1060,7 +1040,6 @@ class _LayoutPageState extends State<LayoutPage> {
           ),
           SliverToBoxAdapter(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ReorderableListView(
                   physics: const NeverScrollableScrollPhysics(),
@@ -1074,7 +1053,7 @@ class _LayoutPageState extends State<LayoutPage> {
                   children: <Widget>[
                     for (int index = 0; index < _items.length; index += 1)
                       Container(
-                        key: Key("$index"),
+                        key: Key('$index'),
                         color: palette.surface,
                         padding: const EdgeInsets.all(4),
                         child: Container(
@@ -1104,7 +1083,7 @@ class _LayoutPageState extends State<LayoutPage> {
                                   setState(() {
                                     removed.add(_items[index]);
                                     _items.remove(_items[index]);
-                                    updatePage('Layout', _items.join(","));
+                                    updatePage('Layout', _items.join(','));
                                   });
                                 },
                                 icon: Icon(
@@ -1155,14 +1134,14 @@ class _LayoutPageState extends State<LayoutPage> {
                       if (oldIndex < newIndex) {
                         newIndex -= 1;
                       }
-                      final String item = _items.removeAt(oldIndex);
+                      final item = _items.removeAt(oldIndex);
                       _items.insert(newIndex, item);
-                      updatePage('Layout', _items.join(","));
+                      updatePage('Layout', _items.join(','));
                     });
                   },
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 0, left: 20, right: 20),
+                  padding: const EdgeInsets.only(left: 20, right: 20),
                   child: Wrap(
                     spacing: 6,
                     runSpacing: 6,

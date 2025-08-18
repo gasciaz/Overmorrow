@@ -30,8 +30,8 @@ import 'package:overmorrow/services/location_service.dart';
 import 'package:overmorrow/settings_page.dart';
 import 'package:overmorrow/ui_helper.dart';
 
-import 'l10n/app_localizations.dart';
-import 'main.dart';
+import 'package:overmorrow/l10n/app_localizations.dart';
+import 'package:overmorrow/main.dart';
 
 //before this the same place from 2 different providers would be registered as different,
 //I am trying to fix this with this
@@ -190,33 +190,33 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
       required this.isTabletMode,
       required this.image});
 
-  String text = "";
+  String text = '';
   bool isEditing = false;
 
-  String locationState = "unknown";
-  String locationMessage = "unknown";
-  String placeName = "-";
-  String country = "-";
-  String region = "-";
+  String locationState = 'unknown';
+  String locationMessage = 'unknown';
+  String placeName = '-';
+  String country = '-';
+  String region = '-';
 
   Timer? _debounce;
 
-  _onSearchChanged(String query) {
+  void void _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 400), () async {
-      var result = await LocationService.getRecommendation(
-          query, settings["Search provider"], settings);
+      final result = await LocationService.getRecommendation(
+          query, settings['Search provider'], settings);
       updateRec(result);
     });
   }
 
-  onFavChanged(List<String> fav) {
+  void void onFavChanged(List<String> fav) {
     setState(() {
       updateFav(fav);
     });
   }
 
-  openSettingsPage() {
+  void void openSettingsPage() {
     HapticFeedback.selectionClick();
     Navigator.push(
       context,
@@ -236,32 +236,32 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
     });
   }
 
-  onIsEditingChanged() {
+  void void onIsEditingChanged() {
     setState(() {
       isEditing = !isEditing;
     });
   }
 
-  findCurrentPosition() async {
+  Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> findCurrentPosition() async {
     Position position;
 
     //start by getting the last position, so there is always some place showing, and then update it later
     try {
       position = (await Geolocator.getLastKnownPosition())!;
 
-      List<Placemark> placemarks =
+      final placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
-      Placemark place = placemarks[0];
+      final place = placemarks[0];
 
       setState(() {
         placeName = place.locality ??
             place.subLocality ??
             place.thoroughfare ??
             place.subThoroughfare ??
-            "";
-        country = place.isoCountryCode ?? place.country ?? "";
-        region = place.administrativeArea ?? place.subAdministrativeArea ?? "";
-        locationState = "enabled";
+            '';
+        country = place.isoCountryCode ?? place.country ?? '';
+        region = place.administrativeArea ?? place.subAdministrativeArea ?? '';
+        locationState = 'enabled';
       });
     } on Error {
       //the first fetch didn't work so we move on to try to find the device's current location
@@ -275,111 +275,111 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
               timeLimit: const Duration(seconds: 20)));
     } on Error {
       setState(() {
-        locationState = "disabled";
+        locationState = 'disabled';
         locationMessage = AppLocalizations.of(context)!.unableToLocateDevice;
       });
-      return "disabled";
+      return 'disabled';
     } on LocationServiceDisabledException {
       setState(() {
-        locationState = "disabled";
+        locationState = 'disabled';
         locationMessage =
             AppLocalizations.of(context)!.locationServicesAreDisabled;
       });
-      return "disabled";
+      return 'disabled';
     }
 
     try {
-      List<Placemark> placemarks =
+      final var placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
-      Placemark place = placemarks[0];
+      final var place = placemarks[0];
 
       setState(() {
         placeName = place.locality ??
             place.subLocality ??
             place.thoroughfare ??
             place.subThoroughfare ??
-            "";
-        country = place.isoCountryCode ?? place.country ?? "";
-        region = place.administrativeArea ?? place.subAdministrativeArea ?? "";
-        locationState = "enabled";
+            '';
+        country = place.isoCountryCode ?? place.country ?? '';
+        region = place.administrativeArea ?? place.subAdministrativeArea ?? '';
+        locationState = 'enabled';
       });
 
       //update the last known position for the home screen widgets
       setLastKnownLocation(placeName,
-          "${position.latitude.toStringAsFixed(2)}, ${position.longitude.toStringAsFixed(2)}");
+          '${position.latitude.toStringAsFixed(2)}, ${position.longitude.toStringAsFixed(2)}');
     } on Error {
       setState(() {
         placeName =
-            "${position.latitude.toStringAsFixed(2)}, ${position.longitude.toStringAsFixed(2)}";
+            '${position.latitude.toStringAsFixed(2)}, ${position.longitude.toStringAsFixed(2)}';
       });
     }
   }
 
-  askGrantLocationPermission() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> Future<String> askGrantLocationPermission() async {
+    final var serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       setState(() {
-        locationState = "disabled";
+        locationState = 'disabled';
         locationMessage =
             AppLocalizations.of(context)!.locationServicesAreDisabled;
       });
-      return "disabled";
+      return 'disabled';
     }
-    LocationPermission permission = await Geolocator.requestPermission();
+    final var permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.deniedForever) {
       setState(() {
-        locationState = "deniedForever";
+        locationState = 'deniedForever';
         locationMessage =
             AppLocalizations.of(context)!.locationPermissionDeniedForever;
       });
-      return "disabled";
+      return 'disabled';
     }
-    String x = await checkIflocationState(true);
-    if (x == "enabled") {
+    final var x = await checkIflocationState(true);
+    if (x == 'enabled') {
       await findCurrentPosition();
     }
   }
 
   Future<String> checkIflocationState([bool afterAsk = false]) async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    final var serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       setState(() {
-        locationState = "disabled";
+        locationState = 'disabled';
         locationMessage =
             AppLocalizations.of(context)!.locationServicesAreDisabled;
       });
-      return "disabled";
+      return 'disabled';
     }
 
-    LocationPermission permission = await Geolocator.checkPermission();
+    final var permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.deniedForever) {
       setState(() {
-        locationState = "deniedForever";
+        locationState = 'deniedForever';
         locationMessage =
             AppLocalizations.of(context)!.locationPermissionDeniedForever;
       });
-      return "disabled";
+      return 'disabled';
     }
     if (permission == LocationPermission.denied) {
       setState(() {
-        locationState = "denied";
+        locationState = 'denied';
         locationMessage =
             AppLocalizations.of(context)!.locationPermissionIsDenied;
       });
-      return "disabled";
+      return 'disabled';
     }
     if (permission == LocationPermission.whileInUse ||
         permission == LocationPermission.always) {
       setState(() {
-        locationState = "enabled";
+        locationState = 'enabled';
       });
-      return "enabled";
+      return 'enabled';
     }
     setState(() {
-      locationState = "disabled";
+      locationState = 'disabled';
       locationMessage = AppLocalizations.of(context)!.unableToLocateDevice;
     });
-    return "disabled";
+    return 'disabled';
   }
 
   @override
@@ -388,7 +388,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       checkIflocationState().then((x) {
-        if (x == "enabled") {
+        if (x == 'enabled') {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             findCurrentPosition();
           });
@@ -408,7 +408,6 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
         foregroundColor: palette.primary,
         surfaceTintColor: palette.outlineVariant,
         elevation: 0,
-        automaticallyImplyLeading: true,
         leading: isTabletMode
             ? Padding(
                 padding: const EdgeInsets.only(left: 8),
@@ -418,9 +417,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
                     color: palette.primary,
                     size: 23,
                   ),
-                  onPressed: () {
-                    openSettingsPage();
-                  },
+                  onPressed: openSettingsPage,
                 ),
               )
             : null,
@@ -430,7 +427,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
             transitionBuilder: (Widget child, Animation<double> animation) {
               return FadeTransition(opacity: animation, child: child);
             },
-            child: (text == "")
+            child: (text == '')
                 ? AnimatedSwitcher(
                     duration: const Duration(milliseconds: 200),
                     child: Padding(
@@ -478,7 +475,6 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
                         ),
                       ),
                       child: TextField(
-                        autofocus: false,
                         onChanged: (String to) async {
                           setState(() {
                             text = to;
@@ -493,17 +489,16 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
                           }
                         },
                         cursorColor: palette.primary,
-                        cursorWidth: 2,
                         style: GoogleFonts.outfit(
                           color: palette.onSurface,
-                          fontSize: 23 * getFontSize(settings["Font size"]!),
+                          fontSize: 23 * getFontSize(settings['Font size']!),
                           fontWeight: FontWeight.w400,
                         ),
                         decoration: InputDecoration(
                           hintText: 'Search...',
                           hintStyle: GoogleFonts.outfit(
                             color: palette.outline,
-                            fontSize: 20 * getFontSize(settings["Font size"]!),
+                            fontSize: 20 * getFontSize(settings['Font size']!),
                             fontWeight: FontWeight.w400,
                           ),
                           border: InputBorder.none,
@@ -526,7 +521,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
                 return FadeTransition(opacity: animation, child: child);
               },
               child: Align(
-                key: ValueKey<bool>(text == ""),
+                key: ValueKey<bool>(text == ''),
                 alignment: Alignment.topCenter,
                 child: SingleChildScrollView(
                   child: buildRecommend(
@@ -574,8 +569,8 @@ Widget buildRecommend(
   return ValueListenableBuilder(
       valueListenable: favoritesListen,
       builder: (context, value, child) {
-        List<String> favorites = value;
-        if (text == "") {
+        final favorites = value;
+        if (text == '') {
           return Padding(
             padding:
                 const EdgeInsets.only(left: 30, top: 10, right: 30, bottom: 40),
@@ -584,7 +579,7 @@ Widget buildRecommend(
                 children: AnimationConfiguration.toStaggeredList(
                   duration: const Duration(milliseconds: 475),
                   childAnimationBuilder: (widget) => SlideAnimation(
-                    horizontalOffset: 0.0,
+                    horizontalOffset: 0,
                     verticalOffset: 50,
                     child: FadeInAnimation(
                       child: widget,
@@ -625,7 +620,7 @@ Widget buildRecommend(
                       child: Row(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(right: 10, top: 0),
+                            padding: const EdgeInsets.only(right: 10),
                             child: Icon(
                               Icons.star_outline,
                               color: palette.outline,
@@ -681,18 +676,18 @@ Widget buildSearchResults(
     onFavChanged,
     settings,
     isTabletMode) {
-  List<String> favoriteNarrow = [];
-  for (int i = 0; i < favorites.length; i++) {
-    var d = jsonDecode(favorites[i]);
+  final favoriteNarrow = <String>[];
+  for (var i = 0; i < favorites.length; i++) {
+    final d = jsonDecode(favorites[i]);
     favoriteNarrow.add(generateSimplifier(d));
   }
   return ValueListenableBuilder(
       valueListenable: recommend,
       builder: (context, value, child) {
-        List<String> rec = value;
+        final rec = value;
         return Padding(
           padding:
-              const EdgeInsets.only(top: 0, bottom: 30, left: 30, right: 30),
+              const EdgeInsets.only(bottom: 30, left: 30, right: 30),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(30),
             child: AnimatedSwitcher(
@@ -713,19 +708,19 @@ Widget buildSearchResults(
                         : const EdgeInsets.all(14),
                     child: Column(
                         children: List.generate(rec.length, (index) {
-                      var split = json.decode(rec[index]);
-                      String name = split["name"];
-                      String country = generateAbbreviation(split["country"]);
-                      String region = split["region"];
-                      String simplifier = generateSimplifier(split);
+                      final split = json.decode(rec[index]);
+                      final String name = split['name'];
+                      final country = generateAbbreviation(split['country']);
+                      final String region = split['region'];
+                      final simplifier = generateSimplifier(split);
 
-                      bool contained = favoriteNarrow.contains(simplifier);
+                      final contained = favoriteNarrow.contains(simplifier);
                       return GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
                           HapticFeedback.selectionClick();
                           updateLocation('${split["lat"]}, ${split["lon"]}',
-                              split["name"]);
+                              split['name']);
                           if (!isTabletMode) {
                             Navigator.pop(context);
                           }
@@ -742,7 +737,7 @@ Widget buildSearchResults(
                                   comfortatext(name, 19, settings,
                                       color: palette.onSurface),
                                   comfortatext(
-                                      "$region, $country", 15, settings,
+                                      '$region, $country', 15, settings,
                                       color: palette.outline)
                                 ],
                               )),
@@ -750,7 +745,7 @@ Widget buildSearchResults(
                                 onPressed: () {
                                   if (contained) {
                                     HapticFeedback.mediumImpact();
-                                    int z = favoriteNarrow.indexOf(simplifier);
+                                    final var z = favoriteNarrow.indexOf(simplifier);
                                     favorites.removeAt(z);
                                     onFavChanged(favorites);
                                   } else {
@@ -787,7 +782,7 @@ Widget CurrentLocationWidget(
     updateLocation,
     context,
     isTabletMode) {
-  if (locationState == "denied") {
+  if (locationState == 'denied') {
     return GestureDetector(
       onTap: () {
         askGrantLocationPermission();
@@ -822,7 +817,7 @@ Widget CurrentLocationWidget(
       ),
     );
   }
-  if (locationState == "enabled") {
+  if (locationState == 'enabled') {
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
@@ -848,7 +843,7 @@ Widget CurrentLocationWidget(
               children: [
                 comfortatext(placeName, 20, settings,
                     color: palette.onPrimaryFixed),
-                comfortatext("$region, $country", 15, settings,
+                comfortatext('$region, $country', 15, settings,
                     color: palette.onPrimaryFixed)
               ],
             )),
@@ -902,7 +897,7 @@ Widget buildFavorites(ColorScheme palette, List<String> favorites,
     updateLocation, settings, context, isTabletMode) {
   return SingleChildScrollView(
     child: Container(
-        key: const ValueKey<String>("normal"),
+        key: const ValueKey<String>('normal'),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: isTabletMode
@@ -912,15 +907,15 @@ Widget buildFavorites(ColorScheme palette, List<String> favorites,
         ),
         child: Column(
             children: List.generate(favorites.length, (index) {
-          var split = json.decode(favorites[index]);
-          String name = split["name"];
-          String country = generateAbbreviation(split["country"]);
-          String region = split["region"];
+          final split = json.decode(favorites[index]);
+          final String name = split['name'];
+          final country = generateAbbreviation(split['country']);
+          final String region = split['region'];
           return GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
               HapticFeedback.selectionClick();
-              updateLocation('${split["lat"]}, ${split["lon"]}', split["name"]);
+              updateLocation('${split["lat"]}, ${split["lon"]}', split['name']);
               if (!isTabletMode) {
                 Navigator.pop(context);
               }
@@ -936,7 +931,7 @@ Widget buildFavorites(ColorScheme palette, List<String> favorites,
                     children: [
                       comfortatext(name, 19, settings,
                           color: palette.onSurface),
-                      comfortatext("$region, $country", 15, settings,
+                      comfortatext('$region, $country', 15, settings,
                           color: palette.outline)
                     ],
                   )),
@@ -953,9 +948,9 @@ Widget buildFavorites(ColorScheme palette, List<String> favorites,
 }
 
 Widget reorderFavorites(
-    _items, settings, onFavChanged, ColorScheme palette, isTabletMode) {
+    items, settings, onFavChanged, ColorScheme palette, isTabletMode) {
   return Container(
-    key: const ValueKey<String>("editing"),
+    key: const ValueKey<String>('editing'),
     decoration: BoxDecoration(
       color: isTabletMode
           ? palette.surfaceContainerHighest
@@ -971,17 +966,17 @@ Widget reorderFavorites(
       ),
       padding: const EdgeInsets.all(12),
       children: <Widget>[
-        for (int index = 0; index < _items.length; index += 1)
+        for (int index = 0; index < items.length; index += 1)
           reorderableItem(
-              _items, index, settings, palette, onFavChanged, isTabletMode)
+              items, index, settings, palette, onFavChanged, isTabletMode)
       ],
       onReorder: (int oldIndex, int newIndex) {
         if (oldIndex < newIndex) {
           newIndex -= 1;
         }
-        final String item = _items.removeAt(oldIndex);
-        _items.insert(newIndex, item);
-        onFavChanged(_items);
+        final String item = items.removeAt(oldIndex);
+        items.insert(newIndex, item);
+        onFavChanged(items);
       },
     ),
   );
@@ -989,12 +984,12 @@ Widget reorderFavorites(
 
 Widget reorderableItem(List<dynamic> items, index, settings,
     ColorScheme palette, onFavChanged, isTabletMode) {
-  var split = json.decode(items[index]);
-  String name = split["name"];
-  String country = generateAbbreviation(split["country"]);
-  String region = split["region"];
-  return Container(
-    key: Key("$name, $country, $region"),
+  final split = json.decode(items[index]);
+  final String name = split['name'];
+  final country = generateAbbreviation(split['country']);
+  final String region = split['region'];
+  return ColoredBox(
+    key: Key('$name, $country, $region'),
     color: isTabletMode
         ? palette.surfaceContainerHighest
         : palette.surfaceContainer,
@@ -1014,7 +1009,7 @@ Widget reorderableItem(List<dynamic> items, index, settings,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               comfortatext(name, 19, settings, color: palette.onSurface),
-              comfortatext("$region, $country", 15, settings,
+              comfortatext('$region, $country', 15, settings,
                   color: palette.outline)
             ],
           )),

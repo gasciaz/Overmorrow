@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:convert';
 
-import '../caching.dart';
+import 'package:overmorrow/caching.dart';
 
 
 class RainviewerRadar {
@@ -35,36 +35,36 @@ class RainviewerRadar {
   });
 
   static Future<RainviewerRadar> getData() async {
-    const String url = 'https://api.rainviewer.com/public/weather-maps.json';
+    const url = 'https://api.rainviewer.com/public/weather-maps.json';
 
-    var file = await XCustomCacheManager.fetchData(url.toString(), url.toString());
-    var response = await file[0].readAsString();
+    final file = await XCustomCacheManager.fetchData(url, url);
+    final response = await file[0].readAsString();
     final Map<String, dynamic> data = json.decode(response);
 
-    final String host = data["host"];
+    final String host = data['host'];
 
-    List<String> images = [];
-    List<String> times = [];
+    final images = <String>[];
+    final times = <String>[];
 
-    final past = data["radar"]["past"];
-    final future = data["radar"]["nowcast"];
+    final past = data['radar']['past'];
+    final future = data['radar']['nowcast'];
 
-    for (var x in past) {
-      DateTime time = DateTime.fromMillisecondsSinceEpoch(x["time"] * 1000);
-      images.add(host + x["path"]);
-      times.add("${time.hour}h ${time.minute}m");
+    for (final x in past) {
+      final var time = DateTime.fromMillisecondsSinceEpoch(x['time'] * 1000);
+      images.add(host + x['path']);
+      times.add('${time.hour}h ${time.minute}m');
     }
 
-    int real_hour = int.parse(times[times.length - 1].split("h")[0]);
-    int starting_index = times.length - 1;
+    final realHour = int.parse(times[times.length - 1].split('h')[0]);
+    final startingIndex = times.length - 1;
 
-    for (var x in future) {
-      DateTime time = DateTime.fromMillisecondsSinceEpoch(x["time"] * 1000);
-      images.add(host + x["path"]);
-      times.add("${time.hour}h ${time.minute}m");
+    for (final x in future) {
+      final time = DateTime.fromMillisecondsSinceEpoch(x['time'] * 1000);
+      images.add(host + x['path']);
+      times.add('${time.hour}h ${time.minute}m');
     }
 
-    return RainviewerRadar(images: images, times: times, real_hour: real_hour, starting_index: starting_index);
+    return RainviewerRadar(images: images, times: times, real_hour: realHour, starting_index: startingIndex);
   }
 }
 
