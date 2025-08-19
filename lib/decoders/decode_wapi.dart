@@ -51,7 +51,7 @@ Future<List<dynamic>> WapiMakeRequest(String latlong, String realLoc) async {
   final file = await XCustomCacheManager.fetchData(
       url.toString(), '$realLoc, weatherapi.com');
 
-  final DateTime fetchDatetime = await file[0].lastModified();
+  final DateTime fetchDatetime = (await file[0].lastModified()) as DateTime;
   final bool isonline = file[1];
 
   final response = (await file[0].readAsString()) as String;
@@ -740,7 +740,7 @@ Future<WeatherData> WapiGetWeatherData(
   final wapi = await WapiMakeRequest('$lat,$lng', realLoc);
 
   final wapiBody = wapi[0];
-  final DateTime fetchDatetime = wapi[1];
+  final DateTime fetchDatetime = wapi[1] as DateTime;
   final bool isonline = wapi[2];
 
   final lastKnowTime = DateTime.parse(wapiBody['location']['localtime']);

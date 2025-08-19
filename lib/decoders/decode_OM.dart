@@ -184,7 +184,7 @@ Future<List<dynamic>> OMRequestData(
   final oMResponse = await oMFile[0].readAsString();
   final OMData = jsonDecode(oMResponse as String);
 
-  final DateTime fetchDatetime = await oMFile[0].lastModified();
+  final DateTime fetchDatetime = (await oMFile[0].lastModified()) as DateTime;
   final bool isonline = oMFile[1];
 
   return [OMData, fetchDatetime, isonline];
@@ -1048,7 +1048,7 @@ Future<WeatherData> OMGetWeatherData(
   final OM = await OMRequestData(lat, lng, realLoc);
   final oMBody = OM[0];
 
-  final DateTime fetchDatetime = OM[1];
+  final DateTime fetchDatetime = OM[1] as DateTime;
   final bool isonline = OM[2];
 
   final localtime = OMGetLocalTime(oMBody);

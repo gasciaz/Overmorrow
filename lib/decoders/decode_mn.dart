@@ -203,7 +203,7 @@ Future<List<dynamic>> MetNMakeRequest(
 
   final MnData = jsonDecode(MnResponse);
 
-  final DateTime fetchDatetime = await MnFile[0].lastModified();
+  final DateTime fetchDatetime = (await MnFile[0].lastModified()) as DateTime;
   return [MnData, fetchDatetime, isonline];
 }
 
@@ -646,7 +646,7 @@ Future<WeatherData> MetNGetWeatherData(
 
   //DateTime lastKnowTime = await MetNGetLocalTime(lat, lng);
   final lastKnowTime = DateTime.now();
-  final DateTime fetchDatetime = Mn[1];
+  final DateTime fetchDatetime = Mn[1] as DateTime;
 
   //this gives us the time passed since last fetch, this is all basically for offline mode
   final realTimeOffset = DateTime.now().difference(fetchDatetime);
