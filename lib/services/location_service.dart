@@ -49,7 +49,7 @@ class LocationService {
       final file = await cacheManager.getSingleFile(url.toString(),
           headers: {'cache-control': 'private, max-age=120'});
       final response = await file.readAsString();
-      jsonbody = jsonDecode(response);
+      jsonbody = jsonDecode(response) as List<dynamic>;
     } on SocketException {
       return [];
     }
@@ -80,7 +80,7 @@ class LocationService {
             'cache-control': 'private, max-age=120'
           }).timeout(const Duration(seconds: 3));
       final response = await file.readAsString();
-      jsonbody = jsonDecode(response)['results'];
+      jsonbody = jsonDecode(response)['results'] as List<dynamic>;
     } catch (e) {
       return [];
     }
