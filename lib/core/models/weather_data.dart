@@ -19,10 +19,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import 'dart:async';
 
 import 'package:overmorrow/core/core.dart';
-import 'package:overmorrow/decoders/decode_OM.dart';
-import 'package:overmorrow/decoders/decode_RV.dart';
-import 'package:overmorrow/decoders/decode_mn.dart';
-import 'package:overmorrow/decoders/decode_wapi.dart';
 
 class WeatherData {
   final Map<String, String> settings;
