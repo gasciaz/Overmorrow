@@ -51,7 +51,7 @@ Widget comfortatext(String text, double size, Map<String, String> settings,
     weight = FontWeight.w400,
     decoration = TextDecoration.none,
     maxLines = 40}) {
-  final x = getFontSize(settings['Font size']);
+  final x = getFontSize(settings['Font size'] as String);
   final baseStyle = GoogleFonts.outfit(
     color: color,
     fontSize: size * x * 1.1,

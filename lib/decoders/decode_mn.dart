@@ -90,10 +90,10 @@ int metNcalculateFeelsLike(double t, double r, double v) {
 String metNGetName(
     int index, settings, item, start, hourDif, AppLocalizations localizations) {
   final String x =
-      item['properties']['timeseries'][start]['time'].split('T')[0];
+      item['properties']['timeseries'][start]['time'].split('T')[0] as String;
   final String hour = item['properties']['timeseries'][start]['time']
       .split('T')[1]
-      .split(':')[0];
+      .split(':')[0] as String;
   final z = x.split('-');
   final timeBefore = DateTime(
       int.parse(z[0]), int.parse(z[1]), int.parse(z[2]), int.parse(hour));
@@ -198,7 +198,7 @@ Future<List<dynamic>> MetNMakeRequest(
       MnUrl.toString(), '$realLoc, met.no',
       headers: headers);
 
-  final MnResponse = await MnFile[0].readAsString();
+  final MnResponse = (await MnFile[0].readAsString()) as String;
   final bool isonline = MnFile[1];
 
   final MnData = jsonDecode(MnResponse);
@@ -422,7 +422,7 @@ class MetNHour {
   final double raw_precip;
   final double raw_wind;
 
-  final rawText;
+  final String rawText;
 
   const MetNHour({
     required this.temp,
@@ -449,20 +449,20 @@ class MetNHour {
     return MetNHour(
       wind_gusts: 0,
       rawText: metNTextCorrection(
-          nextHours['summary']['symbol_code'], false, localizations),
+          nextHours['summary']['symbol_code'] as String, false, localizations),
       text: metNTextCorrection(
-          nextHours['summary']['symbol_code'], true, localizations),
+          nextHours['summary']['symbol_code'] as String, true, localizations),
       temp: unit_coversion(
               item['data']['instant']['details']['air_temperature'],
-              settings['Temperature'])
+              settings['Temperature'] as String)
           .round(),
       precip: unit_coversion(nextHours['details']['precipitation_amount'],
-          settings['Precipitation']),
+          settings['Precipitation'] as String),
       precip_prob:
           (nextHours['details']['probability_of_precipitation'] ?? 0).round(),
       icon: metNIconCorrection(
-        metNTextCorrection(
-            nextHours['summary']['symbol_code'], false, localizations),
+        metNTextCorrection(nextHours['summary']['symbol_code'] as String, false,
+            localizations),
       ),
       time: settings['Time mode'] == '24 hour'
           ? metN24HourTime(item['time'], hourDif)

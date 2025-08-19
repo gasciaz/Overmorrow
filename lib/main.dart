@@ -419,9 +419,9 @@ class _HomePageState extends State<HomePage> {
             await LocationService.getRecommendation(
                 backupName, settings['Search provider'], settings);
         if (suggestedLocations.isNotEmpty) {
-          final split = json.decode(suggestedLocations[0]);
+          final split = json.decode(suggestedLocations[0] as String);
           absoluteProposed = "${split["lat"]},${split["lon"]}";
-          backupName = split['name'];
+          backupName = split['name'] as String;
         } else {
           return ErrorPage(
             errorMessage: '${localizations.placeNotFound}: \n $backupName',

@@ -910,12 +910,13 @@ class TranslationSelection extends StatelessWidget {
                       child: FadeInAnimation(
                         child: ListTile(
                           onTap: () {
-                            onTap(options[index]);
+                            onTap!(options[index] as String?);
                           },
                           title: Padding(
                             padding: const EdgeInsets.only(
                                 top: 15, bottom: 15, left: 13),
-                            child: comfortatext(options[index], 20, settings,
+                            child: comfortatext(
+                                options[index] as String, 20, settings,
                                 color: palette.onSurface),
                           ),
                           contentPadding: EdgeInsets.zero,

@@ -197,7 +197,7 @@ Widget hourlyDataBuilder(hour, ColorScheme palette, bool elevated,
   );
 }
 
-Widget dividerWidget(ColorScheme palette, name, WeatherData data) {
+Widget dividerWidget(ColorScheme palette, String name, WeatherData data) {
   return Padding(
     padding: const EdgeInsets.only(top: 3, bottom: 3, left: 6, right: 6),
     child: RotatedBox(
@@ -240,7 +240,8 @@ Widget buildHourlySum(var hour, ColorScheme palette, WeatherData data) {
               color: palette.primary, weight: FontWeight.w500)
         ],
       ),
-      comfortatext(hour.time, 14, data.settings, color: palette.outline)
+      comfortatext(hour.time as String, 14, data.settings,
+          color: palette.outline)
     ],
   );
 }
@@ -325,7 +326,8 @@ Widget buildHourlyWind(var hour, ColorScheme palette, WeatherData data) {
               color: palette.primary, weight: FontWeight.w500),
         ],
       ),
-      comfortatext(hour.time, 14, data.settings, color: palette.outline)
+      comfortatext(hour.time as String, 14, data.settings,
+          color: palette.outline)
     ],
   );
 }

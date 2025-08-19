@@ -299,7 +299,8 @@ class ColorPalette {
   }
 
   static ColorScheme getCustomColorPalette(String theme, settings) {
-    final mainColor = Color(getColorFromHex(settings['Custom color']));
+    final mainColor =
+        Color(getColorFromHex(settings['Custom color'] as String));
 
     if (theme == 'auto') {
       final brightness =

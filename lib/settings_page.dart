@@ -196,7 +196,7 @@ Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
       ),
       style: GoogleFonts.comfortaa(
         color: textcolor,
-        fontSize: 19 * getFontSize(settings['Font size']),
+        fontSize: 19 * getFontSize(settings['Font size'] as String),
         fontWeight: FontWeight.w300,
       ),
       alignment: Alignment.centerRight,
@@ -214,8 +214,14 @@ Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
       });
 }
 
-Widget settingEntry(icon, text, Map<String, String> settings,
-    ColorScheme palette, Function updatePage, rawText, BuildContext context) {
+Widget settingEntry(
+    icon,
+    String text,
+    Map<String, String> settings,
+    ColorScheme palette,
+    Function updatePage,
+    String rawText,
+    BuildContext context) {
   return GestureDetector(
     behavior: HitTestBehavior.translucent,
     onTap: () {
@@ -367,7 +373,7 @@ class _SettingsPageState extends State<SettingsPage> {
             child: ErrorWidget(snapshot.error!),
           );
         }
-        _locale = snapshot.data?[0]['Language'];
+        _locale = snapshot.data?[0]['Language'] as String;
         //this is needed so flutter wont complain about setstate during build
         WidgetsBinding.instance.addPostFrameCallback((_) {
           colornotify.value = snapshot.data?[1];

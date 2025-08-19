@@ -25,7 +25,7 @@ import 'package:overmorrow/hourly.dart';
 import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
 
-Widget dayStat(WeatherData data, IconData icon, number, addon,
+Widget dayStat(WeatherData data, IconData icon, number, String addon,
     {bool addWind = false, windDir = 0, iconSize = 16.0}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -230,9 +230,11 @@ Widget dailyCollapsed(WeatherData data, var day, ColorScheme palette, int index,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                comfortatext(day.name.split(', ')[0], 19, data.settings,
+                comfortatext(
+                    day.name.split(', ')[0] as String, 19, data.settings,
                     color: palette.secondary),
-                comfortatext(day.name.split(', ')[1], 12, data.settings,
+                comfortatext(
+                    day.name.split(', ')[1] as String, 12, data.settings,
                     color: palette.outline, weight: FontWeight.w500),
               ],
             ),
@@ -383,9 +385,9 @@ Widget dailyExpanded(var day, WeatherData data, ColorScheme palette,
             children: [
               dayStat(data, Icons.umbrella_rounded, day.precip_prob, '%'),
               dayStat(data, Icons.water_drop_outlined, day.total_precip,
-                  data.settings['Precipitation'],
+                  data.settings['Precipitation']!,
                   iconSize: 16.5),
-              dayStat(data, Icons.air, day.windspeed, data.settings['Wind'],
+              dayStat(data, Icons.air, day.windspeed, data.settings['Wind']!,
                   addWind: true, windDir: day.wind_dir),
               dayStat(data, Icons.wb_sunny_outlined, day.uv, 'uv'),
             ],

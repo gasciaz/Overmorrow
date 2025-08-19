@@ -61,19 +61,21 @@ class ImageService {
     final file = await XCustomCacheManager.fetchData(
         url.toString(), '$condition $loc unsplash');
     final response2 = await file[0].readAsString();
-    final unsplashBody = jsonDecode(response2);
+    final unsplashBody = jsonDecode(response2 as String);
 
-    final String imagePath = unsplashBody[0]['urls']['raw'] + '&w=1500';
+    final String imagePath =
+        unsplashBody[0]['urls']['raw'] + '&w=1500' as String;
     final image = Image(
         image: CachedNetworkImageProvider(imagePath),
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity);
 
-    final String userLink = (unsplashBody[0]['user']['links']['html']) ?? '';
-    final String userName = unsplashBody[0]['user']['name'] ?? '';
+    final String userLink =
+        (unsplashBody[0]['user']['links']['html']) as String? ?? '';
+    final String userName = unsplashBody[0]['user']['name'] as String? ?? '';
 
-    final String photoLink = unsplashBody[0]['links']['html'] ?? '';
+    final String photoLink = unsplashBody[0]['links']['html'] as String? ?? '';
 
     return ImageService(
         image: image,

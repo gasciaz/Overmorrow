@@ -58,7 +58,7 @@ class _RadarSmallState extends State<RadarSmall> {
 
     currentFrameIndex = data.radar.starting_index * 1.0;
 
-    final precivedHour = int.parse(data.localtime.split(':')[0]);
+    final precivedHour = int.parse(data.localtime.split(':')[0] as String);
     final int real = data.radar.real_hour;
 
     final offset = precivedHour - real;
@@ -399,7 +399,7 @@ class _RadarBigState extends State<RadarBig> {
 
     currentFrameIndex = data.radar.starting_index * 1.0;
 
-    final precivedHour = int.parse(data.localtime.split(':')[0]);
+    final precivedHour = int.parse(data.localtime.split(':')[0] as String);
     final int real = data.radar.real_hour;
 
     final offset = precivedHour - real;

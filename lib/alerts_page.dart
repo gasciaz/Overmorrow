@@ -23,7 +23,8 @@ import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/new_displays.dart';
 import 'package:overmorrow/ui_helper.dart';
 
-Widget alertBadge(name, text, WeatherData data, ColorScheme palette) {
+Widget alertBadge(
+    String name, String text, WeatherData data, ColorScheme palette) {
   return Padding(
     padding: const EdgeInsets.only(right: 3, top: 3, bottom: 3),
     child: Row(
@@ -106,7 +107,7 @@ class _AlertsPageState extends State<AlertsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      comfortatext(alert.event, 23, data.settings,
+                      comfortatext(alert.event as String, 23, data.settings,
                           color: palette.primary),
                       Padding(
                         padding: const EdgeInsets.only(top: 25, left: 3),

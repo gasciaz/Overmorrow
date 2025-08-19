@@ -558,12 +558,12 @@ Widget buildRecommend(
     Function updateLocation,
     void Function(List<String>) onFavChanged,
     bool isEditing,
-    locationState,
-    locationMessage,
+    String locationState,
+    String locationMessage,
     VoidCallback askGrantLocationPermission,
     String placeName,
-    country,
-    region,
+    String country,
+    String region,
     bool isTabletMode) {
   return ValueListenableBuilder(
       valueListenable: favoritesListen,
@@ -707,9 +707,10 @@ Widget buildSearchResults(
                     child: Column(
                         children: List.generate(rec.length, (index) {
                       final split = json.decode(rec[index]);
-                      final String name = split['name'];
-                      final country = generateAbbreviation(split['country']);
-                      final String region = split['region'];
+                      final String name = split['name'] as String;
+                      final country =
+                          generateAbbreviation(split['country'] as String);
+                      final String region = split['region'] as String;
                       final simplifier = generateSimplifier(split);
 
                       final contained = favoriteNarrow.contains(simplifier);
@@ -771,8 +772,8 @@ Widget buildSearchResults(
 
 Widget CurrentLocationWidget(
     Map<String, String> settings,
-    locationState,
-    locationMessage,
+    String locationState,
+    String locationMessage,
     ColorScheme palette,
     VoidCallback askGrantLocationPermission,
     String placeName,
@@ -919,9 +920,9 @@ Widget buildFavorites(
         child: Column(
             children: List.generate(favorites.length, (index) {
           final split = json.decode(favorites[index]);
-          final String name = split['name'];
-          final country = generateAbbreviation(split['country']);
-          final String region = split['region'];
+          final String name = split['name'] as String;
+          final country = generateAbbreviation(split['country'] as String);
+          final String region = split['region'] as String;
           return GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
@@ -1005,9 +1006,9 @@ Widget reorderableItem(
     void Function(List<String>) onFavChanged,
     bool isTabletMode) {
   final split = json.decode(items[index]);
-  final String name = split['name'];
+  final String name = split['name'] as String;
   final country = generateAbbreviation(split['country']);
-  final String region = split['region'];
+  final String region = split['region'] as String;
   return ColoredBox(
     key: Key('$name, $country, $region'),
     color: isTabletMode

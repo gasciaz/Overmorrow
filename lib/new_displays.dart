@@ -154,7 +154,7 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
               style: GoogleFonts.outfit(
                   fontSize: 15.0 *
                       1.1 *
-                      getFontSize(widget.data.settings['Font size']),
+                      getFontSize(widget.data.settings['Font size'] as String),
                   fontWeight: FontWeight.w300),
             ),
             textDirection: TextDirection.ltr);
@@ -223,12 +223,12 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
                         size: 14,
                       ),
                     ),
-                    comfortatext(
-                        widget.data.sunstatus.sunrise, 15, widget.data.settings,
+                    comfortatext(widget.data.sunstatus.sunrise as String, 15,
+                        widget.data.settings,
                         color: palette.secondary),
                     const Spacer(),
-                    comfortatext(
-                        widget.data.sunstatus.sunset, 15, widget.data.settings,
+                    comfortatext(widget.data.sunstatus.sunset as String, 15,
+                        widget.data.settings,
                         color: palette.outline),
                     Padding(
                       padding: const EdgeInsets.only(left: 4, top: 1),
@@ -446,7 +446,8 @@ Widget rain15MinuteChart(
                   19,
                   data.settings,
                   color: palette.primary),
-              comfortatext(data.settings['Precipitation'], 16, data.settings,
+              comfortatext(
+                  data.settings['Precipitation'] as String, 16, data.settings,
                   color: palette.primary),
               Expanded(
                 child: Padding(

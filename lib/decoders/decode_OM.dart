@@ -182,7 +182,7 @@ Future<List<dynamic>> OMRequestData(
       oMUrl.toString(), '$realLoc, open-meteo');
 
   final oMResponse = await oMFile[0].readAsString();
-  final OMData = jsonDecode(oMResponse);
+  final OMData = jsonDecode(oMResponse as String);
 
   final DateTime fetchDatetime = await oMFile[0].lastModified();
   final bool isonline = oMFile[1];
@@ -192,7 +192,7 @@ Future<List<dynamic>> OMRequestData(
 
 String oMGetName(
     int index, settings, item, dayDif, AppLocalizations localizations) {
-  final String x = item['daily']['time'][index].split('T')[0];
+  final String x = item['daily']['time'][index].split('T')[0] as String;
   final z = x.split('-');
   final time = DateTime(int.parse(z[0]), int.parse(z[1]), int.parse(z[2]));
   final weeks = <String>[
@@ -237,7 +237,8 @@ String oMTextCorrection(int code) {
 }
 
 String oMCurrentTextCorrection(int code, absoluteSunriseSunset, time) {
-  final String t = time.contains('T') ? time.split('T')[1] : time.split(' ')[1];
+  final String t =
+      (time.contains('T') ? time.split('T')[1] : time.split(' ')[1]) as String;
   final minute = int.parse(t.split(':')[1]);
   final hour = int.parse(t.split(':')[0]);
 
@@ -341,7 +342,7 @@ class OMCurrent {
     final imageService =
         await ImageService.getImageService(currentCondition, realLoc, settings);
     final colorPalette = await ColorPalette.getColorPalette(
-        imageService.image, settings['Color mode'], settings);
+        imageService.image, settings['Color mode'] as String, settings);
 
     return OMCurrent(
       imageService: imageService,
@@ -351,12 +352,12 @@ class OMCurrent {
       debugColors: colorPalette.imageColors,
       text: conditionTranslation(currentCondition, context) ?? 'TranslationErr',
       uv: item['daily']['uv_index_max'][dayDif].round(),
-      feels_like: unit_coversion(
-              item['current']['apparent_temperature'], settings['Temperature'])
+      feels_like: unit_coversion(item['current']['apparent_temperature'],
+              settings['Temperature'] as String)
           .round(),
       precip: double.parse(unit_coversion(
               item['daily']['precipitation_sum'][dayDif],
-              settings['Precipitation'])
+              settings['Precipitation'] as String)
           .toStringAsFixed(1)),
       wind: unit_coversion(
               item['hourly']['wind_speed_10m'][start], settings['Wind'])

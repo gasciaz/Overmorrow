@@ -170,7 +170,7 @@ class ThreeQuarterCirclePainter extends CustomPainter {
 }
 
 Widget pollutantWidget(
-    WeatherData data, name, value, percent, ColorScheme palette) {
+    WeatherData data, String name, value, percent, ColorScheme palette) {
   return Padding(
     padding: const EdgeInsets.all(14),
     child: Column(
@@ -444,7 +444,8 @@ Widget aqiCircleAndDesc(WeatherData data, ColorScheme palette) {
                           data.aqi.aqi_index.toString(), 75, data.settings,
                           color: palette.secondary, weight: FontWeight.w200),
                     ),
-                    comfortatext(data.aqi.aqi_title, 23, data.settings,
+                    comfortatext(
+                        data.aqi.aqi_title as String, 23, data.settings,
                         color: palette.secondary),
                   ],
                 ),
@@ -455,7 +456,7 @@ Widget aqiCircleAndDesc(WeatherData data, ColorScheme palette) {
       ),
       Padding(
         padding: const EdgeInsets.only(bottom: 30, left: 30, right: 30),
-        child: comfortatext(data.aqi.aqi_desc, 17, data.settings,
+        child: comfortatext(data.aqi.aqi_desc as String, 17, data.settings,
             color: palette.outline, align: TextAlign.center),
       ),
     ],
@@ -962,7 +963,7 @@ class AQIGraphPainter extends CustomPainter {
   }
 }
 
-Widget HourlyQqi(WeatherData data, hourValues, name, extendedAqi,
+Widget HourlyQqi(WeatherData data, hourValues, String name, extendedAqi,
     BuildContext context, ColorScheme palette) {
   const chartTypes = <List<int>>[
     [0, 2, 4, 6, 8, 10],
