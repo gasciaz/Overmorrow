@@ -24,8 +24,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:overmorrow/api_key.dart';
 import 'package:overmorrow/core/core.dart';
-import 'package:overmorrow/decoders/decode_OM.dart';
-import 'package:overmorrow/decoders/decode_RV.dart';
 import 'package:overmorrow/weather_refact.dart' as weather_refactor;
 import 'package:overmorrow/weather_refact.dart';
 
@@ -265,7 +263,7 @@ String getDateStringFromLocalTime(DateTime now) {
   return '${weekNames[now.weekday - 1]}, ${monthNames[now.month - 1]} ${now.day}';
 }
 
-String backdropCorrection(
+String wapiBackdropCorrection(
   String name,
   int isday,
   AppLocalizations localizations,
