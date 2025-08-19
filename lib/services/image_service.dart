@@ -106,7 +106,7 @@ class ImageService {
   }
 
   static Future<ImageService> getImageService(
-      String condition, String loc, settings) async {
+      String condition, String loc, Map<String, String> settings) async {
     if (settings['Image source'] == 'network') {
       try {
         //ImageService i = await getUnsplashImage(condition, loc);

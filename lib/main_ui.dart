@@ -451,10 +451,8 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
                   minimumSize: const Size(0, 22),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                child: comfortatext(
-                    widget.data.current.imageService.username as String,
-                    13,
-                    widget.data.settings,
+                child: comfortatext(widget.data.current.imageService.username,
+                    13, widget.data.settings,
                     color: text,
                     decoration: TextDecoration.underline,
                     weight: FontWeight.w300),

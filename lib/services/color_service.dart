@@ -212,7 +212,7 @@ class ColorPalette {
   }
 
   static Future<ColorPalette> getColorPalette(
-      Image image, String theme, settings) async {
+      Image image, String theme, Map<String, String> settings) async {
     final colorList = await ImageColorList.getImageColorList(image);
     final regionColors = colorList.regionColors;
     final imageColors = colorList.imageColors;
@@ -298,7 +298,8 @@ class ColorPalette {
     return palette;
   }
 
-  static ColorScheme getCustomColorPalette(String theme, settings) {
+  static ColorScheme getCustomColorPalette(
+      String theme, Map<String, String> settings) {
     final mainColor =
         Color(getColorFromHex(settings['Custom color'] as String));
 

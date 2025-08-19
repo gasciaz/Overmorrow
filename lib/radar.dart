@@ -58,7 +58,7 @@ class _RadarSmallState extends State<RadarSmall> {
 
     currentFrameIndex = data.radar.starting_index * 1.0;
 
-    final precivedHour = int.parse(data.localtime.split(':')[0] as String);
+    final precivedHour = int.parse(data.localtime.split(':')[0]);
     final int real = data.radar.real_hour;
 
     final offset = precivedHour - real;
@@ -357,7 +357,7 @@ class _RadarSmallState extends State<RadarSmall> {
 class RadarBig extends StatefulWidget {
   final WeatherData data;
 
-  const RadarBig({super.key, this.data});
+  const RadarBig({super.key, required this.data});
 
   @override
   _RadarBigState createState() => _RadarBigState(data: data);
@@ -399,7 +399,7 @@ class _RadarBigState extends State<RadarBig> {
 
     currentFrameIndex = data.radar.starting_index * 1.0;
 
-    final precivedHour = int.parse(data.localtime.split(':')[0] as String);
+    final precivedHour = int.parse(data.localtime.split(':')[0]);
     final int real = data.radar.real_hour;
 
     final offset = precivedHour - real;

@@ -195,8 +195,8 @@ Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
         ),
       ),
       style: GoogleFonts.comfortaa(
-        color: textcolor,
-        fontSize: 19 * getFontSize(settings['Font size'] as String),
+        color: textcolor as Color?,
+        fontSize: 19 * getFontSize(settings['Font size']!),
         fontWeight: FontWeight.w300,
       ),
       alignment: Alignment.centerRight,
@@ -376,7 +376,7 @@ class _SettingsPageState extends State<SettingsPage> {
         _locale = snapshot.data?[0]['Language'] as String;
         //this is needed so flutter wont complain about setstate during build
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          colornotify.value = snapshot.data?[1];
+          colornotify.value = snapshot.data?[1] as ColorPalette;
         });
         return Localizations.override(
           context: context,
@@ -386,7 +386,7 @@ class _SettingsPageState extends State<SettingsPage> {
             updatePage: updatePage,
             goBack: goBack,
             image: image,
-            palette: snapshot.data?[1].palette,
+            palette: snapshot.data?[1].palette as ColorScheme,
             colornotify: colornotify,
           ),
         );
@@ -437,7 +437,7 @@ class SettingsMain extends StatelessWidget {
           // Just some content big enough to have something to scroll.
           SliverToBoxAdapter(
             child: NewSettings(
-                settings!, updatePage, image, palette, context, colornotify),
+                settings, updatePage, image, palette, context, colornotify),
           ),
         ],
       ),

@@ -92,8 +92,8 @@ int metNcalculateFeelsLike(double t, double r, double v) {
   }
 }
 
-String metNGetName(
-    int index, settings, item, start, hourDif, AppLocalizations localizations) {
+String metNGetName(int index, Map<String, String> settings, item, int start,
+    hourDif, AppLocalizations localizations) {
   final String x =
       item['properties']['timeseries'][start]['time'].split('T')[0] as String;
   final String hour = item['properties']['timeseries'][start]['time']
@@ -228,8 +228,13 @@ class MetNCurrent extends AbstractCurrent {
     required super.descColor,
   });
 
-  static Future<MetNCurrent> fromJson(item, settings, String realLoc,
-      double lat, double lng, AppLocalizations localizations) async {
+  static Future<MetNCurrent> fromJson(
+      item,
+      Map<String, String> settings,
+      String realLoc,
+      double lat,
+      double lng,
+      AppLocalizations localizations) async {
     final currentCondition = metNTextCorrection(
         item['properties']['timeseries'][0]['data']['next_1_hours']['summary']
             ['symbol_code'],
@@ -290,8 +295,8 @@ class MetNDay extends AbstractDay {
     required super.wind_dir,
   });
 
-  static MetNDay fromJson(item, settings, start, end, int index, hourDif,
-      AppLocalizations localizations) {
+  static MetNDay fromJson(item, Map<String, String> settings, int start,
+      int end, int index, hourDif, AppLocalizations localizations) {
     final temperatures = <int>[];
     final rawTemps = <double>[];
     final windspeeds = <double>[];
@@ -388,8 +393,8 @@ class MetNHour extends AbstractHour {
     required super.rawText,
   });
 
-  static MetNHour fromJson(
-      item, settings, hourDif, AppLocalizations localizations) {
+  static MetNHour fromJson(item, Map<String, String> settings, hourDif,
+      AppLocalizations localizations) {
     final nextHours =
         item['data']['next_1_hours'] ?? item['data']['next_6_hours'];
 
@@ -438,8 +443,14 @@ class MetNSunstatus extends AbstractSunstatus {
     required super.absoluteSunriseSunset,
   });
 
-  static Future<MetNSunstatus> fromJson(item, settings, double lat, double lng,
-      int dif, DateTime timeThere, DateTime fetchDate) async {
+  static Future<MetNSunstatus> fromJson(
+      item,
+      Map<String, String> settings,
+      double lat,
+      double lng,
+      int dif,
+      DateTime timeThere,
+      DateTime fetchDate) async {
     final MnParams = {
       'lat': lat.toString(),
       'lon': lng.toString(),
@@ -507,7 +518,7 @@ class MetN15MinutePrecip extends Abstract15MinPrecip {
   });
 
   static MetN15MinutePrecip fromJson(
-      item, settings, AppLocalizations localizations) {
+      item, Map<String, String> settings, AppLocalizations localizations) {
     var closest = 100;
     var end = -1;
     double sum = 0;
@@ -695,7 +706,10 @@ Future<dynamic> metNGetLightResponse(
 }
 
 Future<LightCurrentWeatherData> metNGetLightCurrentData(
-    settings, String placeName, double lat, double lon) async {
+    Map<String, String> settings,
+    String placeName,
+    double lat,
+    double lon) async {
   final item = await metNGetLightResponse(settings, placeName, lat, lon);
 
   final now = DateTime.now();
@@ -717,8 +731,8 @@ Future<LightCurrentWeatherData> metNGetLightCurrentData(
   );
 }
 
-Future<LightWindData> metNGetLightWindData(
-    settings, String placeName, double lat, double lon) async {
+Future<LightWindData> metNGetLightWindData(Map<String, String> settings,
+    String placeName, double lat, double lon) async {
   final item = await metNGetLightResponse(settings, placeName, lat, lon);
 
   return LightWindData(
@@ -736,7 +750,10 @@ Future<LightWindData> metNGetLightWindData(
 }
 
 Future<LightHourlyForecastData> metNGetLightHourlyData(
-    settings, String placeName, double lat, double lon) async {
+    Map<String, String> settings,
+    String placeName,
+    double lat,
+    double lon) async {
   final item = await metNGetLightResponse(settings, placeName, lat, lon);
 
   final hourlyConditions = <String>[];

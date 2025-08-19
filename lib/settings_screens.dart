@@ -370,7 +370,7 @@ class AppearanceSelector extends StatelessWidget {
                           ],
                         ),
                         SegmentedButton(
-                          selected: <String>{settings['Color mode']},
+                          selected: <String>{settings['Color mode']!},
                           onSelectionChanged: (Set<String> newSelection) {
                             HapticFeedback.mediumImpact();
                             updatePage('Color mode', newSelection.first);
@@ -485,7 +485,7 @@ class AppearanceSelector extends StatelessWidget {
 class UnitsPage extends StatefulWidget {
   final Map<String, String> settings;
   final Image image;
-  final palette;
+  final ColorScheme palette;
   final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
@@ -605,7 +605,7 @@ class _UnitsPageState extends State<UnitsPage> {
 class GeneralSettingsPage extends StatefulWidget {
   final Map<String, String> settings;
   final Image image;
-  final palette;
+  final ColorScheme palette;
   final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
@@ -747,7 +747,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
 class LangaugePage extends StatefulWidget {
   final Map<String, String> settings;
   final Image image;
-  final palette;
+  final ColorScheme palette;
   final void Function(String, String) updateMainPage;
 
   const LangaugePage(
@@ -996,7 +996,7 @@ class _LayoutPageState extends State<LayoutPage> {
   @override
   void initState() {
     super.initState();
-    _items = settings['Layout'] == '' ? [] : settings['Layout'].split(',');
+    _items = settings['Layout'] == '' ? [] : settings['Layout']!.split(',');
 
     for (var i = 0; i < allNames.length; i++) {
       if (!_items.contains(allNames[i])) {

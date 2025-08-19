@@ -107,7 +107,7 @@ class _AlertsPageState extends State<AlertsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      comfortatext(alert.event as String, 23, data.settings,
+                      comfortatext(alert.event, 23, data.settings,
                           color: palette.primary),
                       Padding(
                         padding: const EdgeInsets.only(top: 25, left: 3),

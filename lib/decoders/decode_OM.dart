@@ -65,9 +65,9 @@ String OmAqiTitle(int index, AppLocalizations localizations) {
   ][index - 1];
 }
 
-List<double> omGetMaxMinTempForDaily(days) {
+List<double> omGetMaxMinTempForDaily(List<AbstractDay> days) {
   double minTemp = 100;
-  var maxTemp = -100;
+  var maxTemp = -100.0;
   for (var i = 0; i < days.length; i++) {
     if (days[i].rawMinTemp < minTemp) {
       minTemp = days[i].rawMinTemp;
@@ -196,8 +196,8 @@ Future<List<dynamic>> OMRequestData(
   return [OMData, fetchDatetime, isonline];
 }
 
-String oMGetName(
-    int index, settings, item, dayDif, AppLocalizations localizations) {
+String oMGetName(int index, Map<String, String> settings, item, dayDif,
+    AppLocalizations localizations) {
   final String x = item['daily']['time'][index].split('T')[0] as String;
   final z = x.split('-');
   final time = DateTime(int.parse(z[0]), int.parse(z[1]), int.parse(z[2]));
@@ -304,13 +304,13 @@ class OMCurrent extends AbstractCurrent {
 
   static Future<OMCurrent> fromJson(
       item,
-      settings,
-      sunstatus,
+      Map<String, String> settings,
+      AbstractSunstatus sunstatus,
       timenow,
       String realLoc,
       double lat,
       double lng,
-      start,
+      int start,
       dayDif,
       AppLocalizations context,
       bool isonline) async {
@@ -380,8 +380,14 @@ class OMDay extends AbstractDay {
     required super.wind_dir,
   });
 
-  static OMDay? build(item, settings, int index, sunstatus, approximatelocal,
-      dayDif, AppLocalizations localizations) {
+  static OMDay? build(
+      item,
+      Map<String, String> settings,
+      int index,
+      AbstractSunstatus sunstatus,
+      DateTime approximatelocal,
+      dayDif,
+      AppLocalizations localizations) {
     final hours = buildHours(index, true, item, settings, sunstatus,
         approximatelocal, localizations);
 
@@ -421,8 +427,14 @@ class OMDay extends AbstractDay {
     return null;
   }
 
-  static List<OMHour> buildHours(index, bool getRidFirst, item, settings,
-      sunstatus, approximatelocal, AppLocalizations localizations) {
+  static List<OMHour> buildHours(
+      int index,
+      bool getRidFirst,
+      item,
+      Map<String, String> settings,
+      AbstractSunstatus sunstatus,
+      DateTime approximatelocal,
+      AppLocalizations localizations) {
     final hourly = <OMHour>[];
 
     final int l = item['hourly']['weather_code'].length;
@@ -447,8 +459,8 @@ class OM15MinutePrecip extends Abstract15MinPrecip {
     required super.precips,
   });
 
-  static OM15MinutePrecip fromJson(
-      item, settings, minuteOffset, AppLocalizations localizations) {
+  static OM15MinutePrecip fromJson(item, Map<String, String> settings,
+      minuteOffset, AppLocalizations localizations) {
     var closest = 100;
     var end = -1;
     double sum = 0;
@@ -532,8 +544,8 @@ class OMHour extends AbstractHour {
     required super.rawText,
   });
 
-  static OMHour fromJson(
-          item, index, settings, sunstatus, AppLocalizations localizations) =>
+  static OMHour fromJson(item, int index, Map<String, String> settings,
+          AbstractSunstatus sunstatus, AppLocalizations localizations) =>
       OMHour(
         temp: unit_coversion(item['hourly']['temperature_2m'][index],
                 settings['Temperature'])
@@ -568,6 +580,7 @@ class OMHour extends AbstractHour {
         raw_precip: item['hourly']['precipitation'][index],
         raw_temp: item['hourly']['temperature_2m'][index],
         raw_wind: item['hourly']['wind_speed_10m'][index],
+        rawText: '',
       );
 }
 
@@ -579,16 +592,18 @@ class OMSunstatus extends AbstractSunstatus {
     required super.absoluteSunriseSunset,
   });
 
-  static OMSunstatus fromJson(item, settings) => OMSunstatus(
-      sunrise: settings['Time mode'] == '24 hour'
-          ? OMConvertTime(item['daily']['sunrise'][0])
-          : OMamPmTime(item['daily']['sunrise'][0]),
-      sunset: settings['Time mode'] == '24 hour'
-          ? OMConvertTime(item['daily']['sunset'][0])
-          : OMamPmTime(item['daily']['sunset'][0]),
-      absoluteSunriseSunset: "${OMConvertTime(item["daily"]["sunrise"][0])}/"
-          "${OMConvertTime(item["daily"]["sunset"][0])}",
-      sunstatus: OMGetSunStatus(item));
+  static OMSunstatus fromJson(item, Map<String, String> settings) =>
+      OMSunstatus(
+          sunrise: settings['Time mode'] == '24 hour'
+              ? OMConvertTime(item['daily']['sunrise'][0])
+              : OMamPmTime(item['daily']['sunrise'][0]),
+          sunset: settings['Time mode'] == '24 hour'
+              ? OMConvertTime(item['daily']['sunset'][0])
+              : OMamPmTime(item['daily']['sunset'][0]),
+          absoluteSunriseSunset:
+              "${OMConvertTime(item["daily"]["sunrise"][0])}/"
+              "${OMConvertTime(item["daily"]["sunset"][0])}",
+          sunstatus: OMGetSunStatus(item));
 }
 
 class OMAqi extends AbstractAqi {
@@ -1064,7 +1079,10 @@ Future<WeatherData> OMGetWeatherData(
 }
 
 Future<LightCurrentWeatherData> omGetLightCurrentData(
-    settings, String placeName, double lat, double lon) async {
+    Map<String, String> settings,
+    String placeName,
+    double lat,
+    double lon) async {
   final oMParams = {
     'latitude': lat.toString(),
     'longitude': lon.toString(),
@@ -1099,7 +1117,7 @@ Future<LightCurrentWeatherData> omGetLightCurrentData(
 }
 
 Future<LightWindData> omGetLightWindData(
-    settings, double lat, double lon) async {
+    Map<String, String> settings, double lat, double lon) async {
   final oMParams = {
     'latitude': lat.toString(),
     'longitude': lon.toString(),
@@ -1120,7 +1138,10 @@ Future<LightWindData> omGetLightWindData(
 }
 
 Future<LightHourlyForecastData> omGetHourlyForecast(
-    settings, String placeName, double lat, double lon) async {
+    Map<String, String> settings,
+    String placeName,
+    double lat,
+    double lon) async {
   final oMParams = {
     'latitude': lat.toString(),
     'longitude': lon.toString(),

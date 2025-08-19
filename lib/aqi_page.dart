@@ -170,7 +170,7 @@ class ThreeQuarterCirclePainter extends CustomPainter {
 }
 
 Widget pollutantWidget(
-    WeatherData data, String name, value, percent, ColorScheme palette) {
+    WeatherData data, String name, value, double percent, ColorScheme palette) {
   return Padding(
     padding: const EdgeInsets.all(14),
     child: Column(
@@ -444,8 +444,7 @@ Widget aqiCircleAndDesc(WeatherData data, ColorScheme palette) {
                           data.aqi.aqi_index.toString(), 75, data.settings,
                           color: palette.secondary, weight: FontWeight.w200),
                     ),
-                    comfortatext(
-                        data.aqi.aqi_title as String, 23, data.settings,
+                    comfortatext(data.aqi.aqi_title, 23, data.settings,
                         color: palette.secondary),
                   ],
                 ),
@@ -456,15 +455,15 @@ Widget aqiCircleAndDesc(WeatherData data, ColorScheme palette) {
       ),
       Padding(
         padding: const EdgeInsets.only(bottom: 30, left: 30, right: 30),
-        child: comfortatext(data.aqi.aqi_desc as String, 17, data.settings,
+        child: comfortatext(data.aqi.aqi_desc, 17, data.settings,
             color: palette.outline, align: TextAlign.center),
       ),
     ],
   );
 }
 
-Widget mainPollutantIndicator(
-    WeatherData data, extendedAqi, ColorScheme palette, BuildContext context) {
+Widget mainPollutantIndicator(WeatherData data, OMExtendedAqi extendedAqi,
+    ColorScheme palette, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(top: 25, bottom: 3),
     child: Container(
@@ -488,8 +487,8 @@ Widget mainPollutantIndicator(
   );
 }
 
-Widget pollenIndicators(
-    WeatherData data, extendedAqi, ColorScheme palette, BuildContext context) {
+Widget pollenIndicators(WeatherData data, OMExtendedAqi extendedAqi,
+    ColorScheme palette, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(top: 10, bottom: 10),
     child: Container(
@@ -542,7 +541,8 @@ Widget pollenIndicators(
   );
 }
 
-Widget pollutantIndicators(WeatherData data, extendedAqi, ColorScheme palette) {
+Widget pollutantIndicators(
+    WeatherData data, OMExtendedAqi extendedAqi, ColorScheme palette) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 3, top: 40),
     child: Container(
@@ -576,8 +576,8 @@ Widget pollutantIndicators(WeatherData data, extendedAqi, ColorScheme palette) {
   );
 }
 
-Widget europeanAndUsAqi(
-    WeatherData data, extendedAqi, ColorScheme palette, BuildContext context) {
+Widget europeanAndUsAqi(WeatherData data, OMExtendedAqi extendedAqi,
+    ColorScheme palette, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(top: 10),
     child: Row(
@@ -645,8 +645,8 @@ Widget europeanAndUsAqi(
   );
 }
 
-Widget dailyAqi(WeatherData data, extendedAqi, ColorScheme palette,
-    BuildContext context, highestAqi) {
+Widget dailyAqi(WeatherData data, OMExtendedAqi extendedAqi,
+    ColorScheme palette, BuildContext context, int highestAqi) {
   return Column(
     children: [
       Padding(
@@ -713,8 +713,8 @@ Widget dailyAqi(WeatherData data, extendedAqi, ColorScheme palette,
   );
 }
 
-Widget dustAndAODIndicators(
-    WeatherData data, extendedAqi, ColorScheme palette, BuildContext context) {
+Widget dustAndAODIndicators(WeatherData data, OMExtendedAqi extendedAqi,
+    ColorScheme palette, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(top: 10),
     child: Row(
@@ -808,7 +808,7 @@ Widget dustAndAODIndicators(
 
 class NewHourlyAqi extends StatefulWidget {
   final WeatherData data;
-  final extendedAqi;
+  final OMExtendedAqi extendedAqi;
 
   const NewHourlyAqi(
       {super.key, required this.data, required this.extendedAqi});
@@ -820,7 +820,7 @@ class NewHourlyAqi extends StatefulWidget {
 class _NewHourlyAqiState extends State<NewHourlyAqi>
     with AutomaticKeepAliveClientMixin {
   final WeatherData data;
-  final extendedAqi;
+  final OMExtendedAqi extendedAqi;
   int _value = 0;
 
   PageController _pageController = PageController();
@@ -963,8 +963,8 @@ class AQIGraphPainter extends CustomPainter {
   }
 }
 
-Widget HourlyQqi(WeatherData data, hourValues, String name, extendedAqi,
-    BuildContext context, ColorScheme palette) {
+Widget HourlyQqi(WeatherData data, hourValues, String name,
+    OMExtendedAqi extendedAqi, BuildContext context, ColorScheme palette) {
   const chartTypes = <List<int>>[
     [0, 2, 4, 6, 8, 10],
     [0, 5, 10, 15, 20, 25],

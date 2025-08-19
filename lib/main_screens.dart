@@ -145,8 +145,9 @@ class _NewMainState extends State<NewMain> {
       'air quality': aqiWidget(data, data.current.palette, context, false)
     };
 
-    final List<String> order =
-        data.settings['Layout'] == '' ? [] : data.settings['Layout'].split(',');
+    final List<String> order = data.settings['Layout'] == ''
+        ? []
+        : data.settings['Layout']!.split(',');
     var orderedWidgets = <Widget>[];
     if (order.isNotEmpty && order[0] != '') {
       orderedWidgets = order.map((name) => widgetsMap[name]!).toList();
@@ -191,8 +192,7 @@ class _NewMainState extends State<NewMain> {
                         color: data.current.colorPop,
                         weight: FontWeight.w200,
                       ),
-                      comfortatext(
-                          data.current.text as String, 33, data.settings,
+                      comfortatext(data.current.text, 33, data.settings,
                           color: data.current.descColor)
                     ],
                   ),

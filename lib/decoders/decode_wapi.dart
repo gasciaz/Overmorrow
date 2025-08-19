@@ -194,7 +194,7 @@ IconData iconCorrection(String name, isday, AppLocalizations localizations) {
 String getTime(date, bool ampm) {
   if (ampm) {
     final realtime = date.split(' ')[1] as String;
-    final realhour = realtime.split(':')[0] as String;
+    final realhour = realtime.split(':')[0];
     final num = int.parse(realhour);
     if (num == 0) {
       return '12am';
@@ -213,7 +213,8 @@ String getTime(date, bool ampm) {
   }
 }
 
-String wapiGetName(int index, settings, AppLocalizations localizations, item) {
+String wapiGetName(int index, Map<String, String> settings,
+    AppLocalizations localizations, item) {
   final time = DateTime.parse(item['date']);
   final weeks = <String>[
     localizations.mon,
@@ -304,8 +305,14 @@ class WapiCurrent extends AbstractCurrent {
     required super.descColor,
   });
 
-  static Future<WapiCurrent> fromJson(item, settings, String realLoc,
-      double lat, double lng, start, AppLocalizations localizations) async {
+  static Future<WapiCurrent> fromJson(
+      item,
+      Map<String, String> settings,
+      String realLoc,
+      double lat,
+      double lng,
+      int start,
+      AppLocalizations localizations) async {
     final currentCondition = textCorrection(
         item['hour'][start]['condition']['code'],
         item['hour'][start]['is_day'],
@@ -366,7 +373,7 @@ class WapiDay extends AbstractDay {
   });
 
   static WapiDay fromJson(item, int index, Map<String, String> settings,
-          approximatelocal, AppLocalizations localizations) =>
+          DateTime approximatelocal, AppLocalizations localizations) =>
       WapiDay(
           text: textCorrection(
               item['day']['condition']['code'], 1, true, localizations),

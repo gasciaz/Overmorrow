@@ -223,12 +223,12 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
                         size: 14,
                       ),
                     ),
-                    comfortatext(widget.data.sunstatus.sunrise as String, 15,
-                        widget.data.settings,
+                    comfortatext(
+                        widget.data.sunstatus.sunrise, 15, widget.data.settings,
                         color: palette.secondary),
                     const Spacer(),
-                    comfortatext(widget.data.sunstatus.sunset as String, 15,
-                        widget.data.settings,
+                    comfortatext(
+                        widget.data.sunstatus.sunset, 15, widget.data.settings,
                         color: palette.outline),
                     Padding(
                       padding: const EdgeInsets.only(left: 4, top: 1),

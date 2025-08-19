@@ -23,8 +23,8 @@ import 'package:overmorrow/api_key.dart';
 import 'package:overmorrow/caching.dart';
 
 class LocationService {
-  static Future<List<String>> getRecommendation(
-      String query, String? searchProvider, settings) async {
+  static Future<List<String>> getRecommendation(String query,
+      String? searchProvider, Map<String, String> settings) async {
     query = _sanitizeQuery(query);
     if (query == '') {
       return [];

@@ -24,9 +24,10 @@ import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/hourly.dart';
 import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
+import 'package:overmorrow/weather/abstract_day.dart';
 
 Widget dayStat(WeatherData data, IconData icon, number, String addon,
-    {bool addWind = false, windDir = 0, iconSize = 16.0}) {
+    {bool addWind = false, int windDir = 0, double iconSize = 16.0}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
@@ -207,8 +208,8 @@ class _buildDaysState extends State<buildDays>
   }
 }
 
-Widget dailyCollapsed(WeatherData data, var day, ColorScheme palette, int index,
-    int daysToShow, void Function(int) onExpandTapped) {
+Widget dailyCollapsed(WeatherData data, AbstractDay day, ColorScheme palette,
+    int index, int daysToShow, void Function(int) onExpandTapped) {
   return GestureDetector(
     behavior: HitTestBehavior.translucent,
     onTap: () {
@@ -230,11 +231,9 @@ Widget dailyCollapsed(WeatherData data, var day, ColorScheme palette, int index,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                comfortatext(
-                    day.name.split(', ')[0] as String, 19, data.settings,
+                comfortatext(day.name.split(', ')[0], 19, data.settings,
                     color: palette.secondary),
-                comfortatext(
-                    day.name.split(', ')[1] as String, 12, data.settings,
+                comfortatext(day.name.split(', ')[1], 12, data.settings,
                     color: palette.outline, weight: FontWeight.w500),
               ],
             ),
@@ -299,7 +298,7 @@ Widget dailyCollapsed(WeatherData data, var day, ColorScheme palette, int index,
   );
 }
 
-Widget dailyExpanded(var day, WeatherData data, ColorScheme palette,
+Widget dailyExpanded(AbstractDay day, WeatherData data, ColorScheme palette,
     void Function(int) onExpandTapped, int index) {
   return Padding(
     padding: const EdgeInsets.only(left: 13, right: 13, bottom: 16),
