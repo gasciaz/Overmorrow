@@ -19,9 +19,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:overmorrow/core/core.dart';
-import 'package:overmorrow/daily.dart';
+import 'package:overmorrow/features/forecast/widgets/daily.dart';
+import 'package:overmorrow/features/forecast/widgets/hourly.dart';
 import 'package:overmorrow/features/radar/radar.dart';
-import 'package:overmorrow/hourly.dart';
 import 'package:overmorrow/main_ui.dart';
 import 'package:stretchy_header/stretchy_header.dart';
 
