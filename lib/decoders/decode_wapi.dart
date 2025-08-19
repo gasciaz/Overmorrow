@@ -519,7 +519,7 @@ class WapiSunstatus {
   });
 
   static WapiSunstatus fromJson(
-          item, Map<String, String> settings, localtime) =>
+          item, Map<String, String> settings, DateTime localtime) =>
       WapiSunstatus(
         sunrise: settings['Time mode'] == '24 hour'
             ? convertTime(

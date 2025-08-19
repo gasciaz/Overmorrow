@@ -33,11 +33,11 @@ class WeatherData {
 
   final String provider;
 
-  final updatedTime;
-  final fetch_datetime;
+  final DateTime updatedTime;
+  final DateTime fetch_datetime;
   final bool isonline;
 
-  final localtime;
+  final String localtime;
 
   final days;
   final hourly72;
