@@ -24,8 +24,8 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:overmorrow/core/core.dart';
+import 'package:overmorrow/features/settings/widgets/settings_screens.dart';
 import 'package:overmorrow/main.dart';
-import 'package:overmorrow/settings_screens.dart';
 import 'package:overmorrow/weather_refact.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
