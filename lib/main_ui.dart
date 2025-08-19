@@ -25,7 +25,6 @@ import 'package:overmorrow/api_key.dart';
 import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/main_screens.dart';
-import 'package:overmorrow/services/color_service.dart';
 import 'package:overmorrow/settings_page.dart';
 import 'package:overmorrow/ui_helper.dart';
 import 'package:stretchy_header/stretchy_header.dart';

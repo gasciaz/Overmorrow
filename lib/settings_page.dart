@@ -25,7 +25,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/main.dart';
-import 'package:overmorrow/services/color_service.dart';
 import 'package:overmorrow/settings_screens.dart';
 import 'package:overmorrow/ui_helper.dart';
 import 'package:overmorrow/weather_refact.dart';

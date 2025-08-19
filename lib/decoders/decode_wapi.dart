@@ -16,7 +16,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -30,8 +29,6 @@ import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/decoders/decode_OM.dart';
 import 'package:overmorrow/decoders/decode_RV.dart';
 import 'package:overmorrow/decoders/weather_data.dart';
-import 'package:overmorrow/services/color_service.dart';
-import 'package:overmorrow/services/image_service.dart';
 import 'package:overmorrow/weather/abstract_15_min_precip.dart';
 import 'package:overmorrow/weather/abstract_aqi.dart';
 import 'package:overmorrow/weather/abstract_current.dart';

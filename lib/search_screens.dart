@@ -28,7 +28,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/main.dart';
-import 'package:overmorrow/services/location_service.dart';
 import 'package:overmorrow/settings_page.dart';
 import 'package:overmorrow/ui_helper.dart';
 

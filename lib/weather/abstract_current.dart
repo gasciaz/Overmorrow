@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:overmorrow/services/image_service.dart';
+import 'package:overmorrow/core/core.dart';
 
 abstract class AbstractCurrent {
   final String text;
