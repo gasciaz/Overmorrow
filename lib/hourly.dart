@@ -21,8 +21,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:overmorrow/core/l10n/app_localizations.dart';
 import 'package:overmorrow/decoders/weather_data.dart';
-import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
 import 'package:overmorrow/weather/abstract_hour.dart';
 
@@ -31,11 +31,12 @@ class NewHourly extends StatefulWidget {
   final List<dynamic> hours;
   final bool elevated;
 
-  const NewHourly(
-      {super.key,
-      required this.data,
-      required this.hours,
-      required this.elevated});
+  const NewHourly({
+    super.key,
+    required this.data,
+    required this.hours,
+    required this.elevated,
+  });
 
   @override
   _NewHourlyState createState() => _NewHourlyState(data, hours, elevated);
@@ -89,22 +90,24 @@ class _NewHourlyState extends State<NewHourly>
                           : palette.surface;
                     }),
                     side: BorderSide(
-                        color: index == _value
-                            ? palette.secondaryContainer
-                            : palette.outlineVariant,
-                        width: 1.6),
+                      color: index == _value
+                          ? palette.secondaryContainer
+                          : palette.outlineVariant,
+                      width: 1.6,
+                    ),
                     label: comfortatext(
-                        [
-                          AppLocalizations.of(context)!.sumLowercase,
-                          AppLocalizations.of(context)!.precipLowercase,
-                          AppLocalizations.of(context)!.windLowercase,
-                          AppLocalizations.of(context)!.uvLowercase,
-                        ][index],
-                        14,
-                        data.settings,
-                        color: _value == index
-                            ? palette.onSecondaryContainer
-                            : palette.onSurface),
+                      [
+                        AppLocalizations.of(context)!.sumLowercase,
+                        AppLocalizations.of(context)!.precipLowercase,
+                        AppLocalizations.of(context)!.windLowercase,
+                        AppLocalizations.of(context)!.uvLowercase,
+                      ][index],
+                      14,
+                      data.settings,
+                      color: _value == index
+                          ? palette.onSecondaryContainer
+                          : palette.onSurface,
+                    ),
                     selected: _value == index,
                     onSelected: (bool selected) {
                       setState(() {
@@ -123,8 +126,13 @@ class _NewHourlyState extends State<NewHourly>
   }
 }
 
-Widget hourBoxes(List<dynamic> hours, WeatherData data, int value,
-    bool elevated, BuildContext context) {
+Widget hourBoxes(
+  List<dynamic> hours,
+  WeatherData data,
+  int value,
+  bool elevated,
+  BuildContext context,
+) {
   final palette = data.current.palette;
 
   return AnimationLimiter(
@@ -156,8 +164,14 @@ Widget hourBoxes(List<dynamic> hours, WeatherData data, int value,
           child: SlideAnimation(
             horizontalOffset: 100,
             child: FadeInAnimation(
-                child: hourlyDataBuilder(
-                    hour, palette, elevated, childWidgets[value], data)),
+              child: hourlyDataBuilder(
+                hour,
+                palette,
+                elevated,
+                childWidgets[value],
+                data,
+              ),
+            ),
           ),
         );
       },
@@ -165,17 +179,23 @@ Widget hourBoxes(List<dynamic> hours, WeatherData data, int value,
   );
 }
 
-Widget hourlyDataBuilder(hour, ColorScheme palette, bool elevated,
-    Widget childWidget, WeatherData data) {
+Widget hourlyDataBuilder(
+  hour,
+  ColorScheme palette,
+  bool elevated,
+  Widget childWidget,
+  WeatherData data,
+) {
   return Padding(
     padding: const EdgeInsets.all(3),
     child: AnimatedSwitcher(
       duration: const Duration(milliseconds: 400),
       switchInCurve: Curves.decelerate,
       transitionBuilder: (Widget child, Animation<double> animation) {
-        final offsetAnimation =
-            Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero)
-                .animate(animation);
+        final offsetAnimation = Tween<Offset>(
+          begin: const Offset(0, 1),
+          end: Offset.zero,
+        ).animate(animation);
         return ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: SlideTransition(
@@ -203,32 +223,46 @@ Widget dividerWidget(ColorScheme palette, String name, WeatherData data) {
   return Padding(
     padding: const EdgeInsets.only(top: 3, bottom: 3, left: 6, right: 6),
     child: RotatedBox(
-        quarterTurns: -1,
-        child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: palette.secondaryContainer,
-              borderRadius: BorderRadius.circular(6),
-            ),
-            padding:
-                const EdgeInsets.only(left: 10, top: 5, bottom: 5, right: 10),
-            child: Center(
-                child: comfortatext(name, 17, data.settings,
-                    color: palette.onSecondaryContainer,
-                    weight: FontWeight.w500)))),
+      quarterTurns: -1,
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: palette.secondaryContainer,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5, right: 10),
+        child: Center(
+          child: comfortatext(
+            name,
+            17,
+            data.settings,
+            color: palette.onSecondaryContainer,
+            weight: FontWeight.w500,
+          ),
+        ),
+      ),
+    ),
   );
 }
 
 Widget buildHourlySum(
-    AbstractHour hour, ColorScheme palette, WeatherData data) {
+  AbstractHour hour,
+  ColorScheme palette,
+  WeatherData data,
+) {
   return Column(
     key: const ValueKey('sum'),
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
       Padding(
         padding: const EdgeInsets.only(left: 2),
-        child: comfortatext('${hour.temp}°', 18, data.settings,
-            color: palette.primary, weight: FontWeight.w500),
+        child: comfortatext(
+          '${hour.temp}°',
+          18,
+          data.settings,
+          color: palette.primary,
+          weight: FontWeight.w500,
+        ),
       ),
       Icon(
         hour.icon,
@@ -239,17 +273,25 @@ Widget buildHourlySum(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.umbrella, size: 14, color: palette.primary),
-          comfortatext('${hour.precip_prob}%', 14, data.settings,
-              color: palette.primary, weight: FontWeight.w500)
+          comfortatext(
+            '${hour.precip_prob}%',
+            14,
+            data.settings,
+            color: palette.primary,
+            weight: FontWeight.w500,
+          ),
         ],
       ),
-      comfortatext(hour.time, 14, data.settings, color: palette.outline)
+      comfortatext(hour.time, 14, data.settings, color: palette.outline),
     ],
   );
 }
 
 Widget buildHourlyPrecip(
-    AbstractHour hour, ColorScheme palette, WeatherData data) {
+  AbstractHour hour,
+  ColorScheme palette,
+  WeatherData data,
+) {
   return Stack(
     children: [
       Column(
@@ -258,11 +300,20 @@ Widget buildHourlyPrecip(
         children: [
           Column(
             children: [
-              comfortatext('${hour.precip}', 18, data.settings,
-                  color: palette.primary, weight: FontWeight.w500),
               comfortatext(
-                  '${data.settings["Precipitation"]}', 9, data.settings,
-                  color: palette.primary, weight: FontWeight.w500),
+                '${hour.precip}',
+                18,
+                data.settings,
+                color: palette.primary,
+                weight: FontWeight.w500,
+              ),
+              comfortatext(
+                '${data.settings["Precipitation"]}',
+                9,
+                data.settings,
+                color: palette.primary,
+                weight: FontWeight.w500,
+              ),
             ],
           ),
           SizedBox(
@@ -284,11 +335,16 @@ Widget buildHourlyPrecip(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.umbrella, size: 14, color: palette.primary),
-              comfortatext('${hour.precip_prob}%', 14, data.settings,
-                  color: palette.primary, weight: FontWeight.w500)
+              comfortatext(
+                '${hour.precip_prob}%',
+                14,
+                data.settings,
+                color: palette.primary,
+                weight: FontWeight.w500,
+              ),
             ],
           ),
-          comfortatext(hour.time, 14, data.settings, color: palette.outline)
+          comfortatext(hour.time, 14, data.settings, color: palette.outline),
         ],
       ),
     ],
@@ -296,26 +352,39 @@ Widget buildHourlyPrecip(
 }
 
 Widget buildHourlyWind(
-    AbstractHour hour, ColorScheme palette, WeatherData data) {
+  AbstractHour hour,
+  ColorScheme palette,
+  WeatherData data,
+) {
   return Column(
     key: const ValueKey('wind'),
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
       Column(
         children: [
-          comfortatext('${hour.wind}', 18, data.settings,
-              color: palette.primary),
-          comfortatext('${data.settings["Wind"]}', 9, data.settings,
-              color: palette.primary, weight: FontWeight.w500),
+          comfortatext(
+            '${hour.wind}',
+            18,
+            data.settings,
+            color: palette.primary,
+          ),
+          comfortatext(
+            '${data.settings["Wind"]}',
+            9,
+            data.settings,
+            color: palette.primary,
+            weight: FontWeight.w500,
+          ),
         ],
       ),
       Transform.rotate(
-          angle: (hour.wind_dir + 180) * pi / 180,
-          child: Icon(
-            Icons.navigation_outlined,
-            color: palette.onSurface,
-            size: 18,
-          )),
+        angle: (hour.wind_dir + 180) * pi / 180,
+        child: Icon(
+          Icons.navigation_outlined,
+          color: palette.onSurface,
+          size: 18,
+        ),
+      ),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -323,14 +392,24 @@ Widget buildHourlyWind(
           Icon(Icons.trending_up, size: 13, color: palette.primary),
           Padding(
             padding: const EdgeInsets.only(left: 2),
-            child: comfortatext('${hour.wind_gusts}', 14, data.settings,
-                color: palette.primary, weight: FontWeight.w500),
+            child: comfortatext(
+              '${hour.wind_gusts}',
+              14,
+              data.settings,
+              color: palette.primary,
+              weight: FontWeight.w500,
+            ),
           ),
-          comfortatext('${data.settings["Wind"]}', 9, data.settings,
-              color: palette.primary, weight: FontWeight.w500),
+          comfortatext(
+            '${data.settings["Wind"]}',
+            9,
+            data.settings,
+            color: palette.primary,
+            weight: FontWeight.w500,
+          ),
         ],
       ),
-      comfortatext(hour.time, 14, data.settings, color: palette.outline)
+      comfortatext(hour.time, 14, data.settings, color: palette.outline),
     ],
   );
 }
@@ -342,46 +421,57 @@ Widget buildHourlyUv(AbstractHour hour, ColorScheme palette, WeatherData data) {
     children: [
       Column(
         children: [
-          comfortatext('${hour.uv}', 19, data.settings,
-              color: palette.primary, weight: FontWeight.w500),
-          comfortatext('UV', 9, data.settings,
-              color: palette.primary, weight: FontWeight.w500),
+          comfortatext(
+            '${hour.uv}',
+            19,
+            data.settings,
+            color: palette.primary,
+            weight: FontWeight.w500,
+          ),
+          comfortatext(
+            'UV',
+            9,
+            data.settings,
+            color: palette.primary,
+            weight: FontWeight.w500,
+          ),
         ],
       ),
       SizedBox(
         height: 65,
         child: ListView.builder(
-            padding: EdgeInsets.zero,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 10,
-            itemExtent: 6.5,
-            itemBuilder: (BuildContext context, int index) {
-              if (index < min(max(10 - hour.uv, 0), 10)) {
-                return Center(
-                  child: Container(
-                    width: 13,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: palette.outlineVariant,
-                    ),
+          padding: EdgeInsets.zero,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: 10,
+          itemExtent: 6.5,
+          itemBuilder: (BuildContext context, int index) {
+            if (index < min(max(10 - hour.uv, 0), 10)) {
+              return Center(
+                child: Container(
+                  width: 13,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: palette.outlineVariant,
                   ),
-                );
-              } else {
-                return Center(
-                  child: Container(
-                    width: 13,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: palette.secondary,
-                    ),
+                ),
+              );
+            } else {
+              return Center(
+                child: Container(
+                  width: 13,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: palette.secondary,
                   ),
-                );
-              }
-            }),
+                ),
+              );
+            }
+          },
+        ),
       ),
-      comfortatext(hour.time, 14, data.settings, color: palette.outline)
+      comfortatext(hour.time, 14, data.settings, color: palette.outline),
     ],
   );
 }

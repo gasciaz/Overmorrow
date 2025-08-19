@@ -23,9 +23,9 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:overmorrow/alerts_page.dart';
 import 'package:overmorrow/aqi_page.dart';
+import 'package:overmorrow/core/l10n/app_localizations.dart';
 import 'package:overmorrow/decoders/decode_OM.dart';
 import 'package:overmorrow/decoders/weather_data.dart';
-import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
 
 class WavePainter extends CustomPainter {
@@ -57,7 +57,8 @@ class WavePainter extends CustomPainter {
     final splitPoint = hihi * size.width;
 
     for (double x = 0; x <= splitPoint; x++) {
-      final y = size.height / 2 +
+      final y =
+          size.height / 2 +
           amplitude * sin((x / frequency * 2 * pi) + (waveValue * 2 * pi));
       if (x == 0) {
         path1.moveTo(x, y);
@@ -69,7 +70,8 @@ class WavePainter extends CustomPainter {
     final path2 = Path();
 
     for (var x = splitPoint; x <= size.width; x++) {
-      final y = size.height / 2 +
+      final y =
+          size.height / 2 +
           amplitude * sin((x / frequency * 2 * pi) + (waveValue * 2 * pi));
       if (x == splitPoint) {
         path2.moveTo(x, y);
@@ -113,8 +115,9 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
     final currentTime = DateTime.now();
 
     final localtimeOld = currentTime.copyWith(
-        hour: int.parse(absoluteLocalTime[0]),
-        minute: int.parse(absoluteLocalTime[1]));
+      hour: int.parse(absoluteLocalTime[0]),
+      minute: int.parse(absoluteLocalTime[1]),
+    );
 
     hourdif = localtimeOld.hour - currentTime.hour;
 
@@ -144,50 +147,64 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
 
         final write = widget.data.settings['Time mode'] == '24 hour'
             ? omConvertTime(
-                "j T${localTime.hour.toString().padLeft(2, "0")}:${localTime.minute.toString().padLeft(2, "0")}") //the j is just added so when splitting
+                "j T${localTime.hour.toString().padLeft(2, "0")}:${localTime.minute.toString().padLeft(2, "0")}",
+              ) //the j is just added so when splitting
             : OMamPmTime(
-                'j T${localTime.hour}:${localTime.minute}'); //it can grab the second item
+                'j T${localTime.hour}:${localTime.minute}',
+              ); //it can grab the second item
 
         //this is all so that the text will be right above the progress
         final textPainter = TextPainter(
-            text: TextSpan(
-              text: write,
-              style: GoogleFonts.outfit(
-                  fontSize: 15.0 *
-                      1.1 *
-                      getFontSize(widget.data.settings['Font size']!),
-                  fontWeight: FontWeight.w300),
+          text: TextSpan(
+            text: write,
+            style: GoogleFonts.outfit(
+              fontSize:
+                  15.0 * 1.1 * getFontSize(widget.data.settings['Font size']!),
+              fontWeight: FontWeight.w300,
             ),
-            textDirection: TextDirection.ltr)
-          ..layout();
+          ),
+          textDirection: TextDirection.ltr,
+        )..layout();
 
         final textWidth = textPainter.width * 1.1;
 
         return Padding(
-          padding:
-              const EdgeInsets.only(left: 24, right: 24, bottom: 23, top: 13),
+          padding: const EdgeInsets.only(
+            left: 24,
+            right: 24,
+            bottom: 23,
+            top: 13,
+          ),
           child: Column(
             children: [
               Padding(
                 padding: EdgeInsets.only(
-                    left: min(
-                        max(
-                            (progress * (widget.width - 53)) -
-                                textWidth / 2 +
-                                4,
-                            0),
-                        widget.width - 53 - textWidth)),
+                  left: min(
+                    max(
+                      (progress * (widget.width - 53)) - textWidth / 2 + 4,
+                      0,
+                    ),
+                    widget.width - 53 - textWidth,
+                  ),
+                ),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: comfortatext(write, 15, widget.data.settings,
-                      color: palette.onSurface),
+                  child: comfortatext(
+                    write,
+                    15,
+                    widget.data.settings,
+                    color: palette.onSurface,
+                  ),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(
-                    top: 6,
-                    left: min(max(progress * (widget.width - 56), 2),
-                        widget.width - 56)),
+                  top: 6,
+                  left: min(
+                    max(progress * (widget.width - 56), 2),
+                    widget.width - 56,
+                  ),
+                ),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
@@ -201,11 +218,19 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.only(left: 5, right: 5, bottom: 5, top: 7),
+                padding: const EdgeInsets.only(
+                  left: 5,
+                  right: 5,
+                  bottom: 5,
+                  top: 7,
+                ),
                 child: CustomPaint(
-                  painter: WavePainter(_controller.value, palette.secondary,
-                      palette.surfaceContainerHighest, progress),
+                  painter: WavePainter(
+                    _controller.value,
+                    palette.secondary,
+                    palette.surfaceContainerHighest,
+                    progress,
+                  ),
                   child: const SizedBox(
                     width: double.infinity,
                     height: 8,
@@ -225,20 +250,29 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
                       ),
                     ),
                     comfortatext(
-                        widget.data.sunstatus.sunrise, 15, widget.data.settings,
-                        color: palette.secondary),
+                      widget.data.sunstatus.sunrise,
+                      15,
+                      widget.data.settings,
+                      color: palette.secondary,
+                    ),
                     const Spacer(),
                     comfortatext(
-                        widget.data.sunstatus.sunset, 15, widget.data.settings,
-                        color: palette.outline),
+                      widget.data.sunstatus.sunset,
+                      15,
+                      widget.data.settings,
+                      color: palette.outline,
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(left: 4, top: 1),
-                      child: Icon(Icons.nightlight_outlined,
-                          color: palette.outline, size: 14),
+                      child: Icon(
+                        Icons.nightlight_outlined,
+                        color: palette.outline,
+                        size: 14,
+                      ),
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         );
@@ -247,17 +281,24 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
   }
 }
 
-Widget aqiWidget(WeatherData data, ColorScheme palette, BuildContext context,
-    bool isTabletMode) {
+Widget aqiWidget(
+  WeatherData data,
+  ColorScheme palette,
+  BuildContext context,
+  bool isTabletMode,
+) {
   return Column(
     children: [
       Padding(
         padding: const EdgeInsets.only(left: 25, top: 15),
         child: Align(
           alignment: Alignment.centerLeft,
-          child: comfortatext(AppLocalizations.of(context)!.airQualityLowercase,
-              17, data.settings,
-              color: palette.onSurface),
+          child: comfortatext(
+            AppLocalizations.of(context)!.airQualityLowercase,
+            17,
+            data.settings,
+            color: palette.onSurface,
+          ),
         ),
       ),
       GestureDetector(
@@ -265,20 +306,27 @@ Widget aqiWidget(WeatherData data, ColorScheme palette, BuildContext context,
         onTap: () {
           HapticFeedback.lightImpact();
           Navigator.push(
-              context,
-              MaterialPageRoute<AllergensPage>(
-                  builder: (context) => AllergensPage(
-                        data: data,
-                        isTabletMode: isTabletMode,
-                      )));
+            context,
+            MaterialPageRoute<AllergensPage>(
+              builder: (context) => AllergensPage(
+                data: data,
+                isTabletMode: isTabletMode,
+              ),
+            ),
+          );
         },
         child: Container(
           padding: const EdgeInsets.all(20),
-          margin:
-              const EdgeInsets.only(left: 25, right: 25, top: 14, bottom: 10),
+          margin: const EdgeInsets.only(
+            left: 25,
+            right: 25,
+            top: 14,
+            bottom: 10,
+          ),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              border: Border.all(color: palette.outlineVariant, width: 2)),
+            borderRadius: BorderRadius.circular(100),
+            border: Border.all(color: palette.outlineVariant, width: 2),
+          ),
           child: Row(
             children: [
               Container(
@@ -290,9 +338,13 @@ Widget aqiWidget(WeatherData data, ColorScheme palette, BuildContext context,
                 ),
                 margin: const EdgeInsets.only(right: 20),
                 child: Center(
-                    child: comfortatext(
-                        data.aqi.aqi_index.toString(), 24, data.settings,
-                        color: palette.onSecondaryContainer)),
+                  child: comfortatext(
+                    data.aqi.aqi_index.toString(),
+                    24,
+                    data.settings,
+                    color: palette.onSecondaryContainer,
+                  ),
+                ),
               ),
               Expanded(
                 child: Column(
@@ -307,8 +359,12 @@ Widget aqiWidget(WeatherData data, ColorScheme palette, BuildContext context,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 6),
-                      child: comfortatext(data.aqi.aqi_desc, 14, data.settings,
-                          color: palette.outline),
+                      child: comfortatext(
+                        data.aqi.aqi_desc,
+                        14,
+                        data.settings,
+                        color: palette.outline,
+                      ),
                     ),
                   ],
                 ),
@@ -317,12 +373,14 @@ Widget aqiWidget(WeatherData data, ColorScheme palette, BuildContext context,
                 onPressed: () {
                   HapticFeedback.lightImpact();
                   Navigator.push(
-                      context,
-                      MaterialPageRoute<AllergensPage>(
-                          builder: (context) => AllergensPage(
-                                data: data,
-                                isTabletMode: isTabletMode,
-                              )));
+                    context,
+                    MaterialPageRoute<AllergensPage>(
+                      builder: (context) => AllergensPage(
+                        data: data,
+                        isTabletMode: isTabletMode,
+                      ),
+                    ),
+                  );
                 },
                 icon: Icon(
                   Icons.keyboard_arrow_right_rounded,
@@ -338,89 +396,105 @@ Widget aqiWidget(WeatherData data, ColorScheme palette, BuildContext context,
 }
 
 Widget alertWidget(
-    WeatherData data, BuildContext context, ColorScheme palette) {
+  WeatherData data,
+  BuildContext context,
+  ColorScheme palette,
+) {
   if (data.alerts.isNotEmpty) {
     return Padding(
-        padding:
-            const EdgeInsets.only(left: 25, right: 25, bottom: 10, top: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 11),
-              child: comfortatext(AppLocalizations.of(context)!.alertsLowercase,
-                  17, data.settings,
-                  color: palette.onSurface),
+      padding: const EdgeInsets.only(left: 25, right: 25, bottom: 10, top: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 11),
+            child: comfortatext(
+              AppLocalizations.of(context)!.alertsLowercase,
+              17,
+              data.settings,
+              color: palette.onSurface,
             ),
-            Column(
-              children: List.generate(data.alerts.length, (index) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 2, bottom: 2),
-                  child: GestureDetector(
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute<AlertsPage>(
-                              builder: (context) => AlertsPage(data: data)));
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.only(
-                          left: 25, top: 23, bottom: 23, right: 22),
-                      decoration: BoxDecoration(
-                        color: palette.errorContainer,
-                        borderRadius: BorderRadius.circular(18),
+          ),
+          Column(
+            children: List.generate(data.alerts.length, (index) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 2, bottom: 2),
+                child: GestureDetector(
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<AlertsPage>(
+                        builder: (context) => AlertsPage(data: data),
                       ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize
-                                  .min, //first time i realised this makes it wrap the content size
-                              children: [
-                                Flexible(
-                                  child: comfortatext(
-                                    data.alerts[index].event,
-                                    18,
-                                    data.settings,
-                                    color: palette.onErrorContainer,
-                                  ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(
+                      left: 25,
+                      top: 23,
+                      bottom: 23,
+                      right: 22,
+                    ),
+                    decoration: BoxDecoration(
+                      color: palette.errorContainer,
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize
+                                .min, //first time i realised this makes it wrap the content size
+                            children: [
+                              Flexible(
+                                child: comfortatext(
+                                  data.alerts[index].event,
+                                  18,
+                                  data.settings,
+                                  color: palette.onErrorContainer,
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 2),
-                                  child: comfortatext(
-                                      '${data.alerts[index].start} - ${data.alerts[index].end}',
-                                      14,
-                                      data.settings,
-                                      color: palette.outline),
-                                )
-                              ],
-                            ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 2),
+                                child: comfortatext(
+                                  '${data.alerts[index].start} - ${data.alerts[index].end}',
+                                  14,
+                                  data.settings,
+                                  color: palette.outline,
+                                ),
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 5, left: 20),
-                            child: Icon(
-                              Icons.warning_amber_rounded,
-                              color: palette.error,
-                              size: 26,
-                            ),
-                          )
-                        ],
-                      ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5, left: 20),
+                          child: Icon(
+                            Icons.warning_amber_rounded,
+                            color: palette.error,
+                            size: 26,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                );
-              }),
-            ),
-          ],
-        ));
+                ),
+              );
+            }),
+          ),
+        ],
+      ),
+    );
   }
   return Container();
 }
 
 Widget rain15MinuteChart(
-    WeatherData data, ColorScheme palette, BuildContext context) {
+  WeatherData data,
+  ColorScheme palette,
+  BuildContext context,
+) {
   if (data.minutely_15_precip.t_minus != '') {
     return Container(
       margin: const EdgeInsets.only(left: 23, right: 23, top: 15, bottom: 30),
@@ -443,32 +517,45 @@ Widget rain15MinuteChart(
                 ),
               ),
               comfortatext(
-                  data.minutely_15_precip.precip_sum.toStringAsFixed(1),
-                  19,
-                  data.settings,
-                  color: palette.primary),
-              comfortatext(data.settings['Precipitation']!, 16, data.settings,
-                  color: palette.primary),
+                data.minutely_15_precip.precip_sum.toStringAsFixed(1),
+                19,
+                data.settings,
+                color: palette.primary,
+              ),
+              comfortatext(
+                data.settings['Precipitation']!,
+                16,
+                data.settings,
+                color: palette.primary,
+              ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 4),
                   child: comfortatext(
-                      data.minutely_15_precip.t_minus, 16, data.settings,
-                      color: palette.onSecondaryContainer),
+                    data.minutely_15_precip.t_minus,
+                    16,
+                    data.settings,
+                    color: palette.onSecondaryContainer,
+                  ),
                 ),
               ),
             ],
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(top: 20, bottom: 10, left: 15, right: 15),
+            padding: const EdgeInsets.only(
+              top: 20,
+              bottom: 10,
+              left: 15,
+              right: 15,
+            ),
             child: SizedBox(
               height: 45,
               child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: List<Widget>.generate(
-                      data.minutely_15_precip.precips.length, (int index) {
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List<Widget>.generate(
+                  data.minutely_15_precip.precips.length,
+                  (int index) {
                     return Container(
                       width: 5,
                       //i'm doing this because otherwise you wouldn't be
@@ -483,7 +570,9 @@ Widget rain15MinuteChart(
                             : palette.primary,
                       ),
                     );
-                  })),
+                  },
+                ),
+              ),
             ),
           ),
           Padding(
@@ -492,17 +581,26 @@ Widget rain15MinuteChart(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 comfortatext(
-                    AppLocalizations.of(context)!.now, 13, data.settings,
-                    color: palette.onSurfaceVariant),
+                  AppLocalizations.of(context)!.now,
+                  13,
+                  data.settings,
+                  color: palette.onSurfaceVariant,
+                ),
                 comfortatext(
-                    '3${AppLocalizations.of(context)!.hr}', 13, data.settings,
-                    color: palette.onSurfaceVariant),
+                  '3${AppLocalizations.of(context)!.hr}',
+                  13,
+                  data.settings,
+                  color: palette.onSurfaceVariant,
+                ),
                 comfortatext(
-                    '6${AppLocalizations.of(context)!.hr}', 13, data.settings,
-                    color: palette.onSurfaceVariant)
+                  '6${AppLocalizations.of(context)!.hr}',
+                  13,
+                  data.settings,
+                  color: palette.onSurfaceVariant,
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

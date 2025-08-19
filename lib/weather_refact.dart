@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
 import 'package:overmorrow/Icons/overmorrow_weather_icons3_icons.dart';
-import 'package:overmorrow/l10n/app_localizations.dart';
+import 'package:overmorrow/core/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
 
 Map<String, Locale> languageNameToLocale = {
@@ -80,7 +80,7 @@ Map<String, String> conditionToCollection = {
   'Fog': 'lt3McWCS6sk',
   'Snow': 'IV6PyvU0Vyo',
   'Heavy Rain': '9w3d8QBzjsw',
-  'Cloudy Night': 'ymdgzsktNTE'
+  'Cloudy Night': 'ymdgzsktNTE',
 };
 
 String? conditionTranslation(String key, AppLocalizations localizations) {
@@ -108,37 +108,37 @@ Map<String, List<String>> assetPhotoCredits = {
   'Clear Night': [
     'https://unsplash.com/photos/time-lapse-photography-of-stars-at-nighttime-YvOT1lJ0NPQ',
     'Jack B',
-    'https://unsplash.com/@nervum'
+    'https://unsplash.com/@nervum',
   ],
   'Partly Cloudy': [
     'https://unsplash.com/photos/ocean-under-clouds-Plkff-dVfNM',
     'Edvinas Bruzas',
-    'https://unsplash.com/@edvinasbruzas'
+    'https://unsplash.com/@edvinasbruzas',
   ],
   'Clear Sky': [
     'https://unsplash.com/photos/blue-and-white-sky-d12K_FkCUN8',
     'Irina Iriser',
-    'https://unsplash.com/@iriser'
+    'https://unsplash.com/@iriser',
   ],
   'Overcast': [
     'https://unsplash.com/photos/view-of-calm-sea-nQM2oClouhY',
     'Lionel Gustave',
-    'https://unsplash.com/@lionel_gustave'
+    'https://unsplash.com/@lionel_gustave',
   ],
   'Haze': [
     'https://unsplash.com/photos/silhouette-of-trees-and-sea-L-HxY2XlaaY',
     'Casey Horner',
-    'https://unsplash.com/@mischievous_penguins'
+    'https://unsplash.com/@mischievous_penguins',
   ],
   'Rain': [
     'https://unsplash.com/photos/water-droplets-on-clear-glass-1YHXFeOYpN0',
     'Max Bender',
-    'https://unsplash.com/@maxwbender'
+    'https://unsplash.com/@maxwbender',
   ],
   'Sleet': [
     'https://unsplash.com/photos/snow-covered-trees-and-road-during-daytime-wyM1KmMUSbA',
     'Nikola Johnny Mirkovic',
-    'https://unsplash.com/@thejohnnyme'
+    'https://unsplash.com/@thejohnnyme',
   ],
   'Drizzle': [
     'https://unsplash.com/photos/a-view-of-a-plane-through-a-rain-covered-window-UsYOap7yIMg',
@@ -148,7 +148,7 @@ Map<String, List<String>> assetPhotoCredits = {
   'Thunderstorm': [
     'https://unsplash.com/photos/lightning-strike-on-the-sky-ley4Kf2iG7Y',
     'Jonas Kaiser',
-    'https://unsplash.com/@kaiser1310'
+    'https://unsplash.com/@kaiser1310',
   ],
   'Heavy Snow': [
     'https://unsplash.com/photos/snowy-forest-on-mountainside-during-daytime-t4hA-zCALUQ',
@@ -158,7 +158,7 @@ Map<String, List<String>> assetPhotoCredits = {
   'Fog': [
     'https://unsplash.com/photos/green-trees-on-mountain-under-white-clouds-during-daytime-obQacWYxB1I',
     'Federico Bottos',
-    'https://unsplash.com/@landscapeplaces'
+    'https://unsplash.com/@landscapeplaces',
   ],
   'Snow': [
     'https://unsplash.com/photos/bokeh-photography-of-snows-SH4GNXNj1RA',
@@ -168,12 +168,12 @@ Map<String, List<String>> assetPhotoCredits = {
   'Heavy Rain': [
     'https://unsplash.com/photos/dew-drops-on-glass-panel-bWtd1ZyEy6w',
     'Valentin Müller',
-    'https://unsplash.com/@wackeltin_meem'
+    'https://unsplash.com/@wackeltin_meem',
   ],
   'Cloudy Night': [
     'https://unsplash.com/photos/blue-and-white-starry-night-sky-NpF9JLGYfeQ',
     'Shot by Cerqueira',
-    'https://unsplash.com/@shotbycerqueira'
+    'https://unsplash.com/@shotbycerqueira',
   ],
 };
 
@@ -310,7 +310,7 @@ Map<String, String> metNWeatherToText = {
   'snowshowers_polartwilight': 'Snow',
   'snowshowersandthunder_day': 'Thunderstorm',
   'snowshowersandthunder_night': 'Thunderstorm',
-  'snowshowersandthunder_polartwilight': 'Thunderstorm'
+  'snowshowersandthunder_polartwilight': 'Thunderstorm',
 };
 
 Map<int, String> omCodes = {
@@ -358,7 +358,7 @@ Map<String, String> textBackground = {
   'Fog': 'fog2.jpg',
   'Snow': 'snowy_sky.jpg',
   'Heavy Rain': 'heavy_rainy_sky.jpg',
-  'Cloudy Night': 'clear_night_color.jpg'
+  'Cloudy Night': 'clear_night_color.jpg',
 };
 
 Map<String, List<Color>> textFontColor = {
@@ -375,7 +375,7 @@ Map<String, List<Color>> textFontColor = {
   'Fog': const [kWhite, kWhite],
   'Snow': const [kWhite, kWhite],
   'Heavy Rain': const [kWhite, kWhite],
-  'Cloudy Night': const [kBlack, kWhite]
+  'Cloudy Night': const [kBlack, kWhite],
 };
 
 Map<String, Color> textBackColor = {
@@ -392,7 +392,7 @@ Map<String, Color> textBackColor = {
   'Fog': const Color(0xff151E1B),
   'Snow': const Color(0xff919186),
   'Heavy Rain': const Color(0xff314949),
-  'Cloudy Night': const Color(0xff112f56)
+  'Cloudy Night': const Color(0xff112f56),
 };
 
 Map<String, Color> accentColors = {

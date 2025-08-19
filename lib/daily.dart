@@ -20,14 +20,21 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:overmorrow/core/l10n/app_localizations.dart';
 import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/hourly.dart';
-import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
 import 'package:overmorrow/weather/abstract_day.dart';
 
-Widget dayStat(WeatherData data, IconData icon, int number, String addon,
-    {bool addWind = false, int windDir = 0, double iconSize = 16.0}) {
+Widget dayStat(
+  WeatherData data,
+  IconData icon,
+  int number,
+  String addon, {
+  bool addWind = false,
+  int windDir = 0,
+  double iconSize = 16.0,
+}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
@@ -37,20 +44,33 @@ Widget dayStat(WeatherData data, IconData icon, int number, String addon,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 4),
-            child: comfortatext(number.toString(), 17, data.settings,
-                color: data.current.palette.onSecondaryContainer),
+            child: comfortatext(
+              number.toString(),
+              17,
+              data.settings,
+              color: data.current.palette.onSecondaryContainer,
+            ),
           ),
-          comfortatext(addon, 15, data.settings,
-              color: data.current.palette.onSecondaryContainer)
+          comfortatext(
+            addon,
+            15,
+            data.settings,
+            color: data.current.palette.onSecondaryContainer,
+          ),
         ],
       ),
       if (addWind)
         Padding(
-            padding: const EdgeInsets.only(left: 5, right: 3),
-            child: RotationTransition(
-                turns: AlwaysStoppedAnimation(windDir / 360),
-                child: Icon(Icons.arrow_circle_right_outlined,
-                    color: data.current.palette.primary, size: 18))),
+          padding: const EdgeInsets.only(left: 5, right: 3),
+          child: RotationTransition(
+            turns: AlwaysStoppedAnimation(windDir / 360),
+            child: Icon(
+              Icons.arrow_circle_right_outlined,
+              color: data.current.palette.primary,
+              size: 18,
+            ),
+          ),
+        ),
     ],
   );
 }
@@ -123,50 +143,62 @@ class _BuildDaysState extends State<BuildDays>
           Padding(
             padding: const EdgeInsets.only(left: 1, bottom: 14),
             child: comfortatext(
-                AppLocalizations.of(context)!.dailyLowercase, 17, data.settings,
-                color: data.current.palette.onSurface),
+              AppLocalizations.of(context)!.dailyLowercase,
+              17,
+              data.settings,
+              color: data.current.palette.onSurface,
+            ),
           ),
           AnimatedSize(
             duration: const Duration(milliseconds: 400),
             curve: Curves.easeInOut,
             alignment: Alignment.topCenter,
             child: ListView.builder(
-                key: ValueKey(daysToShow),
-                shrinkWrap: true,
-                padding: EdgeInsets.zero,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: daysToShow,
-                itemBuilder: (context, index) {
-                  final day = data.days[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 2, bottom: 2),
-                    child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.vertical(
-                              top: index == 0
-                                  ? const Radius.circular(33)
-                                  : const Radius.circular(6),
-                              bottom:
-                                  index == daysToShow - 1 && !isDaysExpandable
-                                      ? const Radius.circular(33)
-                                      : const Radius.circular(6),
+              key: ValueKey(daysToShow),
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: daysToShow,
+              itemBuilder: (context, index) {
+                final day = data.days[index];
+                return Padding(
+                  padding: const EdgeInsets.only(top: 2, bottom: 2),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(
+                        top: index == 0
+                            ? const Radius.circular(33)
+                            : const Radius.circular(6),
+                        bottom: index == daysToShow - 1 && !isDaysExpandable
+                            ? const Radius.circular(33)
+                            : const Radius.circular(6),
+                      ),
+                      color: data.current.palette.surfaceContainer,
+                    ),
+                    child: AnimatedSize(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeInOut,
+                      child: expand[index]
+                          ? dailyExpanded(
+                              day,
+                              data,
+                              data.current.palette,
+                              _onExpandTapped,
+                              index,
+                            )
+                          : dailyCollapsed(
+                              data,
+                              day,
+                              data.current.palette,
+                              index,
+                              daysToShow,
+                              _onExpandTapped,
                             ),
-                            color: data.current.palette.surfaceContainer),
-                        child: AnimatedSize(
-                            duration: const Duration(milliseconds: 250),
-                            curve: Curves.easeInOut,
-                            child: expand[index]
-                                ? dailyExpanded(day, data, data.current.palette,
-                                    _onExpandTapped, index)
-                                : dailyCollapsed(
-                                    data,
-                                    day,
-                                    data.current.palette,
-                                    index,
-                                    daysToShow,
-                                    _onExpandTapped))),
-                  );
-                }),
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
           if (isDaysExpandable)
             GestureDetector(
@@ -174,42 +206,58 @@ class _BuildDaysState extends State<BuildDays>
               onTap: toggleMoreDays,
               child: Container(
                 decoration: BoxDecoration(
-                    color: data.current.palette.secondaryContainer,
-                    borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(6), bottom: Radius.circular(33))),
+                  color: data.current.palette.secondaryContainer,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(6),
+                    bottom: Radius.circular(33),
+                  ),
+                ),
                 padding: const EdgeInsets.only(
-                    left: 22, right: 22, top: 13, bottom: 13),
+                  left: 22,
+                  right: 22,
+                  top: 13,
+                  bottom: 13,
+                ),
                 margin: const EdgeInsets.only(top: 2),
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  comfortatext(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    comfortatext(
                       isDaysListExpanded
                           ? AppLocalizations.of(context)!.showLess
                           : AppLocalizations.of(context)!.showMore,
                       16,
                       data.settings,
-                      color: data.current.palette.onSecondaryContainer),
-                  const SizedBox(
-                    width: 4,
-                  ),
-                  Icon(
-                    isDaysListExpanded
-                        ? Icons.arrow_upward
-                        : Icons.arrow_downward,
-                    color: data.current.palette.onSecondaryContainer,
-                    size: 16,
-                  )
-                ]),
+                      color: data.current.palette.onSecondaryContainer,
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Icon(
+                      isDaysListExpanded
+                          ? Icons.arrow_upward
+                          : Icons.arrow_downward,
+                      color: data.current.palette.onSecondaryContainer,
+                      size: 16,
+                    ),
+                  ],
+                ),
               ),
-            )
+            ),
         ],
       ),
     );
   }
 }
 
-Widget dailyCollapsed(WeatherData data, AbstractDay day, ColorScheme palette,
-    int index, int daysToShow, void Function(int) onExpandTapped) {
+Widget dailyCollapsed(
+  WeatherData data,
+  AbstractDay day,
+  ColorScheme palette,
+  int index,
+  int daysToShow,
+  void Function(int) onExpandTapped,
+) {
   return GestureDetector(
     behavior: HitTestBehavior.translucent,
     onTap: () {
@@ -217,12 +265,13 @@ Widget dailyCollapsed(WeatherData data, AbstractDay day, ColorScheme palette,
     },
     child: Padding(
       padding: EdgeInsets.only(
-          left: 21,
-          right: 20,
-          top: index == 0
-              ? 21
-              : 20, //evens out the top size with bigger border radii
-          bottom: 20),
+        left: 21,
+        right: 20,
+        top: index == 0
+            ? 21
+            : 20, //evens out the top size with bigger border radii
+        bottom: 20,
+      ),
       child: Row(
         children: [
           SizedBox(
@@ -231,10 +280,19 @@ Widget dailyCollapsed(WeatherData data, AbstractDay day, ColorScheme palette,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                comfortatext(day.name.split(', ')[0], 19, data.settings,
-                    color: palette.secondary),
-                comfortatext(day.name.split(', ')[1], 12, data.settings,
-                    color: palette.outline, weight: FontWeight.w500),
+                comfortatext(
+                  day.name.split(', ')[0],
+                  19,
+                  data.settings,
+                  color: palette.secondary,
+                ),
+                comfortatext(
+                  day.name.split(', ')[1],
+                  12,
+                  data.settings,
+                  color: palette.outline,
+                  weight: FontWeight.w500,
+                ),
               ],
             ),
           ),
@@ -246,44 +304,64 @@ Widget dailyCollapsed(WeatherData data, AbstractDay day, ColorScheme palette,
           SizedBox(
             width: 40,
             child: Align(
-                alignment: Alignment.centerRight,
-                child: comfortatext('${day.minTemp}°', 18, data.settings,
-                    color: palette.primary, weight: FontWeight.w500)),
+              alignment: Alignment.centerRight,
+              child: comfortatext(
+                '${day.minTemp}°',
+                18,
+                data.settings,
+                color: palette.primary,
+                weight: FontWeight.w500,
+              ),
+            ),
           ),
           Expanded(
-              child: Container(
-            margin: const EdgeInsets.only(left: 14, right: 14),
-            height: 16,
-            decoration: BoxDecoration(
+            child: Container(
+              margin: const EdgeInsets.only(left: 14, right: 14),
+              height: 16,
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: palette.surfaceContainerHighest),
-            child: LayoutBuilder(
+                color: palette.surfaceContainerHighest,
+              ),
+              child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
-              final width = constraints.maxWidth;
+                  final width = constraints.maxWidth;
 
-              final lowest = data.dailyMinMaxTemp[0];
-              final highest = data.dailyMinMaxTemp[1];
-              const double smallest = 18;
-              final double minPercent = min(
-                  max((day.rawMinTemp - lowest) / (highest - lowest), 0), 1);
-              final double maxPercent = min(
-                  max((day.rawMaxTemp - lowest) / (highest - lowest), 0), 1);
-              return Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  margin: EdgeInsets.only(
-                      left: min(width * minPercent, width - smallest)),
-                  width: max(smallest, (maxPercent - minPercent) * width),
-                  height: 16,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: palette.secondaryFixedDim),
-                ),
-              );
-            }),
-          )),
-          comfortatext('${day.maxTemp}°', 18, data.settings,
-              color: palette.primary, weight: FontWeight.w500),
+                  final lowest = data.dailyMinMaxTemp[0];
+                  final highest = data.dailyMinMaxTemp[1];
+                  const double smallest = 18;
+                  final double minPercent = min(
+                    max((day.rawMinTemp - lowest) / (highest - lowest), 0),
+                    1,
+                  );
+                  final double maxPercent = min(
+                    max((day.rawMaxTemp - lowest) / (highest - lowest), 0),
+                    1,
+                  );
+                  return Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      margin: EdgeInsets.only(
+                        left: min(width * minPercent, width - smallest),
+                      ),
+                      width: max(smallest, (maxPercent - minPercent) * width),
+                      height: 16,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: palette.secondaryFixedDim,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          comfortatext(
+            '${day.maxTemp}°',
+            18,
+            data.settings,
+            color: palette.primary,
+            weight: FontWeight.w500,
+          ),
           const SizedBox(
             width: 12,
           ),
@@ -291,15 +369,20 @@ Widget dailyCollapsed(WeatherData data, AbstractDay day, ColorScheme palette,
             Icons.expand_more,
             size: 22,
             color: palette.secondary,
-          )
+          ),
         ],
       ),
     ),
   );
 }
 
-Widget dailyExpanded(AbstractDay day, WeatherData data, ColorScheme palette,
-    void Function(int) onExpandTapped, int index) {
+Widget dailyExpanded(
+  AbstractDay day,
+  WeatherData data,
+  ColorScheme palette,
+  void Function(int) onExpandTapped,
+  int index,
+) {
   return Padding(
     padding: const EdgeInsets.only(left: 13, right: 13, bottom: 16),
     child: Column(
@@ -318,10 +401,18 @@ Widget dailyExpanded(AbstractDay day, WeatherData data, ColorScheme palette,
                 const SizedBox(
                   width: 8,
                 ),
-                comfortatext("${day.name.split(", ")[0]}, ", 19, data.settings,
-                    color: palette.secondary),
-                comfortatext(day.name.split(', ')[1], 14, data.settings,
-                    color: palette.outline),
+                comfortatext(
+                  "${day.name.split(", ")[0]}, ",
+                  19,
+                  data.settings,
+                  color: palette.secondary,
+                ),
+                comfortatext(
+                  day.name.split(', ')[1],
+                  14,
+                  data.settings,
+                  color: palette.outline,
+                ),
                 const Spacer(),
                 Icon(
                   Icons.expand_less,
@@ -346,8 +437,12 @@ Widget dailyExpanded(AbstractDay day, WeatherData data, ColorScheme palette,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: comfortatext(day.text, 22, data.settings,
-                    color: palette.primary),
+                child: comfortatext(
+                  day.text,
+                  22,
+                  data.settings,
+                  color: palette.primary,
+                ),
               ),
               const Spacer(),
               Icon(
@@ -355,8 +450,12 @@ Widget dailyExpanded(AbstractDay day, WeatherData data, ColorScheme palette,
                 size: 16,
                 color: palette.outline,
               ),
-              comfortatext('${day.minTemp}°', 19, data.settings,
-                  color: palette.primary),
+              comfortatext(
+                '${day.minTemp}°',
+                19,
+                data.settings,
+                color: palette.primary,
+              ),
               const SizedBox(
                 width: 6,
               ),
@@ -365,8 +464,12 @@ Widget dailyExpanded(AbstractDay day, WeatherData data, ColorScheme palette,
                 size: 16,
                 color: palette.outline,
               ),
-              comfortatext('${day.maxTemp}°', 19, data.settings,
-                  color: palette.primary)
+              comfortatext(
+                '${day.maxTemp}°',
+                19,
+                data.settings,
+                color: palette.primary,
+              ),
             ],
           ),
         ),
@@ -376,18 +479,32 @@ Widget dailyExpanded(AbstractDay day, WeatherData data, ColorScheme palette,
             border: Border.all(color: palette.outlineVariant, width: 2),
             borderRadius: BorderRadius.circular(18),
           ),
-          padding:
-              const EdgeInsets.only(left: 10, right: 10, top: 25, bottom: 25),
+          padding: const EdgeInsets.only(
+            left: 10,
+            right: 10,
+            top: 25,
+            bottom: 25,
+          ),
           margin: const EdgeInsets.all(2),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               dayStat(data, Icons.umbrella_rounded, day.precip_prob, '%'),
-              dayStat(data, Icons.water_drop_outlined, day.total_precip.toInt(),
-                  data.settings['Precipitation']!,
-                  iconSize: 16.5),
-              dayStat(data, Icons.air, day.windspeed, data.settings['Wind']!,
-                  addWind: true, windDir: day.wind_dir),
+              dayStat(
+                data,
+                Icons.water_drop_outlined,
+                day.total_precip.toInt(),
+                data.settings['Precipitation']!,
+                iconSize: 16.5,
+              ),
+              dayStat(
+                data,
+                Icons.air,
+                day.windspeed,
+                data.settings['Wind']!,
+                addWind: true,
+                windDir: day.wind_dir,
+              ),
               dayStat(data, Icons.wb_sunny_outlined, day.uv, 'uv'),
             ],
           ),
@@ -399,7 +516,7 @@ Widget dailyExpanded(AbstractDay day, WeatherData data, ColorScheme palette,
             hours: day.hourly,
             elevated: true,
           ),
-        )
+        ),
       ],
     ),
   );

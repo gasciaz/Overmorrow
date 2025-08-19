@@ -22,8 +22,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:overmorrow/api_key.dart';
+import 'package:overmorrow/core/l10n/app_localizations.dart';
 import 'package:overmorrow/decoders/weather_data.dart';
-import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/main_screens.dart';
 import 'package:overmorrow/services/color_service.dart';
 import 'package:overmorrow/settings_page.dart';
@@ -42,8 +42,11 @@ class WeatherPage extends StatelessWidget {
   final WeatherData data;
   final Function updateLocation;
 
-  const WeatherPage(
-      {super.key, required this.data, required this.updateLocation});
+  const WeatherPage({
+    super.key,
+    required this.data,
+    required this.updateLocation,
+  });
 
   void openDrawer(BuildContext context) {
     Scaffold.of(context).openDrawer();
@@ -77,8 +80,11 @@ class ParrallaxBackground extends StatelessWidget {
   final Image image;
   final Color color;
 
-  const ParrallaxBackground(
-      {super.key, required this.image, required this.color});
+  const ParrallaxBackground({
+    super.key,
+    required this.image,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -102,40 +108,52 @@ class ParrallaxBackground extends StatelessWidget {
   }
 }
 
-Widget circles(WeatherData data, double bottom, BuildContext context,
-    ColorScheme palette) {
+Widget circles(
+  WeatherData data,
+  double bottom,
+  BuildContext context,
+  ColorScheme palette,
+) {
   return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 13, top: 2),
-      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 13, top: 2),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         DescriptionCircle(
-            text: '${data.current.feels_like}°',
-            undercaption: AppLocalizations.of(context)!.feelsLike,
-            extra: '',
-            settings: data.settings,
-            dir: -1,
-            palette: palette),
+          text: '${data.current.feels_like}°',
+          undercaption: AppLocalizations.of(context)!.feelsLike,
+          extra: '',
+          settings: data.settings,
+          dir: -1,
+          palette: palette,
+        ),
         DescriptionCircle(
-            text: '${data.current.humidity}',
-            undercaption: AppLocalizations.of(context)!.humidity,
-            extra: '%',
-            settings: data.settings,
-            dir: -1,
-            palette: palette),
+          text: '${data.current.humidity}',
+          undercaption: AppLocalizations.of(context)!.humidity,
+          extra: '%',
+          settings: data.settings,
+          dir: -1,
+          palette: palette,
+        ),
         DescriptionCircle(
-            text: '${data.current.precip}',
-            undercaption: AppLocalizations.of(context)!.precipCapital,
-            extra: data.settings['Precipitation']!,
-            settings: data.settings,
-            dir: -1,
-            palette: palette),
+          text: '${data.current.precip}',
+          undercaption: AppLocalizations.of(context)!.precipCapital,
+          extra: data.settings['Precipitation']!,
+          settings: data.settings,
+          dir: -1,
+          palette: palette,
+        ),
         DescriptionCircle(
-            text: '${data.current.wind}',
-            undercaption: AppLocalizations.of(context)!.windCapital,
-            extra: data.settings['Wind']!,
-            settings: data.settings,
-            dir: data.current.wind_dir + 180,
-            palette: palette),
-      ]));
+          text: '${data.current.wind}',
+          undercaption: AppLocalizations.of(context)!.windCapital,
+          extra: data.settings['Wind']!,
+          settings: data.settings,
+          dir: data.current.wind_dir + 180,
+          palette: palette,
+        ),
+      ],
+    ),
+  );
 }
 
 class DescriptionCircle extends StatelessWidget {
@@ -147,26 +165,29 @@ class DescriptionCircle extends StatelessWidget {
 
   final ColorScheme palette;
 
-  const DescriptionCircle(
-      {super.key,
-      required this.text,
-      required this.undercaption,
-      required this.extra,
-      required this.settings,
-      required this.dir,
-      required this.palette});
+  const DescriptionCircle({
+    super.key,
+    required this.text,
+    required this.undercaption,
+    required this.extra,
+    required this.settings,
+    required this.dir,
+    required this.palette,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.only(left: 3, right: 3),
-        child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-          Stack(
-            children: [
-              AspectRatio(
-                aspectRatio: 1,
-                child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Stack(
+              children: [
+                AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(width: 2, color: palette.primary),
@@ -177,45 +198,68 @@ class DescriptionCircle extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.baseline,
                         textBaseline: TextBaseline.alphabetic,
                         children: [
-                          comfortatext(text, 20, settings,
-                              color: palette.primary),
+                          comfortatext(
+                            text,
+                            20,
+                            settings,
+                            color: palette.primary,
+                          ),
                           Flexible(
-                              child: comfortatext(extra, 16, settings,
-                                  color: palette.primary)),
+                            child: comfortatext(
+                              extra,
+                              16,
+                              settings,
+                              color: palette.primary,
+                            ),
+                          ),
                         ],
                       ),
-                    )),
-              ),
-              AspectRatio(
-                aspectRatio: 1,
-                child: LayoutBuilder(builder:
-                    (BuildContext context, BoxConstraints constraints) {
-                  return Visibility(
-                      visible: dir != -1,
-                      child: Center(
-                        child: RotationTransition(
-                            turns: AlwaysStoppedAnimation(dir / 360),
-                            child: Padding(
-                                padding: EdgeInsets.only(
-                                    bottom: constraints.maxWidth * 0.70),
-                                child: Icon(
-                                  Icons.keyboard_arrow_up_outlined,
-                                  color: palette.onSurface,
-                                  size: 17,
-                                ))),
-                      ));
-                }),
-              ),
-            ],
-          ),
-          Center(
+                    ),
+                  ),
+                ),
+                AspectRatio(
+                  aspectRatio: 1,
+                  child: LayoutBuilder(
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                          return Visibility(
+                            visible: dir != -1,
+                            child: Center(
+                              child: RotationTransition(
+                                turns: AlwaysStoppedAnimation(dir / 360),
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: constraints.maxWidth * 0.70,
+                                  ),
+                                  child: Icon(
+                                    Icons.keyboard_arrow_up_outlined,
+                                    color: palette.onSurface,
+                                    size: 17,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                  ),
+                ),
+              ],
+            ),
+            Center(
               child: Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: comfortatext(undercaption, 14, settings,
-                      align: TextAlign.center,
-                      color: palette.outline,
-                      weight: FontWeight.w300)))
-        ]),
+                padding: const EdgeInsets.only(top: 6),
+                child: comfortatext(
+                  undercaption,
+                  14,
+                  settings,
+                  align: TextAlign.center,
+                  color: palette.outline,
+                  weight: FontWeight.w300,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -289,8 +333,9 @@ class _FadingWidgetState extends State<FadingWidget>
     final palette = widget.data.current.palette;
 
     return Container(
-      color:
-          widget.data.isonline ? Colors.transparent : palette.primaryContainer,
+      color: widget.data.isonline
+          ? Colors.transparent
+          : palette.primaryContainer,
       margin: widget.data.isonline
           ? const EdgeInsets.only(bottom: 1)
           : const EdgeInsets.only(bottom: 5),
@@ -326,11 +371,12 @@ class SinceLastUpdate extends StatefulWidget {
   final WeatherData data;
   final bool isVisible;
 
-  const SinceLastUpdate(
-      {super.key,
-      required this.data,
-      required this.split,
-      required this.isVisible});
+  const SinceLastUpdate({
+    super.key,
+    required this.data,
+    required this.split,
+    required this.isVisible,
+  });
 
   @override
   _SinceLastUpdateState createState() => _SinceLastUpdateState();
@@ -357,8 +403,11 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
               if (!widget.data.isonline)
                 Padding(
                   padding: const EdgeInsets.only(right: 2),
-                  child: Icon(Icons.download_for_offline_outlined,
-                      color: highlight, size: 13),
+                  child: Icon(
+                    Icons.download_for_offline_outlined,
+                    color: highlight,
+                    size: 13,
+                  ),
                 ),
               if (!widget.data.isonline)
                 Padding(
@@ -419,59 +468,87 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
               if (!widget.data.isonline)
                 Padding(
                   padding: const EdgeInsets.only(right: 7),
-                  child: comfortatext(AppLocalizations.of(context)!.offline, 13,
-                      widget.data.settings,
-                      color: highlight, weight: FontWeight.w300),
+                  child: comfortatext(
+                    AppLocalizations.of(context)!.offline,
+                    13,
+                    widget.data.settings,
+                    color: highlight,
+                    weight: FontWeight.w300,
+                  ),
                 ),
               TextButton(
                 onPressed: () async {
                   await _launchUrl(
-                      '${widget.data.current.imageService.photolink}?utm_source=overmorrow&utm_medium=referral');
+                    '${widget.data.current.imageService.photolink}?utm_source=overmorrow&utm_medium=referral',
+                  );
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(1),
                   minimumSize: const Size(0, 22),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                child: comfortatext(split[0], 13, widget.data.settings,
-                    color: text,
-                    decoration: TextDecoration.underline,
-                    weight: FontWeight.w300),
+                child: comfortatext(
+                  split[0],
+                  13,
+                  widget.data.settings,
+                  color: text,
+                  decoration: TextDecoration.underline,
+                  weight: FontWeight.w300,
+                ),
               ),
-              comfortatext(split[1], 13, widget.data.settings,
-                  color: text, weight: FontWeight.w300),
-              TextButton(
-                onPressed: () async {
-                  await _launchUrl(
-                      '${widget.data.current.imageService.userlink}?utm_source=overmorrow&utm_medium=referral');
-                },
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.all(1),
-                  minimumSize: const Size(0, 22),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                child: comfortatext(widget.data.current.imageService.username,
-                    13, widget.data.settings,
-                    color: text,
-                    decoration: TextDecoration.underline,
-                    weight: FontWeight.w300),
+              comfortatext(
+                split[1],
+                13,
+                widget.data.settings,
+                color: text,
+                weight: FontWeight.w300,
               ),
-              comfortatext(split[3], 13, widget.data.settings,
-                  color: text, weight: FontWeight.w300),
               TextButton(
                 onPressed: () async {
                   await _launchUrl(
-                      'https://unsplash.com/?utm_source=overmorrow&utm_medium=referral');
+                    '${widget.data.current.imageService.userlink}?utm_source=overmorrow&utm_medium=referral',
+                  );
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(1),
                   minimumSize: const Size(0, 22),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                child: comfortatext(split[4], 13, widget.data.settings,
-                    color: text,
-                    decoration: TextDecoration.underline,
-                    weight: FontWeight.w300),
+                child: comfortatext(
+                  widget.data.current.imageService.username,
+                  13,
+                  widget.data.settings,
+                  color: text,
+                  decoration: TextDecoration.underline,
+                  weight: FontWeight.w300,
+                ),
+              ),
+              comfortatext(
+                split[3],
+                13,
+                widget.data.settings,
+                color: text,
+                weight: FontWeight.w300,
+              ),
+              TextButton(
+                onPressed: () async {
+                  await _launchUrl(
+                    'https://unsplash.com/?utm_source=overmorrow&utm_medium=referral',
+                  );
+                },
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.all(1),
+                  minimumSize: const Size(0, 22),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: comfortatext(
+                  split[4],
+                  13,
+                  widget.data.settings,
+                  color: text,
+                  decoration: TextDecoration.underline,
+                  weight: FontWeight.w300,
+                ),
               ),
             ],
           ),
@@ -482,13 +559,14 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
 }
 
 Widget providerSelector(
-    Map<String, String> settings,
-    Function updateLocation,
-    ColorScheme palette,
-    String provider,
-    String latlng,
-    String realLoc,
-    BuildContext context) {
+  Map<String, String> settings,
+  Function updateLocation,
+  ColorScheme palette,
+  String provider,
+  String latlng,
+  String realLoc,
+  BuildContext context,
+) {
   return Padding(
     padding: const EdgeInsets.only(left: 25, right: 25, bottom: 80, top: 35),
     child: Column(
@@ -497,10 +575,11 @@ Widget providerSelector(
         Padding(
           padding: const EdgeInsets.only(left: 2),
           child: comfortatext(
-              AppLocalizations.of(context)!.weatherProvderLowercase,
-              17,
-              settings,
-              color: palette.onSurface),
+            AppLocalizations.of(context)!.weatherProvderLowercase,
+            17,
+            settings,
+            color: palette.onSurface,
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 12),
@@ -510,8 +589,12 @@ Widget providerSelector(
               borderRadius: BorderRadius.circular(18),
               //border: Border.all(color: palette.secondary, width: 2)
             ),
-            padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 7, bottom: 7),
+            padding: const EdgeInsets.only(
+              left: 16,
+              right: 16,
+              top: 7,
+              bottom: 7,
+            ),
             child: DropdownButton(
               underline: Container(),
               onTap: HapticFeedback.mediumImpact,
@@ -530,8 +613,12 @@ Widget providerSelector(
                   value: item,
                   child: Padding(
                     padding: const EdgeInsets.all(10),
-                    child: comfortatext(item, 18, settings,
-                        color: palette.secondary),
+                    child: comfortatext(
+                      item,
+                      18,
+                      settings,
+                      color: palette.secondary,
+                    ),
                   ),
                 );
               }).toList(),
@@ -562,16 +649,17 @@ class ErrorPage extends StatelessWidget {
   final String latlng;
   final String? shouldAdd;
 
-  const ErrorPage(
-      {super.key,
-      required this.errorMessage,
-      required this.updateLocation,
-      required this.icon,
-      required this.place,
-      required this.settings,
-      required this.provider,
-      required this.latlng,
-      this.shouldAdd});
+  const ErrorPage({
+    super.key,
+    required this.errorMessage,
+    required this.updateLocation,
+    required this.icon,
+    required this.place,
+    required this.settings,
+    required this.provider,
+    required this.latlng,
+    this.shouldAdd,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -584,8 +672,12 @@ class ErrorPage extends StatelessWidget {
     newStr = newStr.replaceAll(access_key, replacement);
     //newStr = newStr.replaceAll(timezonedbKey, replacement);
 
-    final image = Image.asset('assets/backdrops/grayscale_snow2.jpg',
-        fit: BoxFit.cover, width: double.infinity, height: double.infinity);
+    final image = Image.asset(
+      'assets/backdrops/grayscale_snow2.jpg',
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: double.infinity,
+    );
 
     final palette = ColorPalette.getErrorPagePalette(settings['Color mode']);
 
@@ -597,46 +689,54 @@ class ErrorPage extends StatelessWidget {
           await updateLocation(latlng, place, time: 400);
         },
         headerData: HeaderData(
-            blurContent: false,
-            headerHeight: max(size.height * 0.5,
-                400), //we don't want it to be smaller than 400
-            header: ParrallaxBackground(
-                image: Image.asset(
-                  'assets/backdrops/grayscale_snow2.jpg',
-                  fit: BoxFit.cover,
-                ),
-                key: Key(place),
-                color: palette.surfaceContainerHigh),
-            overlay: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(40),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 50, bottom: 20),
-                          child: Icon(icon, color: Colors.black54, size: 20),
-                        ),
-                        comfortatext(newStr, 17, settings,
-                            color: Colors.black54,
-                            weight: FontWeight.w500,
-                            align: TextAlign.center),
-                      ],
-                    ),
+          blurContent: false,
+          headerHeight: max(
+            size.height * 0.5,
+            400,
+          ), //we don't want it to be smaller than 400
+          header: ParrallaxBackground(
+            image: Image.asset(
+              'assets/backdrops/grayscale_snow2.jpg',
+              fit: BoxFit.cover,
+            ),
+            key: Key(place),
+            color: palette.surfaceContainerHigh,
+          ),
+          overlay: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(40),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 50, bottom: 20),
+                        child: Icon(icon, color: Colors.black54, size: 20),
+                      ),
+                      comfortatext(
+                        newStr,
+                        17,
+                        settings,
+                        color: Colors.black54,
+                        weight: FontWeight.w500,
+                        align: TextAlign.center,
+                      ),
+                    ],
                   ),
                 ),
-                MySearchParent(
-                  updateLocation: updateLocation,
-                  palette: palette,
-                  place: place,
-                  settings: settings,
-                  image: image,
-                  isTabletMode: false,
-                )
-              ],
-            )),
+              ),
+              MySearchParent(
+                updateLocation: updateLocation,
+                palette: palette,
+                place: place,
+                settings: settings,
+                image: image,
+                isTabletMode: false,
+              ),
+            ],
+          ),
+        ),
         child: Column(
           children: [
             Padding(
@@ -650,8 +750,15 @@ class ErrorPage extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20),
-              child: providerSelector(settings, updateLocation, palette,
-                  provider, latlng, place, context),
+              child: providerSelector(
+                settings,
+                updateLocation,
+                palette,
+                provider,
+                latlng,
+                place,
+                context,
+              ),
             ),
           ],
         ),

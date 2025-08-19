@@ -26,7 +26,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:overmorrow/l10n/app_localizations.dart';
+import 'package:overmorrow/core/l10n/app_localizations.dart';
 import 'package:overmorrow/main.dart';
 import 'package:overmorrow/services/location_service.dart';
 import 'package:overmorrow/settings_page.dart';
@@ -39,16 +39,17 @@ String generateSimplifier(Map<String, dynamic> split) {
 }
 
 Widget searchBar2(
-    ColorScheme palette,
-    ValueListenable<List<String>> recommend,
-    Function updateLocation,
-    void Function(List<String>) updateFav,
-    ValueListenable<List<String>> favorites,
-    void Function(List<String>) updateRec,
-    String place,
-    BuildContext context,
-    Map<String, String> settings,
-    Image image) {
+  ColorScheme palette,
+  ValueListenable<List<String>> recommend,
+  Function updateLocation,
+  void Function(List<String>) updateFav,
+  ValueListenable<List<String>> favorites,
+  void Function(List<String>) updateRec,
+  String place,
+  BuildContext context,
+  Map<String, String> settings,
+  Image image,
+) {
   return Align(
     alignment: Alignment.topCenter,
     child: GestureDetector(
@@ -57,11 +58,14 @@ Widget searchBar2(
         child: Container(
           height: 67,
           margin: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 15,
-              left: 28,
-              right: 28),
+            top: MediaQuery.of(context).padding.top + 15,
+            left: 28,
+            right: 28,
+          ),
           decoration: BoxDecoration(
-              color: palette.surface, borderRadius: BorderRadius.circular(33)),
+            color: palette.surface,
+            borderRadius: BorderRadius.circular(33),
+          ),
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             children: [
@@ -73,8 +77,14 @@ Widget searchBar2(
                 ),
               ),
               Expanded(
-                  child: comfortatext(place, 23, settings,
-                      color: palette.onSurface, maxLines: 1)),
+                child: comfortatext(
+                  place,
+                  23,
+                  settings,
+                  color: palette.onSurface,
+                  maxLines: 1,
+                ),
+              ),
               IconButton(
                 icon: Icon(
                   Icons.settings_outlined,
@@ -108,19 +118,20 @@ Widget searchBar2(
         HapticFeedback.lightImpact();
         Navigator.of(context).push(
           MaterialPageRoute<HeroSearchPage>(
-              builder: (context) => HeroSearchPage(
-                    palette: palette,
-                    place: place,
-                    settings: settings,
-                    recommend: recommend,
-                    updateRec: updateRec,
-                    updateLocation: updateLocation,
-                    favorites: favorites,
-                    updateFav: updateFav,
-                    isTabletMode: false,
-                    image: image,
-                  ),
-              fullscreenDialog: true),
+            builder: (context) => HeroSearchPage(
+              palette: palette,
+              place: place,
+              settings: settings,
+              recommend: recommend,
+              updateRec: updateRec,
+              updateLocation: updateLocation,
+              favorites: favorites,
+              updateFav: updateFav,
+              isTabletMode: false,
+              image: image,
+            ),
+            fullscreenDialog: true,
+          ),
         );
       },
     ),
@@ -139,31 +150,33 @@ class HeroSearchPage extends StatefulWidget {
   final bool isTabletMode;
   final Image image;
 
-  const HeroSearchPage(
-      {super.key,
-      required this.palette,
-      required this.place,
-      required this.settings,
-      required this.recommend,
-      required this.updateRec,
-      required this.updateLocation,
-      required this.favorites,
-      required this.updateFav,
-      required this.isTabletMode,
-      required this.image});
+  const HeroSearchPage({
+    super.key,
+    required this.palette,
+    required this.place,
+    required this.settings,
+    required this.recommend,
+    required this.updateRec,
+    required this.updateLocation,
+    required this.favorites,
+    required this.updateFav,
+    required this.isTabletMode,
+    required this.image,
+  });
 
   @override
   State<HeroSearchPage> createState() => _HeroSearchPageState(
-      palette: palette,
-      place: place,
-      settings: settings,
-      recommend: recommend,
-      updateRec: updateRec,
-      updateLocation: updateLocation,
-      favorites: favorites,
-      updateFav: updateFav,
-      isTabletMode: isTabletMode,
-      image: image);
+    palette: palette,
+    place: place,
+    settings: settings,
+    recommend: recommend,
+    updateRec: updateRec,
+    updateLocation: updateLocation,
+    favorites: favorites,
+    updateFav: updateFav,
+    isTabletMode: isTabletMode,
+    image: image,
+  );
 }
 
 class _HeroSearchPageState extends State<HeroSearchPage> {
@@ -178,17 +191,18 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
   final bool isTabletMode;
   final Image image;
 
-  _HeroSearchPageState(
-      {required this.palette,
-      required this.place,
-      required this.settings,
-      required this.recommend,
-      required this.updateRec,
-      required this.updateLocation,
-      required this.favorites,
-      required this.updateFav,
-      required this.isTabletMode,
-      required this.image});
+  _HeroSearchPageState({
+    required this.palette,
+    required this.place,
+    required this.settings,
+    required this.recommend,
+    required this.updateRec,
+    required this.updateLocation,
+    required this.favorites,
+    required this.updateFav,
+    required this.isTabletMode,
+    required this.image,
+  });
 
   String text = '';
   bool isEditing = false;
@@ -205,7 +219,10 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 400), () async {
       final result = await LocationService.getRecommendation(
-          query, settings['Search provider'], settings);
+        query,
+        settings['Search provider'],
+        settings,
+      );
       updateRec(result);
     });
   }
@@ -249,12 +266,15 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
     try {
       position = (await Geolocator.getLastKnownPosition())!;
 
-      final placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
+      final placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
       final place = placemarks[0];
 
       setState(() {
-        placeName = place.locality ??
+        placeName =
+            place.locality ??
             place.subLocality ??
             place.thoroughfare ??
             place.subThoroughfare ??
@@ -270,9 +290,11 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
 
     try {
       position = await Geolocator.getCurrentPosition(
-          locationSettings: AndroidSettings(
-              accuracy: LocationAccuracy.medium,
-              timeLimit: const Duration(seconds: 20)));
+        locationSettings: AndroidSettings(
+          accuracy: LocationAccuracy.medium,
+          timeLimit: const Duration(seconds: 20),
+        ),
+      );
     } on Error {
       setState(() {
         locationState = 'disabled';
@@ -282,19 +304,23 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
     } on LocationServiceDisabledException {
       setState(() {
         locationState = 'disabled';
-        locationMessage =
-            AppLocalizations.of(context)!.locationServicesAreDisabled;
+        locationMessage = AppLocalizations.of(
+          context,
+        )!.locationServicesAreDisabled;
       });
       return 'disabled';
     }
 
     try {
-      final placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
+      final placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
       final place = placemarks[0];
 
       setState(() {
-        placeName = place.locality ??
+        placeName =
+            place.locality ??
             place.subLocality ??
             place.thoroughfare ??
             place.subThoroughfare ??
@@ -305,8 +331,10 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
       });
 
       //update the last known position for the home screen widgets
-      await setLastKnownLocation(placeName,
-          '${position.latitude.toStringAsFixed(2)}, ${position.longitude.toStringAsFixed(2)}');
+      await setLastKnownLocation(
+        placeName,
+        '${position.latitude.toStringAsFixed(2)}, ${position.longitude.toStringAsFixed(2)}',
+      );
     } on Error {
       setState(() {
         placeName =
@@ -321,8 +349,9 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
     if (!serviceEnabled) {
       setState(() {
         locationState = 'disabled';
-        locationMessage =
-            AppLocalizations.of(context)!.locationServicesAreDisabled;
+        locationMessage = AppLocalizations.of(
+          context,
+        )!.locationServicesAreDisabled;
       });
       return 'disabled';
     }
@@ -330,8 +359,9 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
     if (permission == LocationPermission.deniedForever) {
       setState(() {
         locationState = 'deniedForever';
-        locationMessage =
-            AppLocalizations.of(context)!.locationPermissionDeniedForever;
+        locationMessage = AppLocalizations.of(
+          context,
+        )!.locationPermissionDeniedForever;
       });
       return 'disabled';
     }
@@ -347,8 +377,9 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
     if (!serviceEnabled) {
       setState(() {
         locationState = 'disabled';
-        locationMessage =
-            AppLocalizations.of(context)!.locationServicesAreDisabled;
+        locationMessage = AppLocalizations.of(
+          context,
+        )!.locationServicesAreDisabled;
       });
       return 'disabled';
     }
@@ -357,16 +388,18 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
     if (permission == LocationPermission.deniedForever) {
       setState(() {
         locationState = 'deniedForever';
-        locationMessage =
-            AppLocalizations.of(context)!.locationPermissionDeniedForever;
+        locationMessage = AppLocalizations.of(
+          context,
+        )!.locationPermissionDeniedForever;
       });
       return 'disabled';
     }
     if (permission == LocationPermission.denied) {
       setState(() {
         locationState = 'denied';
-        locationMessage =
-            AppLocalizations.of(context)!.locationPermissionIsDenied;
+        locationMessage = AppLocalizations.of(
+          context,
+        )!.locationPermissionIsDenied;
       });
       return 'disabled';
     }
@@ -402,11 +435,13 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          isTabletMode ? palette.surfaceContainer : palette.surface,
+      backgroundColor: isTabletMode
+          ? palette.surfaceContainer
+          : palette.surface,
       appBar: AppBar(
-        backgroundColor:
-            isTabletMode ? palette.surfaceContainer : palette.surface,
+        backgroundColor: isTabletMode
+            ? palette.surfaceContainer
+            : palette.surface,
         foregroundColor: palette.primary,
         surfaceTintColor: palette.outlineVariant,
         elevation: 0,
@@ -448,7 +483,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
                     ),
                   )
                 : Container(),
-          )
+          ),
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(103),
@@ -458,10 +493,11 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
               height: 67,
               margin: const EdgeInsets.only(left: 27, right: 27, bottom: 20),
               decoration: BoxDecoration(
-                  color: isTabletMode
-                      ? palette.surfaceContainerHighest
-                      : palette.surfaceContainer,
-                  borderRadius: BorderRadius.circular(33)),
+                color: isTabletMode
+                    ? palette.surfaceContainerHighest
+                    : palette.surfaceContainer,
+                borderRadius: BorderRadius.circular(33),
+              ),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
@@ -527,25 +563,26 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
                 alignment: Alignment.topCenter,
                 child: SingleChildScrollView(
                   child: buildRecommend(
-                      text,
-                      palette,
-                      settings,
-                      favorites,
-                      recommend,
-                      updateLocation,
-                      onFavChanged,
-                      isEditing,
-                      locationState,
-                      locationMessage,
-                      askGrantLocationPermission,
-                      placeName,
-                      country,
-                      region,
-                      isTabletMode),
+                    text,
+                    palette,
+                    settings,
+                    favorites,
+                    recommend,
+                    updateLocation,
+                    onFavChanged,
+                    isEditing,
+                    locationState,
+                    locationMessage,
+                    askGrantLocationPermission,
+                    placeName,
+                    country,
+                    region,
+                    isTabletMode,
+                  ),
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -553,239 +590,275 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
 }
 
 Widget buildRecommend(
-    String text,
-    ColorScheme palette,
-    Map<String, String> settings,
-    ValueListenable<List<String>> favoritesListen,
-    ValueListenable<List<String>> recommend,
-    Function updateLocation,
-    void Function(List<String>) onFavChanged,
-    bool isEditing,
-    String locationState,
-    String locationMessage,
-    VoidCallback askGrantLocationPermission,
-    String placeName,
-    String country,
-    String region,
-    bool isTabletMode) {
+  String text,
+  ColorScheme palette,
+  Map<String, String> settings,
+  ValueListenable<List<String>> favoritesListen,
+  ValueListenable<List<String>> recommend,
+  Function updateLocation,
+  void Function(List<String>) onFavChanged,
+  bool isEditing,
+  String locationState,
+  String locationMessage,
+  VoidCallback askGrantLocationPermission,
+  String placeName,
+  String country,
+  String region,
+  bool isTabletMode,
+) {
   return ValueListenableBuilder(
-      valueListenable: favoritesListen,
-      builder: (context, value, child) {
-        final favorites = value;
-        if (text == '') {
-          return Padding(
-            padding:
-                const EdgeInsets.only(left: 30, top: 10, right: 30, bottom: 40),
-            child: AnimationLimiter(
-              child: Column(
-                children: AnimationConfiguration.toStaggeredList(
-                  duration: const Duration(milliseconds: 475),
-                  childAnimationBuilder: (widget) => SlideAnimation(
-                    horizontalOffset: 0,
-                    verticalOffset: 50,
-                    child: FadeInAnimation(
-                      child: widget,
-                    ),
+    valueListenable: favoritesListen,
+    builder: (context, value, child) {
+      final favorites = value;
+      if (text == '') {
+        return Padding(
+          padding: const EdgeInsets.only(
+            left: 30,
+            top: 10,
+            right: 30,
+            bottom: 40,
+          ),
+          child: AnimationLimiter(
+            child: Column(
+              children: AnimationConfiguration.toStaggeredList(
+                duration: const Duration(milliseconds: 475),
+                childAnimationBuilder: (widget) => SlideAnimation(
+                  horizontalOffset: 0,
+                  verticalOffset: 50,
+                  child: FadeInAnimation(
+                    child: widget,
                   ),
-                  children: [
-                    Row(
+                ),
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10, top: 2),
+                        child: Icon(
+                          Icons.gps_fixed,
+                          color: palette.outline,
+                          size: 17,
+                        ),
+                      ),
+                      comfortatext(
+                        AppLocalizations.of(context)!.currentLocation,
+                        18,
+                        settings,
+                        color: palette.outline,
+                      ),
+                    ],
+                  ),
+                  currentLocationWidget(
+                    settings,
+                    locationState,
+                    locationMessage,
+                    palette,
+                    askGrantLocationPermission,
+                    placeName,
+                    country,
+                    region,
+                    updateLocation,
+                    context,
+                    isTabletMode,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 14),
+                    child: Row(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(right: 10, top: 2),
+                          padding: const EdgeInsets.only(right: 10),
                           child: Icon(
-                            Icons.gps_fixed,
+                            Icons.star_outline,
                             color: palette.outline,
-                            size: 17,
+                            size: 18,
                           ),
                         ),
                         comfortatext(
-                            AppLocalizations.of(context)!.currentLocation,
-                            18,
-                            settings,
-                            color: palette.outline),
+                          AppLocalizations.of(context)!.favoritesLowercase,
+                          18,
+                          settings,
+                          color: palette.outline,
+                        ),
                       ],
                     ),
-                    currentLocationWidget(
-                        settings,
-                        locationState,
-                        locationMessage,
-                        palette,
-                        askGrantLocationPermission,
-                        placeName,
-                        country,
-                        region,
-                        updateLocation,
-                        context,
-                        isTabletMode),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 14),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: Icon(
-                              Icons.star_outline,
-                              color: palette.outline,
-                              size: 18,
-                            ),
-                          ),
-                          comfortatext(
-                              AppLocalizations.of(context)!.favoritesLowercase,
-                              18,
-                              settings,
-                              color: palette.outline),
-                        ],
+                  ),
+                  if (favorites.isNotEmpty)
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(30),
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        transitionBuilder:
+                            (Widget child, Animation<double> animation) {
+                              return SizeTransition(
+                                sizeFactor: animation,
+                                child: child,
+                              );
+                            },
+                        child: favoritesOrReorder(
+                          isEditing,
+                          favorites,
+                          settings,
+                          onFavChanged,
+                          palette,
+                          updateLocation,
+                          context,
+                          isTabletMode,
+                        ),
                       ),
                     ),
-                    if (favorites.isNotEmpty)
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(30),
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          transitionBuilder:
-                              (Widget child, Animation<double> animation) {
-                            return SizeTransition(
-                                sizeFactor: animation, child: child);
-                          },
-                          child: favoritesOrReorder(
-                              isEditing,
-                              favorites,
-                              settings,
-                              onFavChanged,
-                              palette,
-                              updateLocation,
-                              context,
-                              isTabletMode),
-                        ),
-                      )
-                  ],
-                ),
+                ],
               ),
             ),
-          );
-        } else {
-          return buildSearchResults(favorites, recommend, palette,
-              updateLocation, onFavChanged, settings, isTabletMode);
-        }
-      });
+          ),
+        );
+      } else {
+        return buildSearchResults(
+          favorites,
+          recommend,
+          palette,
+          updateLocation,
+          onFavChanged,
+          settings,
+          isTabletMode,
+        );
+      }
+    },
+  );
 }
 
 Widget buildSearchResults(
-    List<String> favorites,
-    ValueListenable<List<String>> recommend,
-    ColorScheme palette,
-    Function updateLocation,
-    void Function(List<String>) onFavChanged,
-    Map<String, String> settings,
-    bool isTabletMode) {
+  List<String> favorites,
+  ValueListenable<List<String>> recommend,
+  ColorScheme palette,
+  Function updateLocation,
+  void Function(List<String>) onFavChanged,
+  Map<String, String> settings,
+  bool isTabletMode,
+) {
   final favoriteNarrow = <String>[];
   for (var i = 0; i < favorites.length; i++) {
     final d = jsonDecode(favorites[i]) as Map<String, dynamic>;
     favoriteNarrow.add(generateSimplifier(d));
   }
   return ValueListenableBuilder(
-      valueListenable: recommend,
-      builder: (context, value, child) {
-        final rec = value;
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 30, left: 30, right: 30),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(30),
-            child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                transitionBuilder: (Widget child, Animation<double> animation) {
-                  return SizeTransition(sizeFactor: animation, child: child);
-                },
-                child: Container(
-                    key: ValueKey<String>(rec.toString()),
-                    decoration: BoxDecoration(
-                      color: isTabletMode
-                          ? palette.surfaceContainerHighest
-                          : palette.surfaceContainer,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: rec.isEmpty
-                        ? EdgeInsets.zero
-                        : const EdgeInsets.all(14),
-                    child: Column(
-                        children: List.generate(rec.length, (index) {
-                      final split =
-                          json.decode(rec[index]) as Map<String, dynamic>;
-                      final name = split['name'] as String;
-                      final country =
-                          generateAbbreviation(split['country'] as String);
-                      final region = split['region'] as String;
-                      final simplifier = generateSimplifier(split);
+    valueListenable: recommend,
+    builder: (context, value, child) {
+      final rec = value;
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 30, left: 30, right: 30),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return SizeTransition(sizeFactor: animation, child: child);
+            },
+            child: Container(
+              key: ValueKey<String>(rec.toString()),
+              decoration: BoxDecoration(
+                color: isTabletMode
+                    ? palette.surfaceContainerHighest
+                    : palette.surfaceContainer,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              padding: rec.isEmpty ? EdgeInsets.zero : const EdgeInsets.all(14),
+              child: Column(
+                children: List.generate(rec.length, (index) {
+                  final split = json.decode(rec[index]) as Map<String, dynamic>;
+                  final name = split['name'] as String;
+                  final country = generateAbbreviation(
+                    split['country'] as String,
+                  );
+                  final region = split['region'] as String;
+                  final simplifier = generateSimplifier(split);
 
-                      final contained = favoriteNarrow.contains(simplifier);
-                      return GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () {
-                          HapticFeedback.selectionClick();
-                          updateLocation('${split["lat"]}, ${split["lon"]}',
-                              split['name']);
-                          if (!isTabletMode) {
-                            Navigator.pop(context);
-                          }
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10, right: 7, top: 5, bottom: 5),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  comfortatext(name, 19, settings,
-                                      color: palette.onSurface),
-                                  comfortatext(
-                                      '$region, $country', 15, settings,
-                                      color: palette.outline)
-                                ],
-                              )),
-                              IconButton(
-                                onPressed: () {
-                                  if (contained) {
-                                    HapticFeedback.mediumImpact();
-                                    final z =
-                                        favoriteNarrow.indexOf(simplifier);
-                                    favorites.removeAt(z);
-                                    onFavChanged(favorites);
-                                  } else {
-                                    HapticFeedback.lightImpact();
-                                    favorites.add(rec[index]);
-                                    onFavChanged(favorites);
-                                  }
-                                },
-                                icon: Icon(
-                                  contained ? Icons.star : Icons.star_outline,
-                                  color: palette.primary,
-                                  size: 24,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                  final contained = favoriteNarrow.contains(simplifier);
+                  return GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      HapticFeedback.selectionClick();
+                      updateLocation(
+                        '${split["lat"]}, ${split["lon"]}',
+                        split['name'],
                       );
-                    })))),
+                      if (!isTabletMode) {
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 7,
+                        top: 5,
+                        bottom: 5,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                comfortatext(
+                                  name,
+                                  19,
+                                  settings,
+                                  color: palette.onSurface,
+                                ),
+                                comfortatext(
+                                  '$region, $country',
+                                  15,
+                                  settings,
+                                  color: palette.outline,
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              if (contained) {
+                                HapticFeedback.mediumImpact();
+                                final z = favoriteNarrow.indexOf(simplifier);
+                                favorites.removeAt(z);
+                                onFavChanged(favorites);
+                              } else {
+                                HapticFeedback.lightImpact();
+                                favorites.add(rec[index]);
+                                onFavChanged(favorites);
+                              }
+                            },
+                            icon: Icon(
+                              contained ? Icons.star : Icons.star_outline,
+                              color: palette.primary,
+                              size: 24,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
           ),
-        );
-      });
+        ),
+      );
+    },
+  );
 }
 
 Widget currentLocationWidget(
-    Map<String, String> settings,
-    String locationState,
-    String locationMessage,
-    ColorScheme palette,
-    VoidCallback askGrantLocationPermission,
-    String placeName,
-    String country,
-    String region,
-    Function updateLocation,
-    BuildContext context,
-    bool isTabletMode) {
+  Map<String, String> settings,
+  String locationState,
+  String locationMessage,
+  ColorScheme palette,
+  VoidCallback askGrantLocationPermission,
+  String placeName,
+  String country,
+  String region,
+  Function updateLocation,
+  BuildContext context,
+  bool isTabletMode,
+) {
   if (locationState == 'denied') {
     return GestureDetector(
       onTap: () {
@@ -793,8 +866,12 @@ Widget currentLocationWidget(
       },
       child: Container(
         margin: const EdgeInsets.only(top: 20, bottom: 30),
-        padding:
-            const EdgeInsets.only(left: 25, right: 25, top: 23, bottom: 23),
+        padding: const EdgeInsets.only(
+          left: 25,
+          right: 25,
+          top: 23,
+          bottom: 23,
+        ),
         decoration: BoxDecoration(
           color: palette.primaryFixedDim,
           borderRadius: BorderRadius.circular(40),
@@ -810,10 +887,11 @@ Widget currentLocationWidget(
               child: Padding(
                 padding: const EdgeInsets.only(left: 10, bottom: 2),
                 child: comfortatext(
-                    AppLocalizations.of(context)!.grantLocationPermission,
-                    19,
-                    settings,
-                    color: palette.onPrimaryFixedVariant),
+                  AppLocalizations.of(context)!.grantLocationPermission,
+                  19,
+                  settings,
+                  color: palette.onPrimaryFixedVariant,
+                ),
               ),
             ),
           ],
@@ -825,16 +903,22 @@ Widget currentLocationWidget(
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
-        updateLocation('40.7128, -74.0060',
-            'CurrentLocation'); // this is new york for backup
+        updateLocation(
+          '40.7128, -74.0060',
+          'CurrentLocation',
+        ); // this is new york for backup
         if (!isTabletMode) {
           Navigator.pop(context);
         }
       },
       child: Container(
         margin: const EdgeInsets.only(top: 14, bottom: 30),
-        padding:
-            const EdgeInsets.only(left: 25, right: 25, top: 20, bottom: 20),
+        padding: const EdgeInsets.only(
+          left: 25,
+          right: 25,
+          top: 20,
+          bottom: 20,
+        ),
         decoration: BoxDecoration(
           color: palette.primaryFixedDim,
           borderRadius: BorderRadius.circular(40),
@@ -842,19 +926,28 @@ Widget currentLocationWidget(
         child: Row(
           children: [
             Expanded(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                comfortatext(placeName, 20, settings,
-                    color: palette.onPrimaryFixed),
-                comfortatext('$region, $country', 15, settings,
-                    color: palette.onPrimaryFixed)
-              ],
-            )),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  comfortatext(
+                    placeName,
+                    20,
+                    settings,
+                    color: palette.onPrimaryFixed,
+                  ),
+                  comfortatext(
+                    '$region, $country',
+                    15,
+                    settings,
+                    color: palette.onPrimaryFixed,
+                  ),
+                ],
+              ),
+            ),
             Icon(
               Icons.keyboard_arrow_right_rounded,
               color: palette.onPrimaryFixed,
-            )
+            ),
           ],
         ),
       ),
@@ -877,8 +970,12 @@ Widget currentLocationWidget(
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(left: 10, bottom: 2),
-            child: comfortatext(locationMessage, 19, settings,
-                color: palette.onPrimaryFixedVariant),
+            child: comfortatext(
+              locationMessage,
+              19,
+              settings,
+              color: palette.onPrimaryFixedVariant,
+            ),
           ),
         ),
       ],
@@ -887,42 +984,55 @@ Widget currentLocationWidget(
 }
 
 Widget favoritesOrReorder(
-    bool isEditing,
-    List<String> favorites,
-    Map<String, String> settings,
-    void Function(List<String>) onFavChanged,
-    ColorScheme palette,
-    Function updateLocation,
-    BuildContext context,
-    bool isTabletMode) {
+  bool isEditing,
+  List<String> favorites,
+  Map<String, String> settings,
+  void Function(List<String>) onFavChanged,
+  ColorScheme palette,
+  Function updateLocation,
+  BuildContext context,
+  bool isTabletMode,
+) {
   if (isEditing) {
     return reorderFavorites(
-        favorites, settings, onFavChanged, palette, isTabletMode);
+      favorites,
+      settings,
+      onFavChanged,
+      palette,
+      isTabletMode,
+    );
   } else {
     return buildFavorites(
-        palette, favorites, updateLocation, settings, context, isTabletMode);
+      palette,
+      favorites,
+      updateLocation,
+      settings,
+      context,
+      isTabletMode,
+    );
   }
 }
 
 Widget buildFavorites(
-    ColorScheme palette,
-    List<String> favorites,
-    Function updateLocation,
-    Map<String, String> settings,
-    BuildContext context,
-    bool isTabletMode) {
+  ColorScheme palette,
+  List<String> favorites,
+  Function updateLocation,
+  Map<String, String> settings,
+  BuildContext context,
+  bool isTabletMode,
+) {
   return SingleChildScrollView(
     child: Container(
-        key: const ValueKey<String>('normal'),
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: isTabletMode
-              ? palette.surfaceContainerHighest
-              : palette.surfaceContainer,
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Column(
-            children: List.generate(favorites.length, (index) {
+      key: const ValueKey<String>('normal'),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: isTabletMode
+            ? palette.surfaceContainerHighest
+            : palette.surfaceContainer,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Column(
+        children: List.generate(favorites.length, (index) {
           final split = json.decode(favorites[index]);
           final name = split['name'] as String;
           final country = generateAbbreviation(split['country'] as String);
@@ -937,38 +1047,54 @@ Widget buildFavorites(
               }
             },
             child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 10, right: 7, top: 8, bottom: 8),
+              padding: const EdgeInsets.only(
+                left: 10,
+                right: 7,
+                top: 8,
+                bottom: 8,
+              ),
               child: Row(
                 children: [
                   Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      comfortatext(name, 19, settings,
-                          color: palette.onSurface),
-                      comfortatext('$region, $country', 15, settings,
-                          color: palette.outline)
-                    ],
-                  )),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        comfortatext(
+                          name,
+                          19,
+                          settings,
+                          color: palette.onSurface,
+                        ),
+                        comfortatext(
+                          '$region, $country',
+                          15,
+                          settings,
+                          color: palette.outline,
+                        ),
+                      ],
+                    ),
+                  ),
                   Icon(
                     Icons.keyboard_arrow_right_rounded,
                     color: palette.primary,
-                  )
+                  ),
                 ],
               ),
             ),
           );
-        }))),
+        }),
+      ),
+    ),
   );
 }
 
 Widget reorderFavorites(
-    List<String> items,
-    Map<String, String> settings,
-    void Function(List<String>) onFavChanged,
-    ColorScheme palette,
-    bool isTabletMode) {
+  List<String> items,
+  Map<String, String> settings,
+  void Function(List<String>) onFavChanged,
+  ColorScheme palette,
+  bool isTabletMode,
+) {
   return Container(
     key: const ValueKey<String>('editing'),
     decoration: BoxDecoration(
@@ -988,7 +1114,13 @@ Widget reorderFavorites(
       children: <Widget>[
         for (int index = 0; index < items.length; index += 1)
           reorderableItem(
-              items, index, settings, palette, onFavChanged, isTabletMode)
+            items,
+            index,
+            settings,
+            palette,
+            onFavChanged,
+            isTabletMode,
+          ),
       ],
       onReorder: (int oldIndex, int newIndex) {
         if (oldIndex < newIndex) {
@@ -1003,12 +1135,13 @@ Widget reorderFavorites(
 }
 
 Widget reorderableItem(
-    List<String> items,
-    int index,
-    Map<String, String> settings,
-    ColorScheme palette,
-    void Function(List<String>) onFavChanged,
-    bool isTabletMode) {
+  List<String> items,
+  int index,
+  Map<String, String> settings,
+  ColorScheme palette,
+  void Function(List<String>) onFavChanged,
+  bool isTabletMode,
+) {
   final split = json.decode(items[index]);
   final name = split['name'] as String;
   final country = generateAbbreviation(split['country'] as String);
@@ -1030,14 +1163,19 @@ Widget reorderableItem(
             ),
           ),
           Expanded(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              comfortatext(name, 19, settings, color: palette.onSurface),
-              comfortatext('$region, $country', 15, settings,
-                  color: palette.outline)
-            ],
-          )),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                comfortatext(name, 19, settings, color: palette.onSurface),
+                comfortatext(
+                  '$region, $country',
+                  15,
+                  settings,
+                  color: palette.outline,
+                ),
+              ],
+            ),
+          ),
           IconButton(
             onPressed: () {
               items.removeAt(index);
@@ -1048,7 +1186,7 @@ Widget reorderableItem(
               color: palette.primary,
               size: 23,
             ),
-          )
+          ),
         ],
       ),
     ),

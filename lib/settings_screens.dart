@@ -20,8 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:overmorrow/about_page.dart';
+import 'package:overmorrow/core/l10n/app_localizations.dart';
 import 'package:overmorrow/decoders/decode_wapi.dart';
-import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/main_ui.dart';
 import 'package:overmorrow/services/color_service.dart';
 import 'package:overmorrow/settings_page.dart';
@@ -37,14 +37,15 @@ Future<void> _launchUrl(String url) async {
 }
 
 Widget mainSettingEntry(
-    String title,
-    String desc,
-    ColorScheme palette,
-    IconData icon,
-    Map<String, String> settings,
-    Widget pushTo,
-    BuildContext context,
-    Function updatePage) {
+  String title,
+  String desc,
+  ColorScheme palette,
+  IconData icon,
+  Map<String, String> settings,
+  Widget pushTo,
+  BuildContext context,
+  Function updatePage,
+) {
   return Padding(
     padding: const EdgeInsets.only(left: 25, right: 25, top: 5, bottom: 5),
     child: GestureDetector(
@@ -52,7 +53,9 @@ Widget mainSettingEntry(
       onTap: () {
         HapticFeedback.selectionClick();
         Navigator.push(
-            context, MaterialPageRoute<dynamic>(builder: (context) => pushTo));
+          context,
+          MaterialPageRoute<dynamic>(builder: (context) => pushTo),
+        );
       },
       child: Padding(
         padding: const EdgeInsets.only(top: 13, bottom: 13),
@@ -73,13 +76,17 @@ Widget mainSettingEntry(
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(bottom: 3),
-                    child: comfortatext(title, 21, settings,
-                        color: palette.onSurface),
+                    child: comfortatext(
+                      title,
+                      21,
+                      settings,
+                      color: palette.onSurface,
+                    ),
                   ),
                   comfortatext(desc, 15, settings, color: palette.outline),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -88,112 +95,122 @@ Widget mainSettingEntry(
 }
 
 Widget newSettings(
-    Map<String, String> settings,
-    void Function(String, String) updatePage,
-    Image image,
-    ColorScheme palette,
-    BuildContext context,
-    ValueNotifier<ColorPalette> colornotify) {
+  Map<String, String> settings,
+  void Function(String, String) updatePage,
+  Image image,
+  ColorScheme palette,
+  BuildContext context,
+  ValueNotifier<ColorPalette> colornotify,
+) {
   final localizations = AppLocalizations.of(context)!;
 
   return Padding(
-      padding: const EdgeInsets.only(top: 20, bottom: 20),
-      child: AnimationLimiter(
-        child: Column(
-          children: AnimationConfiguration.toStaggeredList(
-            duration: const Duration(milliseconds: 375),
-            childAnimationBuilder: (widget) => SlideAnimation(
-              horizontalOffset: 50,
-              child: FadeInAnimation(
-                child: widget,
-              ),
+    padding: const EdgeInsets.only(top: 20, bottom: 20),
+    child: AnimationLimiter(
+      child: Column(
+        children: AnimationConfiguration.toStaggeredList(
+          duration: const Duration(milliseconds: 375),
+          childAnimationBuilder: (widget) => SlideAnimation(
+            horizontalOffset: 50,
+            child: FadeInAnimation(
+              child: widget,
             ),
-            children: [
-              mainSettingEntry(
-                  localizations.appearance,
-                  localizations.appearanceSettingDesc,
-                  palette,
-                  Icons.palette_outlined,
-                  settings,
-                  AppearancePage(
-                      settings: settings,
-                      image: image,
-                      colornotify: colornotify,
-                      updateMainPage: updatePage,
-                      localizations: localizations),
-                  context,
-                  updatePage),
-              mainSettingEntry(
-                  localizations.general,
-                  localizations.generalSettingDesc,
-                  palette,
-                  Icons.tune,
-                  settings,
-                  GeneralSettingsPage(
-                    palette: palette,
-                    settings: settings,
-                    image: image,
-                    updateMainPage: updatePage,
-                    localizations: localizations,
-                  ),
-                  context,
-                  updatePage),
-              mainSettingEntry(
-                  localizations.language,
-                  localizations.languageSettingDesc,
-                  palette,
-                  Icons.language,
-                  settings,
-                  LangaugePage(
-                      palette: palette,
-                      settings: settings,
-                      image: image,
-                      updateMainPage: updatePage),
-                  context,
-                  updatePage),
-              mainSettingEntry(
-                  localizations.units,
-                  localizations.unitsSettingdesc,
-                  palette,
-                  Icons.straighten,
-                  settings,
-                  UnitsPage(
-                    palette: palette,
-                    settings: settings,
-                    image: image,
-                    updateMainPage: updatePage,
-                    localizations: localizations,
-                  ),
-                  context,
-                  updatePage),
-              mainSettingEntry(
-                  localizations.layout,
-                  localizations.layoutSettingDesc,
-                  palette,
-                  Icons.widgets_outlined,
-                  settings,
-                  LayoutPage(
-                    palette: palette,
-                    settings: settings,
-                    image: image,
-                    updateMainPage: updatePage,
-                    localizations: localizations,
-                  ),
-                  context,
-                  updatePage),
-              mainSettingEntry(
-                  localizations.about,
-                  'about this app',
-                  palette,
-                  Icons.info_outline,
-                  settings,
-                  AboutPage(settings: settings, palette: palette),
-                  context,
-                  updatePage),
-            ],
           ),
+          children: [
+            mainSettingEntry(
+              localizations.appearance,
+              localizations.appearanceSettingDesc,
+              palette,
+              Icons.palette_outlined,
+              settings,
+              AppearancePage(
+                settings: settings,
+                image: image,
+                colornotify: colornotify,
+                updateMainPage: updatePage,
+                localizations: localizations,
+              ),
+              context,
+              updatePage,
+            ),
+            mainSettingEntry(
+              localizations.general,
+              localizations.generalSettingDesc,
+              palette,
+              Icons.tune,
+              settings,
+              GeneralSettingsPage(
+                palette: palette,
+                settings: settings,
+                image: image,
+                updateMainPage: updatePage,
+                localizations: localizations,
+              ),
+              context,
+              updatePage,
+            ),
+            mainSettingEntry(
+              localizations.language,
+              localizations.languageSettingDesc,
+              palette,
+              Icons.language,
+              settings,
+              LangaugePage(
+                palette: palette,
+                settings: settings,
+                image: image,
+                updateMainPage: updatePage,
+              ),
+              context,
+              updatePage,
+            ),
+            mainSettingEntry(
+              localizations.units,
+              localizations.unitsSettingdesc,
+              palette,
+              Icons.straighten,
+              settings,
+              UnitsPage(
+                palette: palette,
+                settings: settings,
+                image: image,
+                updateMainPage: updatePage,
+                localizations: localizations,
+              ),
+              context,
+              updatePage,
+            ),
+            mainSettingEntry(
+              localizations.layout,
+              localizations.layoutSettingDesc,
+              palette,
+              Icons.widgets_outlined,
+              settings,
+              LayoutPage(
+                palette: palette,
+                settings: settings,
+                image: image,
+                updateMainPage: updatePage,
+                localizations: localizations,
+              ),
+              context,
+              updatePage,
+            ),
+            mainSettingEntry(
+              localizations.about,
+              'about this app',
+              palette,
+              Icons.info_outline,
+              settings,
+              AboutPage(settings: settings, palette: palette),
+              context,
+              updatePage,
+            ),
+          ],
         ),
-      ));
+      ),
+    ),
+  );
 }
 
 class AppearancePage extends StatefulWidget {
@@ -203,21 +220,23 @@ class AppearancePage extends StatefulWidget {
   final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
-  const AppearancePage(
-      {super.key,
-      required this.colornotify,
-      required this.settings,
-      required this.image,
-      required this.updateMainPage,
-      required this.localizations});
+  const AppearancePage({
+    super.key,
+    required this.colornotify,
+    required this.settings,
+    required this.image,
+    required this.updateMainPage,
+    required this.localizations,
+  });
 
   @override
   _AppearancePageState createState() => _AppearancePageState(
-      image: image,
-      settings: settings,
-      colornotify: colornotify,
-      updateMainPage: updateMainPage,
-      localizations: localizations);
+    image: image,
+    settings: settings,
+    colornotify: colornotify,
+    updateMainPage: updateMainPage,
+    localizations: localizations,
+  );
 }
 
 class _AppearancePageState extends State<AppearancePage> {
@@ -227,12 +246,13 @@ class _AppearancePageState extends State<AppearancePage> {
   final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
-  _AppearancePageState(
-      {required this.image,
-      required this.settings,
-      required this.colornotify,
-      required this.updateMainPage,
-      required this.localizations});
+  _AppearancePageState({
+    required this.image,
+    required this.settings,
+    required this.colornotify,
+    required this.updateMainPage,
+    required this.localizations,
+  });
 
   Map<String, String> copySettings = {};
 
@@ -258,16 +278,18 @@ class _AppearancePageState extends State<AppearancePage> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-        valueListenable: colornotify,
-        builder: (context, ColorPalette value, child) {
-          return AppearanceSelector(
-              image: image,
-              settings: copySettings,
-              colorPalette: value,
-              updatePage: updatePage,
-              localizations: localizations,
-              goBack: goBack);
-        });
+      valueListenable: colornotify,
+      builder: (context, ColorPalette value, child) {
+        return AppearanceSelector(
+          image: image,
+          settings: copySettings,
+          colorPalette: value,
+          updatePage: updatePage,
+          localizations: localizations,
+          goBack: goBack,
+        );
+      },
+    );
   }
 }
 
@@ -279,14 +301,15 @@ class AppearanceSelector extends StatelessWidget {
   final AppLocalizations localizations;
   final VoidCallback goBack;
 
-  const AppearanceSelector(
-      {super.key,
-      required this.image,
-      required this.settings,
-      required this.colorPalette,
-      required this.updatePage,
-      required this.localizations,
-      required this.goBack});
+  const AppearanceSelector({
+    super.key,
+    required this.image,
+    required this.settings,
+    required this.colorPalette,
+    required this.updatePage,
+    required this.localizations,
+    required this.goBack,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -298,13 +321,18 @@ class AppearanceSelector extends StatelessWidget {
         slivers: <Widget>[
           SliverAppBar.large(
             leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: palette.primary,
-                ),
-                onPressed: goBack),
-            title: comfortatext(localizations.appearance, 30, settings,
-                color: palette.primary),
+              icon: Icon(
+                Icons.arrow_back,
+                color: palette.primary,
+              ),
+              onPressed: goBack,
+            ),
+            title: comfortatext(
+              localizations.appearance,
+              30,
+              settings,
+              color: palette.primary,
+            ),
             backgroundColor: palette.surface,
             pinned: false,
           ),
@@ -313,166 +341,202 @@ class AppearanceSelector extends StatelessWidget {
               padding: const EdgeInsets.only(left: 30, right: 30),
               child: AnimationLimiter(
                 child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: AnimationConfiguration.toStaggeredList(
-                      duration: const Duration(milliseconds: 500),
-                      childAnimationBuilder: (widget) => SlideAnimation(
-                        horizontalOffset: 80,
-                        child: FadeInAnimation(
-                          child: widget,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: AnimationConfiguration.toStaggeredList(
+                    duration: const Duration(milliseconds: 500),
+                    childAnimationBuilder: (widget) => SlideAnimation(
+                      horizontalOffset: 80,
+                      child: FadeInAnimation(
+                        child: widget,
+                      ),
+                    ),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30, bottom: 10),
+                        child: Container(
+                          height: 190,
+                          margin: const EdgeInsets.only(left: 10, right: 10),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Stack(
+                              children: [
+                                ParrallaxBackground(
+                                  image: image,
+                                  color: palette.surface,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 40),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      comfortatext(
+                                        "${unit_coversion(16, settings["Temperature"]!).toInt()}°",
+                                        67,
+                                        settings,
+                                        color: colorPalette.colorPop,
+                                        weight: FontWeight.w200,
+                                      ),
+                                      comfortatext(
+                                        localizations.clearSky,
+                                        26,
+                                        settings,
+                                        color: colorPalette.descColor,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 30, bottom: 10),
-                          child: Container(
-                            height: 190,
-                            margin: const EdgeInsets.only(left: 10, right: 10),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: Stack(
-                                children: [
-                                  ParrallaxBackground(
-                                      image: image, color: palette.surface),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 40),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 1,
+                              bottom: 14,
+                              top: 30,
+                            ),
+                            child: comfortatext(
+                              'app theme',
+                              17,
+                              settings,
+                              color: palette.onSurface,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SegmentedButton(
+                        selected: <String>{settings['Color mode']!},
+                        onSelectionChanged: (Set<String> newSelection) {
+                          HapticFeedback.mediumImpact();
+                          updatePage('Color mode', newSelection.first);
+                        },
+                        style: SegmentedButton.styleFrom(
+                          backgroundColor: palette.surface,
+                          foregroundColor: palette.primary,
+                          selectedBackgroundColor: palette.secondaryContainer,
+                          selectedForegroundColor: palette.primary,
+                        ),
+                        segments: [
+                          ButtonSegment(
+                            icon: const Icon(Icons.light_mode_outlined),
+                            value: 'light',
+                            label: comfortatext(
+                              'light',
+                              18,
+                              settings,
+                              color: palette.onSurface,
+                            ),
+                          ),
+                          ButtonSegment(
+                            icon: const Icon(Icons.dark_mode_outlined),
+                            value: 'dark',
+                            label: comfortatext(
+                              'dark',
+                              18,
+                              settings,
+                              color: palette.onSurface,
+                            ),
+                          ),
+                          ButtonSegment(
+                            icon: const Icon(Icons.brightness_6_outlined),
+                            value: 'auto',
+                            label: comfortatext(
+                              'auto',
+                              18,
+                              settings,
+                              color: palette.onSurface,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      settingEntry(
+                        Icons.colorize_rounded,
+                        localizations.colorSource,
+                        settings,
+                        palette,
+                        updatePage,
+                        'Color source',
+                        context,
+                      ),
+                      if (settings['Color source'] == 'custom')
+                        SizedBox(
+                          height: 80,
+                          child: ListView.builder(
+                            padding: const EdgeInsets.only(
+                              left: 30,
+                              right: 30,
+                              bottom: 10,
+                              top: 10,
+                            ),
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: settingSwitches['Custom color']!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  HapticFeedback.mediumImpact();
+                                  updatePage(
+                                    'Custom color',
+                                    settingSwitches['Custom color']![index],
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3),
+                                  child: AspectRatio(
+                                    aspectRatio: 1,
+                                    child: Stack(
                                       children: [
-                                        comfortatext(
-                                            "${unit_coversion(16, settings["Temperature"]!).toInt()}°",
-                                            67,
-                                            settings,
-                                            color: colorPalette.colorPop,
-                                            weight: FontWeight.w200),
-                                        comfortatext(localizations.clearSky, 26,
-                                            settings,
-                                            color: colorPalette.descColor)
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Color(
+                                              getColorFromHex(
+                                                settingSwitches['Custom color']![index],
+                                              ),
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              100,
+                                            ),
+                                          ),
+                                        ),
+                                        if (settings['Custom color'] ==
+                                            settingSwitches['Custom color']![index])
+                                          const Center(
+                                            child: Icon(
+                                              Icons.check,
+                                              color: kWhite,
+                                            ),
+                                          ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
+                                ),
+                              );
+                            },
                           ),
                         ),
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 1, bottom: 14, top: 30),
-                              child: comfortatext('app theme', 17, settings,
-                                  color: palette.onSurface),
-                            ),
-                          ],
-                        ),
-                        SegmentedButton(
-                          selected: <String>{settings['Color mode']!},
-                          onSelectionChanged: (Set<String> newSelection) {
-                            HapticFeedback.mediumImpact();
-                            updatePage('Color mode', newSelection.first);
-                          },
-                          style: SegmentedButton.styleFrom(
-                            backgroundColor: palette.surface,
-                            foregroundColor: palette.primary,
-                            selectedBackgroundColor: palette.secondaryContainer,
-                            selectedForegroundColor: palette.primary,
-                          ),
-                          segments: [
-                            ButtonSegment(
-                                icon: const Icon(Icons.light_mode_outlined),
-                                value: 'light',
-                                label: comfortatext('light', 18, settings,
-                                    color: palette.onSurface)),
-                            ButtonSegment(
-                                icon: const Icon(Icons.dark_mode_outlined),
-                                value: 'dark',
-                                label: comfortatext('dark', 18, settings,
-                                    color: palette.onSurface)),
-                            ButtonSegment(
-                                icon: const Icon(Icons.brightness_6_outlined),
-                                value: 'auto',
-                                label: comfortatext('auto', 18, settings,
-                                    color: palette.onSurface)),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        settingEntry(
-                            Icons.colorize_rounded,
-                            localizations.colorSource,
-                            settings,
-                            palette,
-                            updatePage,
-                            'Color source',
-                            context),
-                        if (settings['Color source'] == 'custom')
-                          SizedBox(
-                            height: 80,
-                            child: ListView.builder(
-                              padding: const EdgeInsets.only(
-                                  left: 30, right: 30, bottom: 10, top: 10),
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount:
-                                  settingSwitches['Custom color']!.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    HapticFeedback.mediumImpact();
-                                    updatePage(
-                                        'Custom color',
-                                        settingSwitches['Custom color']![
-                                            index]);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(3),
-                                    child: AspectRatio(
-                                      aspectRatio: 1,
-                                      child: Stack(
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                color: Color(getColorFromHex(
-                                                    settingSwitches[
-                                                            'Custom color']![
-                                                        index])),
-                                                borderRadius:
-                                                    BorderRadius.circular(100)),
-                                          ),
-                                          if (settings['Custom color'] ==
-                                              settingSwitches['Custom color']![
-                                                  index])
-                                            const Center(
-                                                child: Icon(
-                                              Icons.check,
-                                              color: kWhite,
-                                            ))
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        settingEntry(
-                            Icons.image_outlined,
-                            localizations.imageSource,
-                            settings,
-                            palette,
-                            updatePage,
-                            'Image source',
-                            context),
-                        const SizedBox(
-                          height: 70,
-                        ),
-                      ],
-                    )),
+                      settingEntry(
+                        Icons.image_outlined,
+                        localizations.imageSource,
+                        settings,
+                        palette,
+                        updatePage,
+                        'Image source',
+                        context,
+                      ),
+                      const SizedBox(
+                        height: 70,
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -489,21 +553,23 @@ class UnitsPage extends StatefulWidget {
   final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
-  const UnitsPage(
-      {super.key,
-      required this.palette,
-      required this.settings,
-      required this.image,
-      required this.updateMainPage,
-      required this.localizations});
+  const UnitsPage({
+    super.key,
+    required this.palette,
+    required this.settings,
+    required this.image,
+    required this.updateMainPage,
+    required this.localizations,
+  });
 
   @override
   _UnitsPageState createState() => _UnitsPageState(
-      image: image,
-      settings: settings,
-      palette: palette,
-      updateMainPage: updateMainPage,
-      localizations: localizations);
+    image: image,
+    settings: settings,
+    palette: palette,
+    updateMainPage: updateMainPage,
+    localizations: localizations,
+  );
 }
 
 class _UnitsPageState extends State<UnitsPage> {
@@ -513,12 +579,13 @@ class _UnitsPageState extends State<UnitsPage> {
   final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
-  _UnitsPageState(
-      {required this.image,
-      required this.settings,
-      required this.palette,
-      required this.updateMainPage,
-      required this.localizations});
+  _UnitsPageState({
+    required this.image,
+    required this.settings,
+    required this.palette,
+    required this.updateMainPage,
+    required this.localizations,
+  });
 
   Map<String, String> copySettings = {};
 
@@ -549,13 +616,18 @@ class _UnitsPageState extends State<UnitsPage> {
         slivers: <Widget>[
           SliverAppBar.large(
             leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: palette.primary,
-                ),
-                onPressed: goBack),
-            title: comfortatext(localizations.units, 30, settings,
-                color: palette.primary),
+              icon: Icon(
+                Icons.arrow_back,
+                color: palette.primary,
+              ),
+              onPressed: goBack,
+            ),
+            title: comfortatext(
+              localizations.units,
+              30,
+              settings,
+              color: palette.primary,
+            ),
             backgroundColor: palette.surface,
             pinned: false,
           ),
@@ -564,35 +636,45 @@ class _UnitsPageState extends State<UnitsPage> {
               padding: const EdgeInsets.only(top: 30, bottom: 60, left: 30),
               child: AnimationLimiter(
                 child: Column(
-                    children: AnimationConfiguration.toStaggeredList(
-                  duration: const Duration(milliseconds: 500),
-                  childAnimationBuilder: (widget) => SlideAnimation(
-                    horizontalOffset: 80,
-                    child: FadeInAnimation(
-                      child: widget,
+                  children: AnimationConfiguration.toStaggeredList(
+                    duration: const Duration(milliseconds: 500),
+                    childAnimationBuilder: (widget) => SlideAnimation(
+                      horizontalOffset: 80,
+                      child: FadeInAnimation(
+                        child: widget,
+                      ),
                     ),
-                  ),
-                  children: [
-                    settingEntry(
+                    children: [
+                      settingEntry(
                         Icons.device_thermostat,
                         localizations.temperature,
                         copySettings,
                         palette,
                         updatePage,
                         'Temperature',
-                        context),
-                    settingEntry(
+                        context,
+                      ),
+                      settingEntry(
                         Icons.water_drop_outlined,
                         localizations.precipitaion,
                         copySettings,
                         palette,
                         updatePage,
                         'Precipitation',
-                        context),
-                    settingEntry(Icons.air, localizations.windCapital,
-                        copySettings, palette, updatePage, 'Wind', context),
-                  ],
-                )),
+                        context,
+                      ),
+                      settingEntry(
+                        Icons.air,
+                        localizations.windCapital,
+                        copySettings,
+                        palette,
+                        updatePage,
+                        'Wind',
+                        context,
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -609,21 +691,23 @@ class GeneralSettingsPage extends StatefulWidget {
   final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
-  const GeneralSettingsPage(
-      {super.key,
-      required this.palette,
-      required this.settings,
-      required this.image,
-      required this.updateMainPage,
-      required this.localizations});
+  const GeneralSettingsPage({
+    super.key,
+    required this.palette,
+    required this.settings,
+    required this.image,
+    required this.updateMainPage,
+    required this.localizations,
+  });
 
   @override
   _GeneralSettingsPageState createState() => _GeneralSettingsPageState(
-      image: image,
-      settings: settings,
-      palette: palette,
-      updateMainPage: updateMainPage,
-      localizations: localizations);
+    image: image,
+    settings: settings,
+    palette: palette,
+    updateMainPage: updateMainPage,
+    localizations: localizations,
+  );
 }
 
 class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
@@ -633,12 +717,13 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
   final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
-  _GeneralSettingsPageState(
-      {required this.image,
-      required this.settings,
-      required this.palette,
-      required this.updateMainPage,
-      required this.localizations});
+  _GeneralSettingsPageState({
+    required this.image,
+    required this.settings,
+    required this.palette,
+    required this.updateMainPage,
+    required this.localizations,
+  });
 
   Map<String, String> copySettings = {};
 
@@ -669,13 +754,18 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
         slivers: <Widget>[
           SliverAppBar.large(
             leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: palette.primary,
-                ),
-                onPressed: goBack),
-            title: comfortatext(localizations.general, 30, settings,
-                color: palette.primary),
+              icon: Icon(
+                Icons.arrow_back,
+                color: palette.primary,
+              ),
+              onPressed: goBack,
+            ),
+            title: comfortatext(
+              localizations.general,
+              30,
+              settings,
+              color: palette.primary,
+            ),
             backgroundColor: palette.surface,
             pinned: false,
           ),
@@ -684,57 +774,63 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
               padding: const EdgeInsets.only(top: 30, bottom: 60, left: 30),
               child: AnimationLimiter(
                 child: Column(
-                    children: AnimationConfiguration.toStaggeredList(
-                  duration: const Duration(milliseconds: 500),
-                  childAnimationBuilder: (widget) => SlideAnimation(
-                    horizontalOffset: 80,
-                    child: FadeInAnimation(
-                      child: widget,
+                  children: AnimationConfiguration.toStaggeredList(
+                    duration: const Duration(milliseconds: 500),
+                    childAnimationBuilder: (widget) => SlideAnimation(
+                      horizontalOffset: 80,
+                      child: FadeInAnimation(
+                        child: widget,
+                      ),
                     ),
-                  ),
-                  children: [
-                    settingEntry(
+                    children: [
+                      settingEntry(
                         Icons.access_time_outlined,
                         localizations.timeMode,
                         copySettings,
                         palette,
                         updatePage,
                         'Time mode',
-                        context),
-                    settingEntry(
+                        context,
+                      ),
+                      settingEntry(
                         Icons.date_range,
                         localizations.dateFormat,
                         copySettings,
                         palette,
                         updatePage,
                         'Date format',
-                        context),
-                    settingEntry(
+                        context,
+                      ),
+                      settingEntry(
                         Icons.format_size,
                         localizations.fontSize,
                         copySettings,
                         palette,
                         updatePage,
                         'Font size',
-                        context),
-                    settingEntry(
+                        context,
+                      ),
+                      settingEntry(
                         Icons.manage_search_outlined,
                         localizations.searchProvider,
                         copySettings,
                         palette,
                         updatePage,
                         'Search provider',
-                        context),
-                    settingEntry(
+                        context,
+                      ),
+                      settingEntry(
                         Icons.vibration_rounded,
                         localizations.radarHaptics,
                         copySettings,
                         palette,
                         updatePage,
                         'Radar haptics',
-                        context),
-                  ],
-                )),
+                        context,
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -750,19 +846,21 @@ class LangaugePage extends StatefulWidget {
   final ColorScheme palette;
   final void Function(String, String) updateMainPage;
 
-  const LangaugePage(
-      {super.key,
-      required this.palette,
-      required this.settings,
-      required this.image,
-      required this.updateMainPage});
+  const LangaugePage({
+    super.key,
+    required this.palette,
+    required this.settings,
+    required this.image,
+    required this.updateMainPage,
+  });
 
   @override
   _LangaugePageState createState() => _LangaugePageState(
-      image: image,
-      settings: settings,
-      palette: palette,
-      updateMainPage: updateMainPage);
+    image: image,
+    settings: settings,
+    palette: palette,
+    updateMainPage: updateMainPage,
+  );
 }
 
 class _LangaugePageState extends State<LangaugePage> {
@@ -771,11 +869,12 @@ class _LangaugePageState extends State<LangaugePage> {
   final ColorScheme palette;
   final void Function(String, String) updateMainPage;
 
-  _LangaugePageState(
-      {required this.image,
-      required this.settings,
-      required this.palette,
-      required this.updateMainPage});
+  _LangaugePageState({
+    required this.image,
+    required this.settings,
+    required this.palette,
+    required this.updateMainPage,
+  });
 
   String _locale = 'English';
 
@@ -807,16 +906,17 @@ class _LangaugePageState extends State<LangaugePage> {
     }
 
     return Localizations.override(
-        context: context,
-        locale: languageNameToLocale[_locale] ?? const Locale('en'),
-        child: TranslationSelection(
-          settings: settings,
-          goBack: goBack,
-          onTap: onTap,
-          options: options,
-          selected: selected,
-          palette: palette,
-        ));
+      context: context,
+      locale: languageNameToLocale[_locale] ?? const Locale('en'),
+      child: TranslationSelection(
+        settings: settings,
+        goBack: goBack,
+        onTap: onTap,
+        options: options,
+        selected: selected,
+        palette: palette,
+      ),
+    );
   }
 }
 
@@ -828,14 +928,15 @@ class TranslationSelection extends StatelessWidget {
   final String selected;
   final ColorScheme palette;
 
-  const TranslationSelection(
-      {super.key,
-      required this.settings,
-      required this.goBack,
-      this.onTap,
-      this.options = const [],
-      this.selected = '',
-      required this.palette});
+  const TranslationSelection({
+    super.key,
+    required this.settings,
+    required this.goBack,
+    this.onTap,
+    this.options = const [],
+    this.selected = '',
+    required this.palette,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -845,26 +946,35 @@ class TranslationSelection extends StatelessWidget {
         slivers: <Widget>[
           SliverAppBar.large(
             leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: palette.primary,
-                ),
-                onPressed: goBack),
+              icon: Icon(
+                Icons.arrow_back,
+                color: palette.primary,
+              ),
+              onPressed: goBack,
+            ),
             title: comfortatext(
-                AppLocalizations.of(context)!.language, 30, settings,
-                color: palette.primary),
+              AppLocalizations.of(context)!.language,
+              30,
+              settings,
+              color: palette.primary,
+            ),
             backgroundColor: palette.surface,
             pinned: false,
           ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(
-                  top: 30, left: 25, right: 25, bottom: 10),
+                top: 30,
+                left: 25,
+                right: 25,
+                bottom: 10,
+              ),
               child: GestureDetector(
                 onTap: () {
                   HapticFeedback.selectionClick();
                   _launchUrl(
-                      'https://hosted.weblate.org/engage/overmorrow-weather/');
+                    'https://hosted.weblate.org/engage/overmorrow-weather/',
+                  );
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -876,16 +986,17 @@ class TranslationSelection extends StatelessWidget {
                     child: Row(
                       children: [
                         comfortatext(
-                            AppLocalizations.of(context)!.helpTranslate,
-                            21,
-                            settings,
-                            color: palette.onPrimaryFixedVariant),
+                          AppLocalizations.of(context)!.helpTranslate,
+                          21,
+                          settings,
+                          color: palette.onPrimaryFixedVariant,
+                        ),
                         const Spacer(),
                         Icon(
                           Icons.arrow_forward,
                           color: palette.onPrimaryFixedVariant,
                           size: 22,
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -897,7 +1008,11 @@ class TranslationSelection extends StatelessWidget {
             child: AnimationLimiter(
               child: ListView.builder(
                 padding: const EdgeInsets.only(
-                    top: 30, left: 30, right: 30, bottom: 40),
+                  top: 30,
+                  left: 30,
+                  right: 30,
+                  bottom: 40,
+                ),
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: options.length,
@@ -914,9 +1029,16 @@ class TranslationSelection extends StatelessWidget {
                           },
                           title: Padding(
                             padding: const EdgeInsets.only(
-                                top: 15, bottom: 15, left: 13),
-                            child: comfortatext(options[index], 20, settings,
-                                color: palette.onSurface),
+                              top: 15,
+                              bottom: 15,
+                              left: 13,
+                            ),
+                            child: comfortatext(
+                              options[index],
+                              20,
+                              settings,
+                              color: palette.onSurface,
+                            ),
                           ),
                           contentPadding: EdgeInsets.zero,
                           trailing: Radio<String>(
@@ -946,21 +1068,23 @@ class LayoutPage extends StatefulWidget {
   final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
-  const LayoutPage(
-      {super.key,
-      required this.palette,
-      required this.settings,
-      required this.image,
-      required this.updateMainPage,
-      required this.localizations});
+  const LayoutPage({
+    super.key,
+    required this.palette,
+    required this.settings,
+    required this.image,
+    required this.updateMainPage,
+    required this.localizations,
+  });
 
   @override
   _LayoutPageState createState() => _LayoutPageState(
-      image: image,
-      settings: settings,
-      palette: palette,
-      updateMainPage: updateMainPage,
-      localizations: localizations);
+    image: image,
+    settings: settings,
+    palette: palette,
+    updateMainPage: updateMainPage,
+    localizations: localizations,
+  );
 }
 
 class _LayoutPageState extends State<LayoutPage> {
@@ -970,12 +1094,13 @@ class _LayoutPageState extends State<LayoutPage> {
   final void Function(String, String) updateMainPage;
   final AppLocalizations localizations;
 
-  _LayoutPageState(
-      {required this.image,
-      required this.settings,
-      required this.palette,
-      required this.updateMainPage,
-      required this.localizations});
+  _LayoutPageState({
+    required this.image,
+    required this.settings,
+    required this.palette,
+    required this.updateMainPage,
+    required this.localizations,
+  });
 
   late List<String> _items;
 
@@ -987,7 +1112,7 @@ class _LayoutPageState extends State<LayoutPage> {
     'alerts',
     'radar',
     'daily',
-    'air quality'
+    'air quality',
   ];
 
   List<String> removed = [];
@@ -1046,8 +1171,12 @@ class _LayoutPageState extends State<LayoutPage> {
                 ),
               ),
             ],
-            title: comfortatext(localizations.layout, 30, settings,
-                color: palette.primary),
+            title: comfortatext(
+              localizations.layout,
+              30,
+              settings,
+              color: palette.primary,
+            ),
             backgroundColor: palette.surface,
             pinned: false,
           ),
@@ -1062,7 +1191,11 @@ class _LayoutPageState extends State<LayoutPage> {
                     child: child,
                   ),
                   padding: const EdgeInsets.only(
-                      left: 25, right: 25, top: 10, bottom: 50),
+                    left: 25,
+                    right: 25,
+                    top: 10,
+                    bottom: 50,
+                  ),
                   children: <Widget>[
                     for (int index = 0; index < _items.length; index += 1)
                       Container(
@@ -1076,7 +1209,11 @@ class _LayoutPageState extends State<LayoutPage> {
                           ),
                           height: 67,
                           padding: const EdgeInsets.only(
-                              top: 6, bottom: 6, left: 20, right: 14),
+                            top: 6,
+                            bottom: 6,
+                            left: 20,
+                            right: 14,
+                          ),
                           child: Row(
                             children: [
                               Padding(
@@ -1087,8 +1224,12 @@ class _LayoutPageState extends State<LayoutPage> {
                                 ),
                               ),
                               Expanded(
-                                child: comfortatext(_items[index], 19, settings,
-                                    color: palette.onSurface),
+                                child: comfortatext(
+                                  _items[index],
+                                  19,
+                                  settings,
+                                  color: palette.onSurface,
+                                ),
                               ),
                               IconButton(
                                 onPressed: () {
@@ -1104,7 +1245,7 @@ class _LayoutPageState extends State<LayoutPage> {
                                   color: palette.primary,
                                   size: 23,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                           /*
@@ -1169,9 +1310,12 @@ class _LayoutPageState extends State<LayoutPage> {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(18),
-                              border: Border.all(
-                                  width: 2, color: palette.outlineVariant)),
+                            borderRadius: BorderRadius.circular(18),
+                            border: Border.all(
+                              width: 2,
+                              color: palette.outlineVariant,
+                            ),
+                          ),
                           padding: const EdgeInsets.all(10),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -1182,10 +1326,16 @@ class _LayoutPageState extends State<LayoutPage> {
                                 size: 22,
                               ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 3, right: 3),
-                                child: comfortatext(removed[i], 17, settings,
-                                    color: palette.onSurface),
+                                padding: const EdgeInsets.only(
+                                  left: 3,
+                                  right: 3,
+                                ),
+                                child: comfortatext(
+                                  removed[i],
+                                  17,
+                                  settings,
+                                  color: palette.onSurface,
+                                ),
                               ),
                             ],
                           ),
@@ -1193,7 +1343,7 @@ class _LayoutPageState extends State<LayoutPage> {
                       );
                     }),
                   ),
-                )
+                ),
               ],
             ),
           ),

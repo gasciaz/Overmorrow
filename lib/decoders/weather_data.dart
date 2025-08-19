@@ -18,11 +18,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:async';
 
+import 'package:overmorrow/core/l10n/app_localizations.dart';
 import 'package:overmorrow/decoders/decode_OM.dart';
 import 'package:overmorrow/decoders/decode_RV.dart';
 import 'package:overmorrow/decoders/decode_mn.dart';
 import 'package:overmorrow/decoders/decode_wapi.dart';
-import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/weather/abstract_15_min_precip.dart';
 import 'package:overmorrow/weather/abstract_aqi.dart';
 import 'package:overmorrow/weather/abstract_current.dart';
@@ -56,47 +56,67 @@ class WeatherData {
 
   final List<double> dailyMinMaxTemp;
 
-  WeatherData(
-      {required this.place,
-      required this.settings,
-      required this.provider,
-      required this.real_loc,
-      required this.lat,
-      required this.lng,
-      required this.sunstatus,
-      required this.aqi,
-      required this.radar,
-      required this.days,
-      required this.hourly72,
-      required this.current,
-      required this.fetch_datetime,
-      required this.isonline,
-      required this.updatedTime,
-      required this.localtime,
-      required this.minutely_15_precip,
-      required this.alerts,
-      required this.dailyMinMaxTemp});
+  WeatherData({
+    required this.place,
+    required this.settings,
+    required this.provider,
+    required this.real_loc,
+    required this.lat,
+    required this.lng,
+    required this.sunstatus,
+    required this.aqi,
+    required this.radar,
+    required this.days,
+    required this.hourly72,
+    required this.current,
+    required this.fetch_datetime,
+    required this.isonline,
+    required this.updatedTime,
+    required this.localtime,
+    required this.minutely_15_precip,
+    required this.alerts,
+    required this.dailyMinMaxTemp,
+  });
 
   static Future<WeatherData> getFullData(
-      Map<String, String> settings,
-      String placeName,
-      String realLoc,
-      String latlong,
-      String provider,
-      AppLocalizations localizations) async {
+    Map<String, String> settings,
+    String placeName,
+    String realLoc,
+    String latlong,
+    String provider,
+    AppLocalizations localizations,
+  ) async {
     final split = latlong.split(',');
     final lat = double.parse(split[0]);
     final lng = double.parse(split[1]);
 
     if (provider == 'weatherapi.com') {
       return WapiGetWeatherData(
-          lat, lng, realLoc, settings, placeName, localizations);
+        lat,
+        lng,
+        realLoc,
+        settings,
+        placeName,
+        localizations,
+      );
     } else if (provider == 'met norway') {
       return metNGetWeatherData(
-          lat, lng, realLoc, settings, placeName, localizations);
+        lat,
+        lng,
+        realLoc,
+        settings,
+        placeName,
+        localizations,
+      );
     } else {
       return OMGetWeatherData(
-          lat, lng, realLoc, settings, placeName, localizations);
+        lat,
+        lng,
+        realLoc,
+        settings,
+        placeName,
+        localizations,
+      );
     }
   }
 }
@@ -118,10 +138,11 @@ class LightCurrentWeatherData {
   });
 
   static Future<LightCurrentWeatherData> getLightCurrentWeatherData(
-      String placeName,
-      String latlong,
-      String provider,
-      Map<String, String> settings) async {
+    String placeName,
+    String latlong,
+    String provider,
+    Map<String, String> settings,
+  ) async {
     final split = latlong.split(',');
     final lat = double.parse(split[0]);
     final lng = double.parse(split[1]);
@@ -148,8 +169,12 @@ class LightWindData {
     required this.windUnit,
   });
 
-  static Future<LightWindData> getLightWindData(String placeName,
-      String latlong, String provider, Map<String, String> settings) async {
+  static Future<LightWindData> getLightWindData(
+    String placeName,
+    String latlong,
+    String provider,
+    Map<String, String> settings,
+  ) async {
     final split = latlong.split(',');
     final lat = double.parse(split[0]);
     final lon = double.parse(split[1]);
@@ -174,17 +199,22 @@ class LightHourlyForecastData {
   final String hourlyTemps;
   final String hourlyNames;
 
-  LightHourlyForecastData(
-      {required this.place,
-      required this.currentCondition,
-      required this.currentTemp,
-      required this.updatedTime,
-      required this.hourlyConditions,
-      required this.hourlyNames,
-      required this.hourlyTemps});
+  LightHourlyForecastData({
+    required this.place,
+    required this.currentCondition,
+    required this.currentTemp,
+    required this.updatedTime,
+    required this.hourlyConditions,
+    required this.hourlyNames,
+    required this.hourlyTemps,
+  });
 
-  static Future<LightHourlyForecastData> getLightForecastData(String placeName,
-      String latLon, String provider, Map<String, String> settings) async {
+  static Future<LightHourlyForecastData> getLightForecastData(
+    String placeName,
+    String latLon,
+    String provider,
+    Map<String, String> settings,
+  ) async {
     final split = latLon.split(',');
     final lat = double.parse(split[0]);
     final lon = double.parse(split[1]);

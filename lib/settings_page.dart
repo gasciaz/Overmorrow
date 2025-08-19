@@ -23,7 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:overmorrow/l10n/app_localizations.dart';
+import 'package:overmorrow/core/l10n/app_localizations.dart';
 import 'package:overmorrow/main.dart';
 import 'package:overmorrow/services/color_service.dart';
 import 'package:overmorrow/settings_screens.dart';
@@ -87,7 +87,10 @@ Map<String, List<String>> settingSwitches = {
 Future<List<dynamic>> getSettingsAndColors(Image image) async {
   final settings = await getSettingsUsed();
   final colorPalette = await ColorPalette.getColorPalette(
-      image, settings['Color mode']!, settings);
+    image,
+    settings['Color mode']!,
+    settings,
+  );
   return [settings, colorPalette];
 }
 
@@ -157,8 +160,10 @@ Future<void> setLastKnownLocation(String place, String cord) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('LastKnownPositionName', place);
   await prefs.setString('LastKnownPositionCord', cord);
-  await WidgetService.saveData('widget.lastKnownPlace',
-      place); //save the name of the place to the widgets
+  await WidgetService.saveData(
+    'widget.lastKnownPlace',
+    place,
+  ); //save the name of the place to the widgets
 }
 
 Future<String> getWeatherProvider() async {
@@ -179,112 +184,125 @@ Future<void> SetData(String name, String to) async {
 }
 
 Widget dropdown(
-    Color bgcolor,
-    String name,
-    Function updatePage,
-    String unit,
-    Map<String, String> settings,
-    Color? textcolor,
-    Color primary,
-    String rawName) {
+  Color bgcolor,
+  String name,
+  Function updatePage,
+  String unit,
+  Map<String, String> settings,
+  Color? textcolor,
+  Color primary,
+  String rawName,
+) {
   final items = settingSwitches[rawName] ?? ['˚C', '˚F'];
 
   return DropdownButton(
-      elevation: 0,
-      underline: Container(),
-      dropdownColor: bgcolor,
-      borderRadius: BorderRadius.circular(18),
-      icon: Padding(
-        padding: const EdgeInsets.only(left: 10),
-        child: Icon(
-          Icons.arrow_drop_down_circle_rounded,
-          color: primary,
-        ),
+    elevation: 0,
+    underline: Container(),
+    dropdownColor: bgcolor,
+    borderRadius: BorderRadius.circular(18),
+    icon: Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: Icon(
+        Icons.arrow_drop_down_circle_rounded,
+        color: primary,
       ),
-      style: GoogleFonts.comfortaa(
-        color: textcolor,
-        fontSize: 19 * getFontSize(settings['Font size']!),
-        fontWeight: FontWeight.w300,
-      ),
-      alignment: Alignment.centerRight,
-      value: unit,
-      items: items.map((item) {
-        return DropdownMenuItem(
-          value: item,
-          child: Text(item),
-        );
-      }).toList(),
-      onChanged: (String? value) {
-        HapticFeedback.lightImpact();
-        settings[rawName] = value!;
-        updatePage(rawName, value);
-      });
+    ),
+    style: GoogleFonts.comfortaa(
+      color: textcolor,
+      fontSize: 19 * getFontSize(settings['Font size']!),
+      fontWeight: FontWeight.w300,
+    ),
+    alignment: Alignment.centerRight,
+    value: unit,
+    items: items.map((item) {
+      return DropdownMenuItem(
+        value: item,
+        child: Text(item),
+      );
+    }).toList(),
+    onChanged: (String? value) {
+      HapticFeedback.lightImpact();
+      settings[rawName] = value!;
+      updatePage(rawName, value);
+    },
+  );
 }
 
 Widget settingEntry(
-    IconData icon,
-    String text,
-    Map<String, String> settings,
-    ColorScheme palette,
-    Function updatePage,
-    String rawText,
-    BuildContext context) {
+  IconData icon,
+  String text,
+  Map<String, String> settings,
+  ColorScheme palette,
+  Function updatePage,
+  String rawText,
+  BuildContext context,
+) {
   return GestureDetector(
     behavior: HitTestBehavior.translucent,
     onTap: () {
       HapticFeedback.lightImpact();
       showDialog<String>(
-          context: context,
-          builder: (BuildContext context) {
-            final options = settingSwitches[rawText] ?? [''];
-            return AlertDialog(
-              backgroundColor: palette.surface,
-              content: StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20, top: 10),
-                        child: comfortatext(text, 22, settings,
-                            color: palette.onSurface),
+        context: context,
+        builder: (BuildContext context) {
+          final options = settingSwitches[rawText] ?? [''];
+          return AlertDialog(
+            backgroundColor: palette.surface,
+            content: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20, top: 10),
+                      child: comfortatext(
+                        text,
+                        22,
+                        settings,
+                        color: palette.onSurface,
                       ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children:
-                            List<Widget>.generate(options.length, (int index) {
-                          return GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTap: () {
-                              HapticFeedback.lightImpact();
-                              Navigator.pop(context);
-                              updatePage(rawText, options[index]);
-                            },
-                            child: Row(
-                              children: [
-                                Radio<String>(
-                                  value: options[index],
-                                  groupValue: settings[rawText],
-                                  activeColor: palette.primary,
-                                  onChanged: (String? value) {
-                                    HapticFeedback.lightImpact();
-                                    Navigator.pop(context, value);
-                                  },
-                                ),
-                                comfortatext(options[index], 18, settings,
-                                    color: palette.onSurface)
-                              ],
-                            ),
-                          );
-                        }),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            );
-          }).then((selectedValue) {
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: List<Widget>.generate(options.length, (
+                        int index,
+                      ) {
+                        return GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            HapticFeedback.lightImpact();
+                            Navigator.pop(context);
+                            updatePage(rawText, options[index]);
+                          },
+                          child: Row(
+                            children: [
+                              Radio<String>(
+                                value: options[index],
+                                groupValue: settings[rawText],
+                                activeColor: palette.primary,
+                                onChanged: (String? value) {
+                                  HapticFeedback.lightImpact();
+                                  Navigator.pop(context, value);
+                                },
+                              ),
+                              comfortatext(
+                                options[index],
+                                18,
+                                settings,
+                                color: palette.onSurface,
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                    ),
+                  ],
+                );
+              },
+            ),
+          );
+        },
+      ).then((selectedValue) {
         if (selectedValue != null) {
           updatePage(rawText, selectedValue);
         }
@@ -337,12 +355,14 @@ class _SettingsPageState extends State<SettingsPage> {
   String _locale = 'English';
   //this is so that appearance page setting changes take effect in place rather that having to exit the page
   ValueNotifier<ColorPalette> colornotify = ValueNotifier<ColorPalette>(
-      const ColorPalette(
-          palette: ColorScheme.light(),
-          imageColors: [],
-          regionColors: [],
-          descColor: kWhite,
-          colorPop: kWhite));
+    const ColorPalette(
+      palette: ColorScheme.light(),
+      imageColors: [],
+      regionColors: [],
+      descColor: kWhite,
+      colorPop: kWhite,
+    ),
+  );
 
   _SettingsPageState({required this.image});
 
@@ -410,14 +430,15 @@ class SettingsMain extends StatelessWidget {
   final Image image;
   final ValueNotifier<ColorPalette> colornotify;
 
-  const SettingsMain(
-      {super.key,
-      required this.settings,
-      required this.updatePage,
-      required this.goBack,
-      required this.image,
-      required this.palette,
-      required this.colornotify});
+  const SettingsMain({
+    super.key,
+    required this.settings,
+    required this.updatePage,
+    required this.goBack,
+    required this.image,
+    required this.palette,
+    required this.colornotify,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -427,24 +448,34 @@ class SettingsMain extends StatelessWidget {
         slivers: <Widget>[
           SliverAppBar.large(
             leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: palette.primary,
-                ),
-                onPressed: () {
-                  HapticFeedback.selectionClick();
-                  goBack();
-                }),
+              icon: Icon(
+                Icons.arrow_back,
+                color: palette.primary,
+              ),
+              onPressed: () {
+                HapticFeedback.selectionClick();
+                goBack();
+              },
+            ),
             title: comfortatext(
-                AppLocalizations.of(context)!.settings, 30, settings,
-                color: palette.primary),
+              AppLocalizations.of(context)!.settings,
+              30,
+              settings,
+              color: palette.primary,
+            ),
             backgroundColor: palette.surface,
             pinned: false,
           ),
           // Just some content big enough to have something to scroll.
           SliverToBoxAdapter(
             child: newSettings(
-                settings, updatePage, image, palette, context, colornotify),
+              settings,
+              updatePage,
+              image,
+              palette,
+              context,
+              colornotify,
+            ),
           ),
         ],
       ),
