@@ -31,6 +31,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:overmorrow/caching.dart';
+import 'package:overmorrow/core/di/di.dart';
 import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/main_ui.dart';
@@ -213,25 +214,25 @@ void callbackDispatcher() {
   });
 }
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  Workmanager().initialize(
+  await configureDependencies();
+  await Workmanager().initialize(
       callbackDispatcher, // The top level function, aka callbackDispatcher
       isInDebugMode:
           kDebugMode // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
       );
 
-  HomeWidget.registerInteractivityCallback(interactiveCallback);
+  await HomeWidget.registerInteractivityCallback(interactiveCallback);
 
   if (kDebugMode) {
     print('thissssssssssssssssssssssssssssssssss');
-    Workmanager().registerOneOffTask(
+    await Workmanager().registerOneOffTask(
         'test_task_${DateTime.now().millisecondsSinceEpoch}',
         updateWeatherDataKey);
   }
 
-  Workmanager().registerPeriodicTask(
+  await Workmanager().registerPeriodicTask(
     'updateWeatherWidget',
     updateWeatherDataKey,
     frequency: const Duration(hours: 1),
@@ -245,7 +246,7 @@ void main() {
       WidgetsBinding.instance.platformDispatcher.views.first.devicePixelRatio;
 
   if (data.shortestSide / ratio < 600) {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
         .then((value) => runApp(const MyApp()));
   } else {
     runApp(const MyApp());
