@@ -22,7 +22,6 @@ import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/daily.dart';
 import 'package:overmorrow/hourly.dart';
 import 'package:overmorrow/main_ui.dart';
-import 'package:overmorrow/new_displays.dart';
 import 'package:overmorrow/radar.dart';
 import 'package:stretchy_header/stretchy_header.dart';
 
