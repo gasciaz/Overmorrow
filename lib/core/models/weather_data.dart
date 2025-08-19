@@ -23,11 +23,6 @@ import 'package:overmorrow/decoders/decode_OM.dart';
 import 'package:overmorrow/decoders/decode_RV.dart';
 import 'package:overmorrow/decoders/decode_mn.dart';
 import 'package:overmorrow/decoders/decode_wapi.dart';
-import 'package:overmorrow/weather/abstract_15_min_precip.dart';
-import 'package:overmorrow/weather/abstract_aqi.dart';
-import 'package:overmorrow/weather/abstract_current.dart';
-import 'package:overmorrow/weather/abstract_day.dart';
-import 'package:overmorrow/weather/abstract_sunstatus.dart';
 
 class WeatherData {
   final Map<String, String> settings;
