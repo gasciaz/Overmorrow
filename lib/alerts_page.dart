@@ -20,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/new_displays.dart';
-import 'package:overmorrow/ui_helper.dart';
 
 Widget alertBadge(
   String name,

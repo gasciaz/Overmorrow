@@ -22,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/hourly.dart';
-import 'package:overmorrow/ui_helper.dart';
 
 Widget dayStat(
   WeatherData data,

@@ -33,7 +33,6 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/main_ui.dart';
 import 'package:overmorrow/settings_page.dart';
-import 'package:overmorrow/ui_helper.dart';
 import 'package:overmorrow/weather_refact.dart';
 import 'package:workmanager/workmanager.dart';
 

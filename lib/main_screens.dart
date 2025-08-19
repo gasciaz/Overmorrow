@@ -18,13 +18,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:overmorrow/core/models/weather_data.dart';
+import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/daily.dart';
 import 'package:overmorrow/hourly.dart';
 import 'package:overmorrow/main_ui.dart';
 import 'package:overmorrow/new_displays.dart';
 import 'package:overmorrow/radar.dart';
-import 'package:overmorrow/ui_helper.dart';
 import 'package:stretchy_header/stretchy_header.dart';
 
 class NewMain extends StatefulWidget {

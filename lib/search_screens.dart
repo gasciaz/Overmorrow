@@ -29,7 +29,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/main.dart';
 import 'package:overmorrow/settings_page.dart';
-import 'package:overmorrow/ui_helper.dart';
 
 //before this the same place from 2 different providers would be registered as different,
 //I am trying to fix this with this

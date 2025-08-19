@@ -25,7 +25,6 @@ import 'package:overmorrow/api_key.dart';
 import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/main_screens.dart';
 import 'package:overmorrow/settings_page.dart';
-import 'package:overmorrow/ui_helper.dart';
 import 'package:stretchy_header/stretchy_header.dart';
 import 'package:url_launcher/url_launcher.dart';
 

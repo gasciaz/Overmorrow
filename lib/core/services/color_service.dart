@@ -22,7 +22,7 @@ import 'dart:math';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:overmorrow/ui_helper.dart';
+import 'package:overmorrow/core/core.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 int getColorFromHex(String hexColor) {
@@ -48,7 +48,7 @@ double difFromBackColors(Color front, List<Color> backs) {
 class ImageColorList {
   final List<Color> imageColors; //a list of colors for the whole image
   final List<Color>
-      regionColors; //a list of colors for the region where the text will appear
+  regionColors; //a list of colors for the region where the text will appear
 
   const ImageColorList({required this.imageColors, required this.regionColors});
 
@@ -106,8 +106,9 @@ class ImageColorList {
     imageProvider.resolve(ImageConfiguration.empty).removeListener(listener);
 
     return ImageColorList(
-        imageColors: imageColors.colors.toList(),
-        regionColors: regionColors.colors.toList());
+      imageColors: imageColors.colors.toList(),
+      regionColors: regionColors.colors.toList(),
+    );
   }
 }
 
@@ -115,7 +116,7 @@ class ColorPalette {
   final ColorScheme palette;
   final Color colorPop; //The color that is applied to the temperature display
   final Color
-      descColor; //the color that is applied to the description under the temperature
+  descColor; //the color that is applied to the description under the temperature
 
   //used for debugging to see what colors the palette generator sees
   final List<Color> imageColors;
@@ -146,7 +147,9 @@ class ColorPalette {
 
   //make sure the temperature and description text remain readable
   static List<Color> checkTextContrast(
-      List<Color> regionColors, ColorScheme palette) {
+    List<Color> regionColors,
+    ColorScheme palette,
+  ) {
     //the intended look is temperature with primaryFixedDim and description with surface
     //though that can be adjusted to help contrast
 
@@ -162,7 +165,7 @@ class ColorPalette {
       palette.primaryContainer,
       palette.primary,
       palette.secondary,
-      palette.onSurface
+      palette.onSurface,
     ];
 
     double dif;
@@ -212,7 +215,10 @@ class ColorPalette {
   }
 
   static Future<ColorPalette> getColorPalette(
-      Image image, String theme, Map<String, String> settings) async {
+    Image image,
+    String theme,
+    Map<String, String> settings,
+  ) async {
     final colorList = await ImageColorList.getImageColorList(image);
     final regionColors = colorList.regionColors;
     final imageColors = colorList.imageColors;
@@ -265,8 +271,9 @@ class ColorPalette {
 
     //generate color palette with that seedColor
     final palette = ColorScheme.fromSeed(
-        seedColor: seedColor,
-        brightness: theme == 'light' ? Brightness.light : Brightness.dark);
+      seedColor: seedColor,
+      brightness: theme == 'light' ? Brightness.light : Brightness.dark,
+    );
 
     return palette;
   }
@@ -299,7 +306,9 @@ class ColorPalette {
   }
 
   static ColorScheme getCustomColorPalette(
-      String theme, Map<String, String> settings) {
+    String theme,
+    Map<String, String> settings,
+  ) {
     final mainColor = Color(getColorFromHex(settings['Custom color']!));
 
     if (theme == 'auto') {
@@ -331,8 +340,9 @@ class ColorPalette {
     }
 
     final palette = ColorScheme.fromSeed(
-        seedColor: Colors.deepPurple,
-        brightness: theme == 'light' ? Brightness.light : Brightness.dark);
+      seedColor: Colors.deepPurple,
+      brightness: theme == 'light' ? Brightness.light : Brightness.dark,
+    );
 
     return palette;
   }

@@ -22,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:overmorrow/core/core.dart';
-import 'package:overmorrow/ui_helper.dart';
 
 class NewHourly extends StatefulWidget {
   final WeatherData data;
