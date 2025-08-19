@@ -32,6 +32,11 @@ import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/services/color_service.dart';
 import 'package:overmorrow/services/image_service.dart';
 import 'package:overmorrow/ui_helper.dart';
+import 'package:overmorrow/weather/abstract_15_min_precip.dart';
+import 'package:overmorrow/weather/abstract_current.dart';
+import 'package:overmorrow/weather/abstract_day.dart';
+import 'package:overmorrow/weather/abstract_hour.dart';
+import 'package:overmorrow/weather/abstract_sunstatus.dart';
 import 'package:overmorrow/weather_refact.dart';
 
 String metNTextCorrection(
@@ -207,36 +212,20 @@ Future<List<dynamic>> MetNMakeRequest(
   return [MnData, fetchDatetime, isonline];
 }
 
-class MetNCurrent {
-  final String text;
-  final int temp;
-  final int humidity;
-  final int feels_like;
-  final int uv;
-  final double precip;
-
-  final int wind;
-  final int wind_dir;
-
-  final ImageService imageService;
-
-  final ColorScheme palette;
-  final Color colorPop;
-  final Color descColor;
-
+class MetNCurrent extends AbstractCurrent {
   const MetNCurrent({
-    required this.precip,
-    required this.humidity,
-    required this.feels_like,
-    required this.temp,
-    required this.text,
-    required this.uv,
-    required this.wind,
-    required this.wind_dir,
-    required this.imageService,
-    required this.palette,
-    required this.colorPop,
-    required this.descColor,
+    required super.precip,
+    required super.humidity,
+    required super.feels_like,
+    required super.temp,
+    required super.text,
+    required super.uv,
+    required super.wind,
+    required super.wind_dir,
+    required super.imageService,
+    required super.palette,
+    required super.colorPop,
+    required super.descColor,
   });
 
   static Future<MetNCurrent> fromJson(item, settings, String realLoc,
@@ -282,46 +271,23 @@ class MetNCurrent {
   }
 }
 
-class MetNDay {
-  final String text;
-
-  final IconData icon;
-
-  final String name;
-
-  final int minTemp;
-  final int maxTemp;
-  final double rawMinTemp; //the unconverted numbers used for charts
-  final double rawMaxTemp;
-
-  final List<MetNHour> hourly;
-  final List<MetNHour> hourly_for_precip;
-
-  final int precip_prob;
-  final double total_precip;
-
-  final int windspeed;
-  final int wind_dir;
-
-  final double mm_precip;
-  final int uv;
-
+class MetNDay extends AbstractDay {
   const MetNDay({
-    required this.text,
-    required this.icon,
-    required this.name,
-    required this.minTemp,
-    required this.maxTemp,
-    required this.rawMinTemp,
-    required this.rawMaxTemp,
-    required this.hourly,
-    required this.precip_prob,
-    required this.total_precip,
-    required this.windspeed,
-    required this.hourly_for_precip,
-    required this.mm_precip,
-    required this.uv,
-    required this.wind_dir,
+    required super.text,
+    required super.icon,
+    required super.name,
+    required super.minTemp,
+    required super.maxTemp,
+    required super.rawMinTemp,
+    required super.rawMaxTemp,
+    required super.hourly,
+    required super.precip_prob,
+    required super.total_precip,
+    required super.windspeed,
+    required super.hourly_for_precip,
+    required super.mm_precip,
+    required super.uv,
+    required super.wind_dir,
   });
 
   static MetNDay fromJson(item, settings, start, end, int index, hourDif,
@@ -404,41 +370,22 @@ class MetNDay {
   }
 }
 
-class MetNHour {
-  final int temp;
-
-  final IconData icon;
-
-  final String time;
-  final String text;
-  final double precip;
-  final int precip_prob;
-  final double wind;
-  final int wind_dir;
-  final int wind_gusts;
-  final int uv;
-
-  final double raw_temp;
-  final double raw_precip;
-  final double raw_wind;
-
-  final String rawText;
-
+class MetNHour extends AbstractHour {
   const MetNHour({
-    required this.temp,
-    required this.time,
-    required this.icon,
-    required this.text,
-    required this.precip,
-    required this.wind,
-    required this.raw_precip,
-    required this.raw_temp,
-    required this.raw_wind,
-    required this.wind_dir,
-    required this.wind_gusts,
-    required this.uv,
-    required this.precip_prob,
-    required this.rawText,
+    required super.temp,
+    required super.time,
+    required super.icon,
+    required super.text,
+    required super.precip,
+    required super.wind,
+    required super.raw_precip,
+    required super.raw_temp,
+    required super.raw_wind,
+    required super.wind_dir,
+    required super.wind_gusts,
+    required super.uv,
+    required super.precip_prob,
+    required super.rawText,
   });
 
   static MetNHour fromJson(
@@ -483,17 +430,12 @@ class MetNHour {
   }
 }
 
-class MetNSunstatus {
-  final String sunrise;
-  final String sunset;
-  final double sunstatus;
-  final String absoluteSunriseSunset;
-
+class MetNSunstatus extends AbstractSunstatus {
   const MetNSunstatus({
-    required this.sunrise,
-    required this.sunstatus,
-    required this.sunset,
-    required this.absoluteSunriseSunset,
+    required super.sunrise,
+    required super.sunstatus,
+    required super.sunset,
+    required super.absoluteSunriseSunset,
   });
 
   static Future<MetNSunstatus> fromJson(item, settings, double lat, double lng,
@@ -554,18 +496,14 @@ class MetNSunstatus {
   }
 }
 
-class MetN15MinutePrecip {
+class MetN15MinutePrecip extends Abstract15MinPrecip {
   //met norway doesn't actaully have 15 minute forecast, but i figured i could just use the
   //hourly data and just use some smoothing between the hours to emulate the 15 minutes
   //still better than not having it
-  final String t_minus;
-  final double precip_sum;
-  final List<double> precips;
-
   const MetN15MinutePrecip({
-    required this.t_minus,
-    required this.precip_sum,
-    required this.precips,
+    required super.t_minus,
+    required super.precip_sum,
+    required super.precips,
   });
 
   static MetN15MinutePrecip fromJson(

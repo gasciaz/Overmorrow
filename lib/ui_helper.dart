@@ -129,7 +129,7 @@ Widget NewAqiDataPoints(String name, double value, WeatherData data,
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       comfortatext(name, size, data.settings,
-          color: data.current.primary,
+          color: data.current.palette.primary,
           align: TextAlign.end,
           weight: FontWeight.w500),
       Padding(
@@ -139,12 +139,12 @@ Widget NewAqiDataPoints(String name, double value, WeatherData data,
           height: 2.5,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: data.current.primarySecond,
+            color: data.current.palette.primaryContainer, //primarySecond
           ),
         ),
       ),
       comfortatext(value.toString(), size, data.settings,
-          color: data.current.primarySecond,
+          color: data.current.palette.primaryContainer, //primarySecond
           align: TextAlign.end,
           weight: FontWeight.w600),
     ],

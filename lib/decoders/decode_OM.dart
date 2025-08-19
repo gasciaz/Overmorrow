@@ -31,6 +31,12 @@ import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/services/color_service.dart';
 import 'package:overmorrow/services/image_service.dart';
 import 'package:overmorrow/ui_helper.dart';
+import 'package:overmorrow/weather/abstract_15_min_precip.dart';
+import 'package:overmorrow/weather/abstract_aqi.dart';
+import 'package:overmorrow/weather/abstract_current.dart';
+import 'package:overmorrow/weather/abstract_day.dart';
+import 'package:overmorrow/weather/abstract_hour.dart';
+import 'package:overmorrow/weather/abstract_sunstatus.dart';
 import 'package:overmorrow/weather_refact.dart';
 
 String OMConvertTime(String time) {
@@ -280,38 +286,20 @@ IconData oMIconCorrection(String text) {
   return textMaterialIcon[text] ?? OvermorrowWeatherIcons3.clear_sky;
 }
 
-class OMCurrent {
-  final String text;
-  final int temp;
-  final int humidity;
-  final int feels_like;
-  final int uv;
-  final double precip;
-
-  final int wind;
-  final int wind_dir;
-
-  final ImageService imageService;
-
-  final ColorScheme palette;
-  final Color colorPop;
-  final Color descColor;
-  final List<Color> debugColors;
-
+class OMCurrent extends AbstractCurrent {
   const OMCurrent({
-    required this.precip,
-    required this.humidity,
-    required this.feels_like,
-    required this.temp,
-    required this.text,
-    required this.uv,
-    required this.wind,
-    required this.wind_dir,
-    required this.imageService,
-    required this.palette,
-    required this.colorPop,
-    required this.descColor,
-    required this.debugColors,
+    required super.precip,
+    required super.humidity,
+    required super.feels_like,
+    required super.temp,
+    required super.text,
+    required super.uv,
+    required super.wind,
+    required super.wind_dir,
+    required super.imageService,
+    required super.palette,
+    required super.colorPop,
+    required super.descColor,
   });
 
   static Future<OMCurrent> fromJson(
@@ -349,7 +337,6 @@ class OMCurrent {
       palette: colorPalette.palette,
       colorPop: colorPalette.colorPop,
       descColor: colorPalette.descColor,
-      debugColors: colorPalette.imageColors,
       text: conditionTranslation(currentCondition, context) ?? 'TranslationErr',
       uv: item['daily']['uv_index_max'][dayDif].round(),
       feels_like: unit_coversion(item['current']['apparent_temperature'],
@@ -374,46 +361,23 @@ class OMCurrent {
   }
 }
 
-class OMDay {
-  final String text;
-
-  final IconData icon;
-
-  final String name;
-
-  final int minTemp;
-  final int maxTemp;
-  final double rawMinTemp; //the unconverted numbers used for charts
-  final double rawMaxTemp;
-
-  final List<OMHour> hourly;
-  final List<OMHour> hourly_for_precip;
-
-  final int precip_prob;
-  final double total_precip;
-
-  final int windspeed;
-  final int wind_dir;
-
-  final double mm_precip;
-  final int uv;
-
+class OMDay extends AbstractDay {
   const OMDay({
-    required this.text,
-    required this.icon,
-    required this.name,
-    required this.minTemp,
-    required this.maxTemp,
-    required this.rawMinTemp,
-    required this.rawMaxTemp,
-    required this.hourly,
-    required this.precip_prob,
-    required this.total_precip,
-    required this.windspeed,
-    required this.hourly_for_precip,
-    required this.mm_precip,
-    required this.uv,
-    required this.wind_dir,
+    required super.text,
+    required super.icon,
+    required super.name,
+    required super.minTemp,
+    required super.maxTemp,
+    required super.rawMinTemp,
+    required super.rawMaxTemp,
+    required super.hourly,
+    required super.precip_prob,
+    required super.total_precip,
+    required super.windspeed,
+    required super.hourly_for_precip,
+    required super.mm_precip,
+    required super.uv,
+    required super.wind_dir,
   });
 
   static OMDay? build(item, settings, int index, sunstatus, approximatelocal,
@@ -476,15 +440,11 @@ class OMDay {
   }
 }
 
-class OM15MinutePrecip {
-  final String t_minus;
-  final double precip_sum;
-  final List<double> precips;
-
+class OM15MinutePrecip extends Abstract15MinPrecip {
   const OM15MinutePrecip({
-    required this.t_minus,
-    required this.precip_sum,
-    required this.precips,
+    required super.t_minus,
+    required super.precip_sum,
+    required super.precips,
   });
 
   static OM15MinutePrecip fromJson(
@@ -554,39 +514,22 @@ class OM15MinutePrecip {
   }
 }
 
-class OMHour {
-  final int temp;
-
-  final IconData icon;
-
-  final String time;
-
-  final String text;
-  final double precip;
-  final int precip_prob;
-  final double wind;
-  final int wind_dir;
-  final int wind_gusts;
-  final int uv;
-
-  final double raw_temp;
-  final double raw_precip;
-  final double raw_wind;
-
+class OMHour extends AbstractHour {
   const OMHour({
-    required this.temp,
-    required this.time,
-    required this.icon,
-    required this.text,
-    required this.precip,
-    required this.wind,
-    required this.raw_precip,
-    required this.raw_temp,
-    required this.raw_wind,
-    required this.wind_dir,
-    required this.wind_gusts,
-    required this.uv,
-    required this.precip_prob,
+    required super.temp,
+    required super.time,
+    required super.icon,
+    required super.text,
+    required super.precip,
+    required super.wind,
+    required super.raw_precip,
+    required super.raw_temp,
+    required super.raw_wind,
+    required super.wind_dir,
+    required super.wind_gusts,
+    required super.uv,
+    required super.precip_prob,
+    required super.rawText,
   });
 
   static OMHour fromJson(
@@ -628,17 +571,12 @@ class OMHour {
       );
 }
 
-class OMSunstatus {
-  final String sunrise;
-  final String sunset;
-  final double sunstatus;
-  final String absoluteSunriseSunset;
-
+class OMSunstatus extends AbstractSunstatus {
   const OMSunstatus({
-    required this.sunrise,
-    required this.sunstatus,
-    required this.sunset,
-    required this.absoluteSunriseSunset,
+    required super.sunrise,
+    required super.sunstatus,
+    required super.sunset,
+    required super.absoluteSunriseSunset,
   });
 
   static OMSunstatus fromJson(item, settings) => OMSunstatus(
@@ -653,16 +591,11 @@ class OMSunstatus {
       sunstatus: OMGetSunStatus(item));
 }
 
-class OMAqi {
-  final int aqi_index;
-
-  final String aqi_desc;
-  final String aqi_title;
-
+class OMAqi extends AbstractAqi {
   const OMAqi({
-    required this.aqi_desc,
-    required this.aqi_title,
-    required this.aqi_index,
+    required super.aqi_desc,
+    required super.aqi_title,
+    required super.aqi_index,
   });
 
   static Future<OMAqi> fromJson(
