@@ -26,7 +26,7 @@ import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
 import 'package:overmorrow/weather/abstract_day.dart';
 
-Widget dayStat(WeatherData data, IconData icon, number, String addon,
+Widget dayStat(WeatherData data, IconData icon, int number, String addon,
     {bool addWind = false, int windDir = 0, double iconSize = 16.0}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -383,7 +383,7 @@ Widget dailyExpanded(AbstractDay day, WeatherData data, ColorScheme palette,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               dayStat(data, Icons.umbrella_rounded, day.precip_prob, '%'),
-              dayStat(data, Icons.water_drop_outlined, day.total_precip,
+              dayStat(data, Icons.water_drop_outlined, day.total_precip.toInt(),
                   data.settings['Precipitation']!,
                   iconSize: 16.5),
               dayStat(data, Icons.air, day.windspeed, data.settings['Wind']!,

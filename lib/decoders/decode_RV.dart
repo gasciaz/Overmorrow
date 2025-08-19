@@ -46,12 +46,13 @@ class RainviewerRadar {
     final images = <String>[];
     final times = <String>[];
 
-    final past = data['radar']['past'];
-    final future = data['radar']['nowcast'];
+    final List<dynamic> past = data['radar']['past'] as List<dynamic>;
+    final List<dynamic> future = data['radar']['nowcast'] as List<dynamic>;
 
     for (final x in past) {
-      final time = DateTime.fromMillisecondsSinceEpoch(x['time'] * 1000);
-      images.add(host + x['path']);
+      final time =
+          DateTime.fromMillisecondsSinceEpoch((x['time'] as int) * 1000);
+      images.add(host + (x['path'] as String));
       times.add('${time.hour}h ${time.minute}m');
     }
 
@@ -59,8 +60,9 @@ class RainviewerRadar {
     final startingIndex = times.length - 1;
 
     for (final x in future) {
-      final time = DateTime.fromMillisecondsSinceEpoch(x['time'] * 1000);
-      images.add(host + x['path']);
+      final time =
+          DateTime.fromMillisecondsSinceEpoch((x['time'] as int) * 1000);
+      images.add(host + (x['path'] as String));
       times.add('${time.hour}h ${time.minute}m');
     }
 

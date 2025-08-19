@@ -178,8 +178,15 @@ Future<void> SetData(String name, String to) async {
   await prefs.setString(name, to);
 }
 
-Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
-    Map<String, String> settings, textcolor, Color primary, String rawName) {
+Widget dropdown(
+    Color bgcolor,
+    String name,
+    Function updatePage,
+    String unit,
+    Map<String, String> settings,
+    Color? textcolor,
+    Color primary,
+    String rawName) {
   final Items = settingSwitches[rawName] ?? ['˚C', '˚F'];
 
   return DropdownButton(
@@ -195,7 +202,7 @@ Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
         ),
       ),
       style: GoogleFonts.comfortaa(
-        color: textcolor as Color?,
+        color: textcolor,
         fontSize: 19 * getFontSize(settings['Font size']!),
         fontWeight: FontWeight.w300,
       ),
@@ -215,7 +222,7 @@ Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
 }
 
 Widget settingEntry(
-    icon,
+    IconData icon,
     String text,
     Map<String, String> settings,
     ColorScheme palette,

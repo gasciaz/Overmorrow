@@ -48,10 +48,10 @@ double getFontSize(String set) {
 Widget comfortatext(String text, double size, Map<String, String> settings,
     {Color color = WHITE,
     TextAlign align = TextAlign.left,
-    weight = FontWeight.w400,
-    decoration = TextDecoration.none,
-    maxLines = 40}) {
-  final x = getFontSize(settings['Font size'] as String);
+    FontWeight weight = FontWeight.w400,
+    TextDecoration decoration = TextDecoration.none,
+    int maxLines = 40}) {
+  final x = getFontSize(settings['Font size']!);
   final baseStyle = GoogleFonts.outfit(
     color: color,
     fontSize: size * x * 1.1,
@@ -262,7 +262,7 @@ class _MySearchParentState extends State<MySearchParent> {
             updateLocation: widget.updateLocation,
             palette: palette,
             favorites: favorites,
-            prefs: snapshot.data,
+            prefs: snapshot.data!,
             place: place,
             settings: settings,
             image: image,
@@ -277,7 +277,7 @@ class MySearchWidget extends StatefulWidget {
   final String place;
   final Function updateLocation;
   final List<String> favorites;
-  final prefs;
+  final SharedPreferences prefs;
   final Map<String, String> settings;
   final Image image;
   final bool isTabletMode;
@@ -310,7 +310,7 @@ class _MySearchWidgetState extends State<MySearchWidget> {
   final ColorScheme palette;
   final String place;
   final Function updateLocation;
-  final prefs;
+  final SharedPreferences prefs;
   final Map<String, String> settings;
   final Image image;
   final bool isTabletMode;

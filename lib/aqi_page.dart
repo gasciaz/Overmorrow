@@ -169,8 +169,8 @@ class ThreeQuarterCirclePainter extends CustomPainter {
   }
 }
 
-Widget pollutantWidget(
-    WeatherData data, String name, value, double percent, ColorScheme palette) {
+Widget pollutantWidget(WeatherData data, String name, double value,
+    double percent, ColorScheme palette) {
   return Padding(
     padding: const EdgeInsets.all(14),
     child: Column(
@@ -963,7 +963,7 @@ class AQIGraphPainter extends CustomPainter {
   }
 }
 
-Widget HourlyQqi(WeatherData data, hourValues, String name,
+Widget HourlyQqi(WeatherData data, List<double> hourValues, String name,
     OMExtendedAqi extendedAqi, BuildContext context, ColorScheme palette) {
   const chartTypes = <List<int>>[
     [0, 2, 4, 6, 8, 10],

@@ -312,7 +312,7 @@ class _AboutPageState extends State<AboutPage> {
                           onTap: () {
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(
+                                MaterialPageRoute<ApiAndServicesPage>(
                                     builder: (context) => ApiAndServicesPage(
                                         settings: settings, palette: palette)));
                           },

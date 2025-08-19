@@ -93,7 +93,7 @@ Widget NewSettings(
     Image image,
     ColorScheme palette,
     BuildContext context,
-    colornotify) {
+    ValueNotifier<ColorPalette> colornotify) {
   final localizations = AppLocalizations.of(context)!;
 
   return Padding(
@@ -824,8 +824,8 @@ class TranslationSelection extends StatelessWidget {
   final VoidCallback goBack;
   final ValueChanged<String?>? onTap;
   final Map<String, String> settings;
-  final options;
-  final selected;
+  final List<String> options;
+  final String selected;
   final ColorScheme palette;
 
   const TranslationSelection(
@@ -833,8 +833,8 @@ class TranslationSelection extends StatelessWidget {
       required this.settings,
       required this.goBack,
       this.onTap,
-      this.options,
-      this.selected,
+      this.options = const [],
+      this.selected = '',
       required this.palette});
 
   @override
@@ -915,8 +915,7 @@ class TranslationSelection extends StatelessWidget {
                           title: Padding(
                             padding: const EdgeInsets.only(
                                 top: 15, bottom: 15, left: 13),
-                            child: comfortatext(
-                                options[index] as String, 20, settings,
+                            child: comfortatext(options[index], 20, settings,
                                 color: palette.onSurface),
                           ),
                           contentPadding: EdgeInsets.zero,

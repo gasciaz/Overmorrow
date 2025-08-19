@@ -85,12 +85,12 @@ Widget searchBar2(
                   HapticFeedback.selectionClick();
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
+                    MaterialPageRoute<SettingsPage>(
                       builder: (context) => SettingsPage(image: image),
                     ),
                   ).then((value) {
                     Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
+                      MaterialPageRoute<MyApp>(
                         builder: (context) {
                           return const MyApp();
                         },
@@ -106,7 +106,7 @@ Widget searchBar2(
       onTap: () {
         HapticFeedback.lightImpact();
         Navigator.of(context).push(
-          MaterialPageRoute(
+          MaterialPageRoute<HeroSearchPage>(
               builder: (context) => HeroSearchPage(
                     palette: palette,
                     place: place,
@@ -219,13 +219,13 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
     HapticFeedback.selectionClick();
     Navigator.push(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<SettingsPage>(
         builder: (context) => SettingsPage(image: image),
       ),
     ).then((value) {
       if (mounted) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
+          MaterialPageRoute<MyApp>(
             builder: (context) {
               return const MyApp();
             },
@@ -312,6 +312,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
             '${position.latitude.toStringAsFixed(2)}, ${position.longitude.toStringAsFixed(2)}';
       });
     }
+    return 'enabled';
   }
 
   Future<String> askGrantLocationPermission() async {
@@ -337,6 +338,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
     if (x == 'enabled') {
       await findCurrentPosition();
     }
+    return x;
   }
 
   Future<String> checkIflocationState([bool afterAsk = false]) async {
@@ -960,7 +962,7 @@ Widget buildFavorites(
 }
 
 Widget reorderFavorites(
-    items,
+    List<String> items,
     Map<String, String> settings,
     void Function(List<String>) onFavChanged,
     ColorScheme palette,
@@ -999,7 +1001,7 @@ Widget reorderFavorites(
 }
 
 Widget reorderableItem(
-    List<dynamic> items,
+    List<String> items,
     int index,
     Map<String, String> settings,
     ColorScheme palette,
@@ -1007,7 +1009,7 @@ Widget reorderableItem(
     bool isTabletMode) {
   final split = json.decode(items[index]);
   final String name = split['name'] as String;
-  final country = generateAbbreviation(split['country']);
+  final country = generateAbbreviation(split['country'] as String);
   final String region = split['region'] as String;
   return ColoredBox(
     key: Key('$name, $country, $region'),

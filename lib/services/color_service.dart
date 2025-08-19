@@ -323,7 +323,7 @@ class ColorPalette {
   //i specifically made this because it's always the same,
   // so there's no point in loading it from the image every time
   static ColorScheme getErrorPagePalette(
-    theme,
+    String? theme,
   ) {
     if (theme == 'auto') {
       final brightness =

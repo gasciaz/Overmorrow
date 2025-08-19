@@ -52,7 +52,7 @@ const forecastWidgetReceiver =
     'com.marotidev.overmorrow.receivers.ForecastWidgetReceiver';
 
 class WidgetService {
-  static Future<void> saveData(String id, value) async {
+  static Future<void> saveData(String id, dynamic value) async {
     await HomeWidget.saveWidgetData(id, value);
     print(('Saved', id, value));
   }
@@ -90,19 +90,19 @@ class WidgetService {
   }
 
   static Future<void> reloadWidgets() async {
-    HomeWidget.updateWidget(
+    await HomeWidget.updateWidget(
       androidName: 'CurrentWidget',
       qualifiedAndroidName: currentWidgetReceiver,
     );
-    HomeWidget.updateWidget(
+    await HomeWidget.updateWidget(
       androidName: 'DateCurrentWidget',
       qualifiedAndroidName: dateCurrentWidgetReceiver,
     );
-    HomeWidget.updateWidget(
+    await HomeWidget.updateWidget(
       androidName: 'WindWidget',
       qualifiedAndroidName: windWidgetReceiver,
     );
-    HomeWidget.updateWidget(
+    await HomeWidget.updateWidget(
       androidName: 'ForecastWidget',
       qualifiedAndroidName: forecastWidgetReceiver,
     );
@@ -198,7 +198,7 @@ void callbackDispatcher() {
             }
           }
 
-          WidgetService.reloadWidgets();
+          await WidgetService.reloadWidgets();
         } catch (e, stacktrace) {
           if (kDebugMode) {
             print(
@@ -546,7 +546,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> updateLocation(String proposedLoc, String backupName,
-      {time = 0, bool startup = false}) async {
+      {int time = 0, bool startup = false}) async {
     setState(() {
       HapticFeedback.lightImpact();
       if (startup) {

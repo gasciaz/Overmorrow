@@ -28,7 +28,7 @@ import 'package:overmorrow/weather/abstract_hour.dart';
 
 class NewHourly extends StatefulWidget {
   final WeatherData data;
-  final hours;
+  final List<dynamic> hours;
   final bool elevated;
 
   const NewHourly(
@@ -44,7 +44,7 @@ class NewHourly extends StatefulWidget {
 class _NewHourlyState extends State<NewHourly>
     with AutomaticKeepAliveClientMixin {
   final WeatherData data;
-  final hours;
+  final List<dynamic> hours;
   final bool elevated;
 
   int _value = 0;
@@ -123,7 +123,8 @@ class _NewHourlyState extends State<NewHourly>
   }
 }
 
-Widget hourBoxes(hours, WeatherData data, value, bool elevated, context) {
+Widget hourBoxes(List<dynamic> hours, WeatherData data, int value,
+    bool elevated, BuildContext context) {
   final ColorScheme palette = data.current.palette;
 
   return AnimationLimiter(
@@ -143,7 +144,7 @@ Widget hourBoxes(hours, WeatherData data, value, bool elevated, context) {
           );
         }
         final childWidgets = <Widget>[
-          buildHourlySum(hour, palette, data),
+          buildHourlySum(hour as AbstractHour, palette, data),
           buildHourlyPrecip(hour, palette, data),
           buildHourlyWind(hour, palette, data),
           buildHourlyUv(hour, palette, data),

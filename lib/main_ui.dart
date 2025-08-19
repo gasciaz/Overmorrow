@@ -143,7 +143,7 @@ class DescriptionCircle extends StatelessWidget {
   final String undercaption;
   final String extra;
   final Map<String, String> settings;
-  final dir;
+  final double dir;
 
   final ColorScheme palette;
 
@@ -223,7 +223,7 @@ class DescriptionCircle extends StatelessWidget {
 
 class FadingWidget extends StatefulWidget {
   final WeatherData data;
-  final time;
+  final DateTime time;
 
   const FadingWidget({super.key, required this.data, required this.time});
 
@@ -322,7 +322,7 @@ class _FadingWidgetState extends State<FadingWidget>
 }
 
 class SinceLastUpdate extends StatefulWidget {
-  final split;
+  final List<String> split;
   final WeatherData data;
   final bool isVisible;
 
@@ -388,8 +388,7 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
                 weight: FontWeight.w300,
               ),
               comfortatext(
-                ((widget.split.length as int) > 1 ? widget.split[1] : '')
-                    as String,
+                widget.split.length > 1 ? widget.split[1] : '',
                 14,
                 widget.data.settings,
                 color: text,
@@ -554,14 +553,14 @@ Widget providerSelector(
 }
 
 class ErrorPage extends StatelessWidget {
-  final errorMessage;
+  final String errorMessage;
   final Function updateLocation;
   final String place;
-  final icon;
+  final IconData icon;
   final Map<String, String> settings;
   final String provider;
   final String latlng;
-  final shouldAdd;
+  final String? shouldAdd;
 
   const ErrorPage(
       {super.key,

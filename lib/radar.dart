@@ -154,7 +154,7 @@ class _RadarSmallState extends State<RadarSmall> {
                                 onTap: (tapPosition, point) => {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(
+                                    MaterialPageRoute<RadarBig>(
                                         builder: (context) => RadarBig(
                                               data: data,
                                             )),
@@ -244,7 +244,7 @@ class _RadarSmallState extends State<RadarSmall> {
                               });
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
+                                MaterialPageRoute<RadarBig>(
                                     builder: (context) => RadarBig(
                                           data: data,
                                         )),

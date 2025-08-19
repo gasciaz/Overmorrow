@@ -92,8 +92,13 @@ int metNcalculateFeelsLike(double t, double r, double v) {
   }
 }
 
-String metNGetName(int index, Map<String, String> settings, item, int start,
-    hourDif, AppLocalizations localizations) {
+String metNGetName(
+    int index,
+    Map<String, String> settings,
+    Map<String, dynamic> item,
+    int start,
+    int hourDif,
+    AppLocalizations localizations) {
   final String x =
       item['properties']['timeseries'][start]['time'].split('T')[0] as String;
   final String hour = item['properties']['timeseries'][start]['time']
@@ -204,7 +209,7 @@ Future<List<dynamic>> MetNMakeRequest(
       headers: headers);
 
   final MnResponse = (await MnFile[0].readAsString()) as String;
-  final bool isonline = MnFile[1];
+  final bool isonline = MnFile[1] as bool;
 
   final MnData = jsonDecode(MnResponse);
 
@@ -229,7 +234,7 @@ class MetNCurrent extends AbstractCurrent {
   });
 
   static Future<MetNCurrent> fromJson(
-      item,
+      Map<String, dynamic> item,
       Map<String, String> settings,
       String realLoc,
       double lat,
@@ -237,7 +242,7 @@ class MetNCurrent extends AbstractCurrent {
       AppLocalizations localizations) async {
     final currentCondition = metNTextCorrection(
         item['properties']['timeseries'][0]['data']['next_1_hours']['summary']
-            ['symbol_code'],
+            ['symbol_code'] as String,
         false,
         localizations);
 
@@ -246,7 +251,7 @@ class MetNCurrent extends AbstractCurrent {
     final imageService =
         await ImageService.getImageService(currentCondition, realLoc, settings);
     final colorPalette = await ColorPalette.getColorPalette(
-        imageService.image, settings['Color mode'], settings);
+        imageService.image, settings['Color mode']!, settings);
 
     return MetNCurrent(
       imageService: imageService,
@@ -254,24 +259,31 @@ class MetNCurrent extends AbstractCurrent {
       colorPop: colorPalette.colorPop,
       descColor: colorPalette.descColor,
       text: metNTextCorrection(
-          it['next_1_hours']['summary']['symbol_code'], true, localizations),
+          it['next_1_hours']['summary']['symbol_code'] as String,
+          true,
+          localizations),
       precip: double.parse(unit_coversion(
-              it['next_1_hours']['details']['precipitation_amount'],
-              settings['Precipitation'])
+              it['next_1_hours']['details']['precipitation_amount'] as double,
+              settings['Precipitation']!)
           .toStringAsFixed(1)),
-      temp: unit_coversion(it['instant']['details']['air_temperature'],
-              settings['Temperature'])
+      temp: unit_coversion(
+              it['instant']['details']['air_temperature'] as double,
+              settings['Temperature']!)
           .round(),
-      humidity: it['instant']['details']['relative_humidity'].round(),
+      humidity:
+          (it['instant']['details']['relative_humidity'] as double).round(),
       wind: unit_coversion(
-              it['instant']['details']['wind_speed'] * 3.6, settings['Wind'])
+              (it['instant']['details']['wind_speed'] * 3.6 as double),
+              settings['Wind']!)
           .round(),
-      uv: it['instant']['details']['ultraviolet_index_clear_sky'].round(),
+      uv: (it['instant']['details']['ultraviolet_index_clear_sky'] as double)
+          .round(),
       feels_like: metNcalculateFeelsLike(
-          it['instant']['details']['air_temperature'],
-          it['instant']['details']['relative_humidity'],
-          it['instant']['details']['wind_speed'] * 3.6),
-      wind_dir: it['instant']['details']['wind_from_direction'].round(),
+          it['instant']['details']['air_temperature'] as double,
+          it['instant']['details']['relative_humidity'] as double,
+          (it['instant']['details']['wind_speed'] as double) * 3.6),
+      wind_dir:
+          (it['instant']['details']['wind_from_direction'] as double).round(),
     );
   }
 }
@@ -295,8 +307,14 @@ class MetNDay extends AbstractDay {
     required super.wind_dir,
   });
 
-  static MetNDay fromJson(item, Map<String, String> settings, int start,
-      int end, int index, hourDif, AppLocalizations localizations) {
+  static MetNDay fromJson(
+      Map<String, dynamic> item,
+      Map<String, String> settings,
+      int start,
+      int end,
+      int index,
+      int hourDif,
+      AppLocalizations localizations) {
     final temperatures = <int>[];
     final rawTemps = <double>[];
     final windspeeds = <double>[];
@@ -328,8 +346,11 @@ class MetNDay extends AbstractDay {
     final hours = <MetNHour>[];
 
     for (int n = start; n < end; n++) {
-      final hour = MetNHour.fromJson(item['properties']['timeseries'][n],
-          settings, hourDif, localizations);
+      final hour = MetNHour.fromJson(
+          item['properties']['timeseries'][n] as Map<String, dynamic>,
+          settings,
+          hourDif,
+          localizations);
       temperatures.add(hour.temp);
       rawTemps.add(hour.raw_temp);
       windspeeds.add(hour.wind);
@@ -393,7 +414,10 @@ class MetNHour extends AbstractHour {
     required super.rawText,
   });
 
-  static MetNHour fromJson(item, Map<String, String> settings, hourDif,
+  static MetNHour fromJson(
+      Map<String, dynamic> item,
+      Map<String, String> settings,
+      int hourDif,
       AppLocalizations localizations) {
     final nextHours =
         item['data']['next_1_hours'] ?? item['data']['next_6_hours'];
@@ -405,32 +429,38 @@ class MetNHour extends AbstractHour {
       text: metNTextCorrection(
           nextHours['summary']['symbol_code'] as String, true, localizations),
       temp: unit_coversion(
-              item['data']['instant']['details']['air_temperature'],
-              settings['Temperature'] as String)
+              item['data']['instant']['details']['air_temperature'] as double,
+              settings['Temperature']!)
           .round(),
-      precip: unit_coversion(nextHours['details']['precipitation_amount'],
-          settings['Precipitation'] as String),
+      precip: unit_coversion(
+          nextHours['details']['precipitation_amount'] as double,
+          settings['Precipitation']!),
       precip_prob:
-          (nextHours['details']['probability_of_precipitation'] ?? 0).round(),
+          (nextHours['details']['probability_of_precipitation'] as double? ?? 0)
+              .round(),
       icon: metNIconCorrection(
         metNTextCorrection(nextHours['summary']['symbol_code'] as String, false,
             localizations),
       ),
       time: settings['Time mode'] == '24 hour'
-          ? metN24HourTime(item['time'], hourDif)
-          : metNTimeCorrect(item['time'], hourDif),
+          ? metN24HourTime(item['time'] as String, hourDif)
+          : metNTimeCorrect(item['time'] as String, hourDif),
       wind: double.parse(unit_coversion(
-              item['data']['instant']['details']['wind_speed'] * 3.6,
-              settings['Wind'])
+              (item['data']['instant']['details']['wind_speed'] as double) *
+                  3.6,
+              settings['Wind']!)
           .toStringAsFixed(1)),
       wind_dir:
-          item['data']['instant']['details']['wind_from_direction'].round(),
-      uv: (item['data']['instant']['details']['ultraviolet_index_clear_sky'] ??
+          (item['data']['instant']['details']['wind_from_direction'] as double)
+              .round(),
+      uv: (item['data']['instant']['details']['ultraviolet_index_clear_sky']
+                  as double? ??
               0)
           .round(),
-      raw_wind: item['data']['instant']['details']['wind_speed'] * 3.6,
-      raw_precip: nextHours['details']['precipitation_amount'],
-      raw_temp: item['data']['instant']['details']['air_temperature'],
+      raw_wind:
+          (item['data']['instant']['details']['wind_speed'] as double) * 3.6,
+      raw_precip: nextHours['details']['precipitation_amount'] as double,
+      raw_temp: item['data']['instant']['details']['air_temperature'] as double,
     );
   }
 }
@@ -444,7 +474,7 @@ class MetNSunstatus extends AbstractSunstatus {
   });
 
   static Future<MetNSunstatus> fromJson(
-      item,
+      Map<String, dynamic> item,
       Map<String, String> settings,
       double lat,
       double lng,
@@ -467,13 +497,13 @@ class MetNSunstatus extends AbstractSunstatus {
     final MnFile = await XCustomCacheManager.fetchData(
         MnUrl.toString(), '$lat, $lng met.no aqi',
         headers: headers);
-    final MnResponse = await MnFile[0].readAsString();
+    final MnResponse = (await MnFile[0].readAsString()) as String;
     final item = jsonDecode(MnResponse);
 
     final List<String> sunriseString = item['properties']['sunrise']['time']
         .split('T')[1]
         .split('+')[0]
-        .split(':');
+        .split(':') as List<String>;
     final sunrise = timeThere.copyWith(
       hour: (int.parse(sunriseString[0]) - dif) % 24,
       minute: int.parse(sunriseString[1]),
@@ -482,7 +512,7 @@ class MetNSunstatus extends AbstractSunstatus {
     final List<String> sunsetString = item['properties']['sunset']['time']
         .split('T')[1]
         .split('+')[0]
-        .split(':');
+        .split(':') as List<String>;
     final sunset = timeThere.copyWith(
       hour: (int.parse(sunsetString[0]) - dif) % 24,
       minute: int.parse(sunsetString[1]),
@@ -517,8 +547,8 @@ class MetN15MinutePrecip extends Abstract15MinPrecip {
     required super.precips,
   });
 
-  static MetN15MinutePrecip fromJson(
-      item, Map<String, String> settings, AppLocalizations localizations) {
+  static MetN15MinutePrecip fromJson(Map<String, dynamic> item,
+      Map<String, String> settings, AppLocalizations localizations) {
     var closest = 100;
     var end = -1;
     double sum = 0;
@@ -529,7 +559,7 @@ class MetN15MinutePrecip extends Abstract15MinPrecip {
     for (var i = 0; i < 6; i++) {
       final x = double.parse(item['properties']['timeseries'][i]['data']
               ['next_1_hours']['details']['precipitation_amount']
-          .toStringAsFixed(1));
+          .toStringAsFixed(1) as String);
 
       if (x > 0.0) {
         if (closest == 100) {
@@ -577,7 +607,7 @@ class MetN15MinutePrecip extends Abstract15MinPrecip {
 
     return MetN15MinutePrecip(
       t_minus: tMinus,
-      precip_sum: unit_coversion(sum, settings['Precipitation']),
+      precip_sum: unit_coversion(sum, settings['Precipitation']!),
       precips: precips,
     );
   }
@@ -591,7 +621,7 @@ Future<WeatherData> MetNGetWeatherData(
     String placeName,
     AppLocalizations localizations) async {
   final Mn = await MetNMakeRequest(lat, lng, realLoc);
-  final MnBody = Mn[0];
+  final MnBody = Mn[0] as Map<String, dynamic>;
 
   //DateTime lastKnowTime = await MetNGetLocalTime(lat, lng);
   final lastKnowTime = DateTime.now();
@@ -605,7 +635,7 @@ Future<WeatherData> MetNGetWeatherData(
 
   final hourDif = metNCalculateHourDif(localTime);
 
-  final bool isonline = Mn[2];
+  final bool isonline = Mn[2] as bool;
 
   //I have to use the fetch date because on offline it wouldn't work because it changes
   final sunstatus = await MetNSunstatus.fromJson(
@@ -618,7 +648,7 @@ Future<WeatherData> MetNGetWeatherData(
       .inHours;
 
   //make sure that there is data left
-  if (start >= MnBody['properties']['timeseries'].length) {
+  if (start >= (MnBody['properties']['timeseries'].length as int)) {
     throw const SocketException('Cached data expired');
   }
 
@@ -633,10 +663,10 @@ Future<WeatherData> MetNGetWeatherData(
   var index = 0;
 
   var previousHour = 0;
-  for (var n = 0; n < MnBody['properties']['timeseries'].length; n++) {
+  for (var n = 0; n < (MnBody['properties']['timeseries'].length as int); n++) {
     final hour = (int.parse(MnBody['properties']['timeseries'][n]['time']
                 .split('T')[1]
-                .split(':')[0]) -
+                .split(':')[0] as String) -
             hourDif) %
         24;
     if (n > 0 && hour - previousHour < 1) {
@@ -717,14 +747,14 @@ Future<LightCurrentWeatherData> metNGetLightCurrentData(
   return LightCurrentWeatherData(
     condition: metNTextCorrection(
         item['properties']['timeseries'][0]['data']['next_1_hours']['summary']
-            ['symbol_code'],
+            ['symbol_code'] as String,
         false,
         null),
     place: placeName,
     temp: unit_coversion(
             item['properties']['timeseries'][0]['data']['instant']['details']
-                ['air_temperature'],
-            settings['Temperature'])
+                ['air_temperature'] as double,
+            settings['Temperature']!)
         .round(),
     updatedTime: "${now.hour}:${now.minute.toString().padLeft(2, "0")}",
     dateString: getDateStringFromLocalTime(now),
@@ -736,16 +766,16 @@ Future<LightWindData> metNGetLightWindData(Map<String, String> settings,
   final item = await metNGetLightResponse(settings, placeName, lat, lon);
 
   return LightWindData(
-    windDirAngle: item['properties']['timeseries'][0]['data']['instant']
-            ['details']['wind_from_direction']
+    windDirAngle: (item['properties']['timeseries'][0]['data']['instant']
+            ['details']['wind_from_direction'] as double)
         .round(),
     windSpeed: unit_coversion(
-            item['properties']['timeseries'][0]['data']['instant']['details']
-                    ['wind_speed'] *
+            (item['properties']['timeseries'][0]['data']['instant']['details']
+                    ['wind_speed'] as double) *
                 3.6,
-            settings['Wind'])
+            settings['Wind']!)
         .round(),
-    windUnit: settings['Wind'],
+    windUnit: settings['Wind']!,
   );
 }
 
@@ -762,17 +792,22 @@ Future<LightHourlyForecastData> metNGetLightHourlyData(
 
   final now = DateTime.now();
 
-  for (var i = 0; i < min(item['properties']['timeseries'].length, 23); i++) {
+  for (var i = 0;
+      i < min(item['properties']['timeseries'].length as int, 23);
+      i++) {
     final hour = item['properties']['timeseries'][i];
 
-    final d = DateTime.parse(hour['time']);
+    final d = DateTime.parse(hour['time'] as String);
 
     if (d.hour % 6 == 0) {
       hourlyConditions.add(metNTextCorrection(
-          hour['data']['next_1_hours']['summary']['symbol_code'], false, null));
+          hour['data']['next_1_hours']['summary']['symbol_code'] as String,
+          false,
+          null));
       hourlyTemps.add(
-        unit_coversion(hour['data']['instant']['details']['air_temperature'],
-                settings['Temperature'])
+        unit_coversion(
+                hour['data']['instant']['details']['air_temperature'] as double,
+                settings['Temperature']!)
             .round(),
       );
       hourlyNames.add('${d.hour}h');
@@ -783,13 +818,13 @@ Future<LightHourlyForecastData> metNGetLightHourlyData(
     place: placeName,
     currentCondition: metNTextCorrection(
         item['properties']['timeseries'][0]['data']['next_1_hours']['summary']
-            ['symbol_code'],
+            ['symbol_code'] as String,
         false,
         null),
     currentTemp: unit_coversion(
             item['properties']['timeseries'][0]['data']['instant']['details']
-                ['air_temperature'],
-            settings['Temperature'])
+                ['air_temperature'] as double,
+            settings['Temperature']!)
         .round(),
     updatedTime: "${now.hour}:${now.minute.toString().padLeft(2, "0")}",
     //i can't sync lists to widgets so i need to encode and then decode them

@@ -90,7 +90,7 @@ class WavePainter extends CustomPainter {
 
 class NewSunriseSunset extends StatefulWidget {
   final WeatherData data;
-  final width;
+  final double width;
 
   @override
   const NewSunriseSunset({super.key, required this.data, required this.width});
@@ -265,7 +265,7 @@ Widget aqiWidget(WeatherData data, ColorScheme palette, BuildContext context,
           HapticFeedback.lightImpact();
           Navigator.push(
               context,
-              MaterialPageRoute(
+              MaterialPageRoute<AllergensPage>(
                   builder: (context) => AllergensPage(
                         data: data,
                         isTabletMode: isTabletMode,
@@ -317,7 +317,7 @@ Widget aqiWidget(WeatherData data, ColorScheme palette, BuildContext context,
                   HapticFeedback.lightImpact();
                   Navigator.push(
                       context,
-                      MaterialPageRoute(
+                      MaterialPageRoute<AllergensPage>(
                           builder: (context) => AllergensPage(
                                 data: data,
                                 isTabletMode: isTabletMode,
@@ -360,7 +360,7 @@ Widget alertWidget(
                       HapticFeedback.lightImpact();
                       Navigator.push(
                           context,
-                          MaterialPageRoute(
+                          MaterialPageRoute<AlertsPage>(
                               builder: (context) => AlertsPage(data: data)));
                     },
                     child: Container(
