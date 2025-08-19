@@ -16,19 +16,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:overmorrow/l10n/app_localizations.dart';
+import 'package:overmorrow/main.dart';
 import 'package:overmorrow/services/color_service.dart';
 import 'package:overmorrow/settings_screens.dart';
+import 'package:overmorrow/ui_helper.dart';
 import 'package:overmorrow/weather_refact.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../l10n/app_localizations.dart';
-import 'main.dart';
-import 'ui_helper.dart';
 
 Map<String, List<String>> settingSwitches = {
   'Language': [
@@ -79,20 +80,20 @@ Map<String, List<String>> settingSwitches = {
     '#ffab40',
   ],
   'Search provider': ['weatherapi', 'open-meteo'],
-  'Layout': ["sunstatus,rain indicator,hourly,alerts,radar,daily,air quality"],
-  'Radar haptics': ["on", "off"],
+  'Layout': ['sunstatus,rain indicator,hourly,alerts,radar,daily,air quality'],
+  'Radar haptics': ['on', 'off'],
 };
 
-Future<List<dynamic>> getSettingsAndColors(image) async {
-  Map<String, String> settings = await getSettingsUsed();
-  ColorPalette colorPalette = await ColorPalette.getColorPalette(
-      image, settings["Color mode"]!, settings);
+Future<List<dynamic>> getSettingsAndColors(Image image) async {
+  final settings = await getSettingsUsed();
+  final colorPalette = await ColorPalette.getColorPalette(
+      image, settings['Color mode']!, settings);
   return [settings, colorPalette];
 }
 
 Future<Map<String, String>> getSettingsUsed() async {
-  Map<String, String> settings = {};
-  for (var v in settingSwitches.entries) {
+  final settings = <String, String>{};
+  for (final v in settingSwitches.entries) {
     final prefs = await SharedPreferences.getInstance();
     final ifnot = v.value[0];
     final used = prefs.getString('setting${v.key}') ?? ifnot;
@@ -106,13 +107,13 @@ Future<Map<String, String>> getSettingsUsed() async {
   return settings;
 }
 
-Future<String> isLocationSafe(translationProv) async {
-  bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+Future<String> isLocationSafe(AppLocalizations translationProv) async {
+  final serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
     return translationProv.locationServicesAreDisabled;
   }
 
-  LocationPermission permission = await Geolocator.checkPermission();
+  var permission = await Geolocator.checkPermission();
   if (permission == LocationPermission.denied) {
     permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
@@ -124,7 +125,7 @@ Future<String> isLocationSafe(translationProv) async {
   }
   if (permission == LocationPermission.whileInUse ||
       permission == LocationPermission.always) {
-    return "enabled";
+    return 'enabled';
   }
   return translationProv.failedToAccessGps;
 }
@@ -138,7 +139,7 @@ Future<List<String>> getLastPlace() async {
   return [place, cord];
 }
 
-setLastPlace(String place, String cord) async {
+Future<void> setLastPlace(String place, String cord) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('LastPlaceN', place);
   await prefs.setString('LastCord', cord);
@@ -152,11 +153,11 @@ Future<List<String>> getLastKnownLocation() async {
   return [place, cord];
 }
 
-setLastKnownLocation(String place, String cord) async {
+Future<void> setLastKnownLocation(String place, String cord) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('LastKnownPositionName', place);
   await prefs.setString('LastKnownPositionCord', cord);
-  WidgetService.saveData("widget.lastKnownPlace",
+  await WidgetService.saveData('widget.lastKnownPlace',
       place); //save the name of the place to the widgets
 }
 
@@ -172,14 +173,21 @@ Future<String> getLanguageUsed() async {
   return used;
 }
 
-SetData(String name, String to) async {
+Future<void> SetData(String name, String to) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString(name, to);
 }
 
-Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
-    settings, textcolor, Color primary, rawName) {
-  List<String> Items = settingSwitches[rawName] ?? ['˚C', '˚F'];
+Widget dropdown(
+    Color bgcolor,
+    String name,
+    Function updatePage,
+    String unit,
+    Map<String, String> settings,
+    Color? textcolor,
+    Color primary,
+    String rawName) {
+  final items = settingSwitches[rawName] ?? ['˚C', '˚F'];
 
   return DropdownButton(
       elevation: 0,
@@ -195,26 +203,32 @@ Widget dropdown(Color bgcolor, String name, Function updatePage, String unit,
       ),
       style: GoogleFonts.comfortaa(
         color: textcolor,
-        fontSize: 19 * getFontSize(settings["Font size"]),
+        fontSize: 19 * getFontSize(settings['Font size']!),
         fontWeight: FontWeight.w300,
       ),
       alignment: Alignment.centerRight,
       value: unit,
-      items: Items.map((item) {
+      items: items.map((item) {
         return DropdownMenuItem(
           value: item,
           child: Text(item),
         );
       }).toList(),
-      onChanged: (Object? value) {
+      onChanged: (String? value) {
         HapticFeedback.lightImpact();
-        settings[rawName] = value;
+        settings[rawName] = value!;
         updatePage(rawName, value);
       });
 }
 
 Widget settingEntry(
-    icon, text, settings, ColorScheme palette, updatePage, rawText, context) {
+    IconData icon,
+    String text,
+    Map<String, String> settings,
+    ColorScheme palette,
+    Function updatePage,
+    String rawText,
+    BuildContext context) {
   return GestureDetector(
     behavior: HitTestBehavior.translucent,
     onTap: () {
@@ -222,7 +236,7 @@ Widget settingEntry(
       showDialog<String>(
           context: context,
           builder: (BuildContext context) {
-            List<String> options = settingSwitches[rawText] ?? [""];
+            final options = settingSwitches[rawText] ?? [''];
             return AlertDialog(
               backgroundColor: palette.surface,
               content: StatefulBuilder(
@@ -232,8 +246,7 @@ Widget settingEntry(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding:
-                            const EdgeInsets.only(bottom: 20, top: 10, left: 0),
+                        padding: const EdgeInsets.only(bottom: 20, top: 10),
                         child: comfortatext(text, 22, settings,
                             color: palette.onSurface),
                       ),
@@ -310,16 +323,16 @@ Widget settingEntry(
 }
 
 class SettingsPage extends StatefulWidget {
-  final image;
+  final Image image;
 
-  const SettingsPage({Key? key, required this.image}) : super(key: key);
+  const SettingsPage({super.key, required this.image});
 
   @override
   _SettingsPageState createState() => _SettingsPageState(image: image);
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final image;
+  final Image image;
 
   String _locale = 'English';
   //this is so that appearance page setting changes take effect in place rather that having to exit the page
@@ -328,15 +341,15 @@ class _SettingsPageState extends State<SettingsPage> {
           palette: ColorScheme.light(),
           imageColors: [],
           regionColors: [],
-          descColor: WHITE,
-          colorPop: WHITE));
+          descColor: kWhite,
+          colorPop: kWhite));
 
   _SettingsPageState({required this.image});
 
   void updatePage(String name, String to) {
     setState(() {
       SetData('setting$name', to);
-      if (name == "Language") {
+      if (name == 'Language') {
         _locale = to;
       }
     });
@@ -364,23 +377,23 @@ class _SettingsPageState extends State<SettingsPage> {
             print((snapshot.error, snapshot.stackTrace));
           }
           return Center(
-            child: ErrorWidget(snapshot.error as Object),
+            child: ErrorWidget(snapshot.error!),
           );
         }
-        _locale = snapshot.data?[0]["Language"];
+        _locale = snapshot.data?[0]['Language'] as String;
         //this is needed so flutter wont complain about setstate during build
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          colornotify.value = snapshot.data?[1];
+          colornotify.value = snapshot.data?[1] as ColorPalette;
         });
         return Localizations.override(
           context: context,
           locale: languageNameToLocale[_locale] ?? const Locale('en'),
           child: SettingsMain(
-            settings: snapshot.data?[0],
+            settings: snapshot.data?[0] as Map<String, String>,
             updatePage: updatePage,
             goBack: goBack,
             image: image,
-            palette: snapshot.data?[1].palette,
+            palette: snapshot.data?[1].palette as ColorScheme,
             colornotify: colornotify,
           ),
         );
@@ -391,20 +404,20 @@ class _SettingsPageState extends State<SettingsPage> {
 
 class SettingsMain extends StatelessWidget {
   final ColorScheme palette;
-  final goBack;
-  final settings;
-  final updatePage;
-  final image;
-  final colornotify;
+  final VoidCallback goBack;
+  final Map<String, String> settings;
+  final void Function(String, String) updatePage;
+  final Image image;
+  final ValueNotifier<ColorPalette> colornotify;
 
   const SettingsMain(
       {super.key,
-      this.settings,
-      this.updatePage,
-      this.goBack,
-      this.image,
+      required this.settings,
+      required this.updatePage,
+      required this.goBack,
+      required this.image,
       required this.palette,
-      this.colornotify});
+      required this.colornotify});
 
   @override
   Widget build(BuildContext context) {
@@ -430,8 +443,8 @@ class SettingsMain extends StatelessWidget {
           ),
           // Just some content big enough to have something to scroll.
           SliverToBoxAdapter(
-            child: NewSettings(
-                settings!, updatePage, image, palette, context, colornotify),
+            child: newSettings(
+                settings, updatePage, image, palette, context, colornotify),
           ),
         ],
       ),

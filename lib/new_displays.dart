@@ -21,12 +21,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:overmorrow/alerts_page.dart';
+import 'package:overmorrow/aqi_page.dart';
+import 'package:overmorrow/decoders/decode_OM.dart';
+import 'package:overmorrow/decoders/weather_data.dart';
+import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/ui_helper.dart';
-
-import '../l10n/app_localizations.dart';
-import 'alerts_page.dart';
-import 'aqi_page.dart';
-import 'decoders/decode_OM.dart';
 
 class WavePainter extends CustomPainter {
   final double waveValue;
@@ -68,7 +68,7 @@ class WavePainter extends CustomPainter {
 
     final path2 = Path();
 
-    for (double x = splitPoint; x <= size.width; x++) {
+    for (var x = splitPoint; x <= size.width; x++) {
       final y = size.height / 2 +
           amplitude * sin((x / frequency * 2 * pi) + (waveValue * 2 * pi));
       if (x == splitPoint) {
@@ -78,8 +78,9 @@ class WavePainter extends CustomPainter {
       }
     }
 
-    canvas.drawPath(path2, secondPaint);
-    canvas.drawPath(path1, firstPaint);
+    canvas
+      ..drawPath(path2, secondPaint)
+      ..drawPath(path1, firstPaint);
   }
 
   @override
@@ -89,8 +90,8 @@ class WavePainter extends CustomPainter {
 }
 
 class NewSunriseSunset extends StatefulWidget {
-  final data;
-  final width;
+  final WeatherData data;
+  final double width;
 
   @override
   const NewSunriseSunset({super.key, required this.data, required this.width});
@@ -107,7 +108,7 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
 
   @override
   void initState() {
-    final List<String> absoluteLocalTime = widget.data.localtime.split(':');
+    final absoluteLocalTime = widget.data.localtime.split(':');
 
     final currentTime = DateTime.now();
 
@@ -132,20 +133,20 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
 
   @override
   Widget build(BuildContext context) {
-    ColorScheme palette = widget.data.current.palette;
+    final palette = widget.data.current.palette;
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
-        DateTime now = DateTime.now();
-        DateTime localTime = now.add(Duration(hours: hourdif));
+        final now = DateTime.now();
+        final localTime = now.add(Duration(hours: hourdif));
 
-        final double progress = widget.data.sunstatus.sunstatus;
+        final progress = widget.data.sunstatus.sunstatus;
 
-        String write = widget.data.settings["Time mode"] == "24 hour"
-            ? OMConvertTime(
+        final write = widget.data.settings['Time mode'] == '24 hour'
+            ? omConvertTime(
                 "j T${localTime.hour.toString().padLeft(2, "0")}:${localTime.minute.toString().padLeft(2, "0")}") //the j is just added so when splitting
             : OMamPmTime(
-                "j T${localTime.hour}:${localTime.minute}"); //it can grab the second item
+                'j T${localTime.hour}:${localTime.minute}'); //it can grab the second item
 
         //this is all so that the text will be right above the progress
         final textPainter = TextPainter(
@@ -154,11 +155,11 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
               style: GoogleFonts.outfit(
                   fontSize: 15.0 *
                       1.1 *
-                      getFontSize(widget.data.settings["Font size"]),
+                      getFontSize(widget.data.settings['Font size']!),
                   fontWeight: FontWeight.w300),
             ),
-            textDirection: TextDirection.ltr);
-        textPainter.layout();
+            textDirection: TextDirection.ltr)
+          ..layout();
 
         final textWidth = textPainter.width * 1.1;
 
@@ -185,7 +186,7 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
               Padding(
                 padding: EdgeInsets.only(
                     top: 6,
-                    left: min(max((progress * (widget.width - 56)), 2),
+                    left: min(max(progress * (widget.width - 56), 2),
                         widget.width - 56)),
                 child: Align(
                   alignment: Alignment.centerLeft,
@@ -207,7 +208,7 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
                       palette.surfaceContainerHighest, progress),
                   child: const SizedBox(
                     width: double.infinity,
-                    height: 8.0,
+                    height: 8,
                   ),
                 ),
               ),
@@ -225,11 +226,11 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
                     ),
                     comfortatext(
                         widget.data.sunstatus.sunrise, 15, widget.data.settings,
-                        color: palette.secondary, weight: FontWeight.w400),
+                        color: palette.secondary),
                     const Spacer(),
                     comfortatext(
                         widget.data.sunstatus.sunset, 15, widget.data.settings,
-                        color: palette.outline, weight: FontWeight.w400),
+                        color: palette.outline),
                     Padding(
                       padding: const EdgeInsets.only(left: 4, top: 1),
                       child: Icon(Icons.nightlight_outlined,
@@ -246,7 +247,8 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
   }
 }
 
-Widget aqiWidget(var data, ColorScheme palette, context, bool isTabletMode) {
+Widget aqiWidget(WeatherData data, ColorScheme palette, BuildContext context,
+    bool isTabletMode) {
   return Column(
     children: [
       Padding(
@@ -264,7 +266,7 @@ Widget aqiWidget(var data, ColorScheme palette, context, bool isTabletMode) {
           HapticFeedback.lightImpact();
           Navigator.push(
               context,
-              MaterialPageRoute(
+              MaterialPageRoute<AllergensPage>(
                   builder: (context) => AllergensPage(
                         data: data,
                         isTabletMode: isTabletMode,
@@ -301,13 +303,12 @@ Widget aqiWidget(var data, ColorScheme palette, context, bool isTabletMode) {
                       19,
                       data.settings,
                       color: palette.secondary,
-                      align: TextAlign.left,
                       weight: FontWeight.w500,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 6, left: 0),
+                      padding: const EdgeInsets.only(top: 6),
                       child: comfortatext(data.aqi.aqi_desc, 14, data.settings,
-                          color: palette.outline, weight: FontWeight.w400),
+                          color: palette.outline),
                     ),
                   ],
                 ),
@@ -317,7 +318,7 @@ Widget aqiWidget(var data, ColorScheme palette, context, bool isTabletMode) {
                   HapticFeedback.lightImpact();
                   Navigator.push(
                       context,
-                      MaterialPageRoute(
+                      MaterialPageRoute<AllergensPage>(
                           builder: (context) => AllergensPage(
                                 data: data,
                                 isTabletMode: isTabletMode,
@@ -336,8 +337,9 @@ Widget aqiWidget(var data, ColorScheme palette, context, bool isTabletMode) {
   );
 }
 
-Widget alertWidget(var data, context, ColorScheme palette) {
-  if (data.alerts.length > 0) {
+Widget alertWidget(
+    WeatherData data, BuildContext context, ColorScheme palette) {
+  if (data.alerts.isNotEmpty) {
     return Padding(
         padding:
             const EdgeInsets.only(left: 25, right: 25, bottom: 10, top: 20),
@@ -359,7 +361,7 @@ Widget alertWidget(var data, context, ColorScheme palette) {
                       HapticFeedback.lightImpact();
                       Navigator.push(
                           context,
-                          MaterialPageRoute(
+                          MaterialPageRoute<AlertsPage>(
                               builder: (context) => AlertsPage(data: data)));
                     },
                     child: Container(
@@ -388,7 +390,7 @@ Widget alertWidget(var data, context, ColorScheme palette) {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 2),
                                   child: comfortatext(
-                                      "${data.alerts[index].start} - ${data.alerts[index].end}",
+                                      '${data.alerts[index].start} - ${data.alerts[index].end}',
                                       14,
                                       data.settings,
                                       color: palette.outline),
@@ -417,8 +419,9 @@ Widget alertWidget(var data, context, ColorScheme palette) {
   return Container();
 }
 
-Widget rain15MinuteChart(var data, ColorScheme palette, context) {
-  if (data.minutely_15_precip.t_minus != "") {
+Widget rain15MinuteChart(
+    WeatherData data, ColorScheme palette, BuildContext context) {
+  if (data.minutely_15_precip.t_minus != '') {
     return Container(
       margin: const EdgeInsets.only(left: 23, right: 23, top: 15, bottom: 30),
       padding: const EdgeInsets.all(22),
@@ -429,7 +432,6 @@ Widget rain15MinuteChart(var data, ColorScheme palette, context) {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Padding(
@@ -445,7 +447,7 @@ Widget rain15MinuteChart(var data, ColorScheme palette, context) {
                   19,
                   data.settings,
                   color: palette.primary),
-              comfortatext(data.settings["Precipitation"], 16, data.settings,
+              comfortatext(data.settings['Precipitation']!, 16, data.settings,
                   color: palette.primary),
               Expanded(
                 child: Padding(

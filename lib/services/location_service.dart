@@ -19,18 +19,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import 'dart:convert';
 import 'dart:io';
 
-import '../api_key.dart';
-import '../caching.dart';
+import 'package:overmorrow/api_key.dart';
+import 'package:overmorrow/caching.dart';
 
 class LocationService {
-  static Future<List<String>> getRecommendation(
-      String query, String? searchProvider, settings) async {
+  static Future<List<String>> getRecommendation(String query,
+      String? searchProvider, Map<String, String> settings) async {
     query = _sanitizeQuery(query);
     if (query == '') {
       return [];
     }
 
-    if (searchProvider == "weatherapi") {
+    if (searchProvider == 'weatherapi') {
       return _getWapiRecommendation(query);
     } else {
       return _getOMRecommendation(query, settings);
@@ -38,24 +38,24 @@ class LocationService {
   }
 
   static Future<List<String>> _getWapiRecommendation(String query) async {
-    var params = {
+    final params = {
       'key': wapi_Key,
       'q': query,
     };
-    var url = Uri.https('api.weatherapi.com', 'v1/search.json', params);
+    final url = Uri.https('api.weatherapi.com', 'v1/search.json', params);
 
-    var jsonbody = [];
+    var jsonbody = <dynamic>[];
     try {
-      var file = await cacheManager.getSingleFile(url.toString(),
+      final file = await cacheManager.getSingleFile(url.toString(),
           headers: {'cache-control': 'private, max-age=120'});
-      var response = await file.readAsString();
-      jsonbody = jsonDecode(response);
+      final response = await file.readAsString();
+      jsonbody = jsonDecode(response) as List<dynamic>;
     } on SocketException {
       return [];
     }
 
-    List<String> recommendations = [];
-    for (var item in jsonbody) {
+    final recommendations = <String>[];
+    for (final item in jsonbody) {
       recommendations.add(json.encode(item));
     }
 
@@ -64,44 +64,44 @@ class LocationService {
 
   static Future<List<String>> _getOMRecommendation(
       String query, settings) async {
-    var params = {
+    final params = {
       'name': query,
       'count': '6',
       'language': 'en',
     };
 
-    var url = Uri.https('geocoding-api.open-meteo.com', 'v1/search', params);
+    final url = Uri.https('geocoding-api.open-meteo.com', 'v1/search', params);
 
-    var jsonbody = [];
+    var jsonbody = <dynamic>[];
     try {
-      var file = await cacheManager.getSingleFile(url.toString(),
-          key: "$query, open-meteo search",
+      final file = await cacheManager.getSingleFile(url.toString(),
+          key: '$query, open-meteo search',
           headers: {
             'cache-control': 'private, max-age=120'
           }).timeout(const Duration(seconds: 3));
-      var response = await file.readAsString();
-      jsonbody = jsonDecode(response)["results"];
+      final response = await file.readAsString();
+      jsonbody = jsonDecode(response)['results'] as List<dynamic>;
     } catch (e) {
       return [];
     }
 
-    List<String> recommendations = [];
-    for (var item in jsonbody) {
-      String pre = json.encode(item);
+    final recommendations = <String>[];
+    for (final item in jsonbody) {
+      final pre = json.encode(item);
 
       if (!pre.contains('"admin1"')) {
-        item["region"] = "";
+        item['region'] = '';
       } else {
-        item["region"] = item['admin1'];
+        item['region'] = item['admin1'];
       }
 
       if (!pre.contains('"country"')) {
-        item["country"] = "";
+        item['country'] = '';
       }
 
-      String x = json.encode(item);
-      x = x.replaceAll('latitude', "lat");
-      x = x.replaceAll('longitude', "lon");
+      var x = json.encode(item);
+      x = x.replaceAll('latitude', 'lat');
+      x = x.replaceAll('longitude', 'lon');
 
       recommendations.add(x);
     }

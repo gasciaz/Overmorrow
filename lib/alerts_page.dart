@@ -18,18 +18,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:overmorrow/decoders/weather_data.dart';
+import 'package:overmorrow/l10n/app_localizations.dart';
 import 'package:overmorrow/new_displays.dart';
 import 'package:overmorrow/ui_helper.dart';
 
-import '../l10n/app_localizations.dart';
-
-Widget alertBadge(name, text, data, ColorScheme palette) {
+Widget alertBadge(
+    String name, String text, WeatherData data, ColorScheme palette) {
   return Padding(
-    padding: const EdgeInsets.only(right: 3.0, top: 3, bottom: 3),
+    padding: const EdgeInsets.only(right: 3, top: 3, bottom: 3),
     child: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        comfortatext("$name:", 15, data.settings, color: palette.onSurface),
+        comfortatext('$name:', 15, data.settings, color: palette.onSurface),
         Padding(
           padding: const EdgeInsets.only(left: 5),
           child: Container(
@@ -49,16 +50,16 @@ Widget alertBadge(name, text, data, ColorScheme palette) {
 }
 
 class AlertsPage extends StatefulWidget {
-  final data;
+  final WeatherData data;
 
-  const AlertsPage({Key? key, required this.data}) : super(key: key);
+  const AlertsPage({super.key, required this.data});
 
   @override
   _AlertsPageState createState() => _AlertsPageState(data: data);
 }
 
 class _AlertsPageState extends State<AlertsPage> {
-  final data;
+  final WeatherData data;
 
   _AlertsPageState({required this.data});
 
@@ -74,7 +75,7 @@ class _AlertsPageState extends State<AlertsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme palette = data.current.palette;
+    final palette = data.current.palette;
 
     return Material(
       color: palette.surface,
@@ -86,9 +87,7 @@ class _AlertsPageState extends State<AlertsPage> {
                   Icons.arrow_back,
                   color: palette.primary,
                 ),
-                onPressed: () {
-                  goBack();
-                }),
+                onPressed: goBack),
             title: comfortatext(
                 AppLocalizations.of(context)!.alertsCapital, 30, data.settings,
                 color: palette.secondary),
@@ -132,7 +131,7 @@ class _AlertsPageState extends State<AlertsPage> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 20, top: 5),
                         child: comfortatext(
-                            "${data.alerts[index].start} - ${data.alerts[index].end}",
+                            '${data.alerts[index].start} - ${data.alerts[index].end}',
                             15,
                             data.settings,
                             color: palette.primary),
@@ -150,7 +149,7 @@ class _AlertsPageState extends State<AlertsPage> {
                       Padding(
                         padding: const EdgeInsets.only(left: 2, top: 15),
                         child: comfortatext(
-                            "${AppLocalizations.of(context)!.areas}:",
+                            '${AppLocalizations.of(context)!.areas}:',
                             16,
                             data.settings,
                             color: palette.primary),
@@ -172,7 +171,7 @@ class _AlertsPageState extends State<AlertsPage> {
                                 1),
                             child: const SizedBox(
                               width: double.infinity,
-                              height: 8.0,
+                              height: 8,
                             ),
                           ),
                         ),

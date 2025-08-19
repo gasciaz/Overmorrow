@@ -24,19 +24,20 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/main.dart';
 import 'package:overmorrow/search_screens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const WHITE = Color(0xffFFFFFF);
-const BLACK = Color(0xff000000);
+const kWhite = Color(0xffFFFFFF);
+const kBlack = Color(0xff000000);
 
 double getFontSize(String set) {
-  double x = Platform.isLinux ? 0.85 : 0.92;
+  var x = Platform.isLinux ? 0.85 : 0.92;
 
-  if (set == "small") {
+  if (set == 'small') {
     x = 0.85 * x;
-  } else if (set == "very small") {
+  } else if (set == 'very small') {
     x = 0.75 * x;
   } else if (set == 'big') {
     x = 1.1 * x;
@@ -44,13 +45,13 @@ double getFontSize(String set) {
   return x;
 }
 
-Widget comfortatext(String text, double size, settings,
-    {Color color = WHITE,
+Widget comfortatext(String text, double size, Map<String, String> settings,
+    {Color color = kWhite,
     TextAlign align = TextAlign.left,
-    weight = FontWeight.w400,
-    decoration = TextDecoration.none,
-    maxLines = 40}) {
-  double x = getFontSize(settings["Font size"]);
+    FontWeight weight = FontWeight.w400,
+    TextDecoration decoration = TextDecoration.none,
+    int maxLines = 40}) {
+  final x = getFontSize(settings['Font size']!);
   final baseStyle = GoogleFonts.outfit(
     color: color,
     fontSize: size * x * 1.1,
@@ -76,14 +77,14 @@ Widget comfortatext(String text, double size, settings,
 }
 
 bool estimateBrightnessForColor(Color color) {
-  final double relativeLuminance = color.computeLuminance();
+  final relativeLuminance = color.computeLuminance();
 
-  const double kThreshold = 0.15;
+  const kThreshold = 0.15;
   return (relativeLuminance + 0.05) * (relativeLuminance + 0.05) > kThreshold;
 }
 
 Color darken(Color color, [double amount = .1]) {
-  assert(amount >= 0 && amount <= 1);
+  assert(amount >= 0 && amount <= 1, 'Amount must be between 0 and 1');
 
   final hsl = HSLColor.fromColor(color);
   final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
@@ -92,7 +93,7 @@ Color darken(Color color, [double amount = .1]) {
 }
 
 Color lighten(Color color, [double amount = .1]) {
-  assert(amount >= 0 && amount <= 1);
+  assert(amount >= 0 && amount <= 1, 'Amount must be between 0 and 1');
 
   final hsl = HSLColor.fromColor(color);
   final hslLight = hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
@@ -101,14 +102,14 @@ Color lighten(Color color, [double amount = .1]) {
 }
 
 Color darken2(Color c, [double amount = 0.1]) {
-  assert(0 <= amount && amount <= 1);
-  var f = 1 - amount;
+  assert(0 <= amount && amount <= 1, 'Amount must be between 0 and 1');
+  final f = 1 - amount;
   return Color.fromARGB(
       c.a.toInt(), (c.r * f).round(), (c.g * f).round(), (c.b * f).round());
 }
 
 Color lighten2(Color c, [double amount = 0.1]) {
-  assert(0 <= amount && amount <= 1);
+  assert(0 <= amount && amount <= 1, 'Amount must be between 0 and 1');
   return Color.fromARGB(
       c.a.toInt(),
       c.r.toInt() + ((255 - c.r) * amount).round(),
@@ -117,33 +118,33 @@ Color lighten2(Color c, [double amount = 0.1]) {
 }
 
 Color lightAccent(Color color, int intensity) {
-  double x = intensity / (color.r + color.g + color.b);
+  final x = intensity / (color.r + color.g + color.b);
   return Color.fromRGBO(sqrt(color.r * x).toInt(), sqrt(color.g * x).toInt(),
       sqrt(color.b * x).toInt(), 1);
 }
 
-Widget NewAqiDataPoints(String name, double value, var data,
+Widget newAqiDataPoints(String name, double value, WeatherData data,
     [double size = 15]) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       comfortatext(name, size, data.settings,
-          color: data.current.primary,
+          color: data.current.palette.primary,
           align: TextAlign.end,
           weight: FontWeight.w500),
       Padding(
-        padding: const EdgeInsets.all(3.0),
+        padding: const EdgeInsets.all(3),
         child: Container(
           width: 2.5,
           height: 2.5,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: data.current.primarySecond,
+            color: data.current.palette.primaryContainer, //primarySecond
           ),
         ),
       ),
       comfortatext(value.toString(), size, data.settings,
-          color: data.current.primarySecond,
+          color: data.current.palette.primaryContainer, //primarySecond
           align: TextAlign.end,
           weight: FontWeight.w600),
     ],
@@ -155,13 +156,13 @@ bool isUppercase(String str) {
 }
 
 String generateAbbreviation(String countryName) {
-  List<String> words = countryName.split(' ');
+  final words = countryName.split(' ');
 
   if (words.length == 1) {
     return countryName;
   } else {
-    String abbreviation = '';
-    for (String word in words) {
+    var abbreviation = '';
+    for (final word in words) {
       if (word.isNotEmpty && isUppercase(word[0])) {
         abbreviation += word[0];
       }
@@ -171,12 +172,12 @@ String generateAbbreviation(String countryName) {
 }
 
 class MySearchParent extends StatefulWidget {
-  final updateLocation;
+  final Function updateLocation;
   final ColorScheme palette;
-  final place;
-  final settings;
+  final String place;
+  final Map<String, String> settings;
   final Image image;
-  final isTabletMode;
+  final bool isTabletMode;
 
   const MySearchParent(
       {super.key,
@@ -200,10 +201,10 @@ class _MySearchParentState extends State<MySearchParent> {
   bool isEditing = false;
 
   final ColorScheme palette;
-  final place;
-  final settings;
+  final String place;
+  final Map<String, String> settings;
   final Image image;
-  final isTabletMode;
+  final bool isTabletMode;
 
   _MySearchParentState(
       {required this.palette,
@@ -222,10 +223,10 @@ class _MySearchParentState extends State<MySearchParent> {
 
   List<String> getFavorites(SharedPreferences? prefs) {
     final ifnot = [
-      "{\n        \"id\": 2651922,\n        \"name\": \"Nashville\",\n        \"region\": \"Tennessee\",\n        \"country\": \"United States of America\",\n        \"lat\": 36.17,\n        \"lon\": -86.78,\n        \"url\": \"nashville-tennessee-united-states-of-america\"\n    }"
+      '{\n        "id": 2651922,\n        "name": "Nashville",\n        "region": "Tennessee",\n        "country": "United States of America",\n        "lat": 36.17,\n        "lon": -86.78,\n        "url": "nashville-tennessee-united-states-of-america"\n    }'
     ];
     final used = prefs?.getStringList('favorites') ?? ifnot;
-    int n = 0;
+    var n = 0;
     while (n < used.length) {
       try {
         jsonDecode(used[n]);
@@ -252,16 +253,16 @@ class _MySearchParentState extends State<MySearchParent> {
             print(snapshot.error);
           }
           return Center(
-            child: ErrorWidget(snapshot.error as Object),
+            child: ErrorWidget(snapshot.error!),
           );
         }
-        List<String> favorites = getFavorites(snapshot.data);
+        final favorites = getFavorites(snapshot.data);
         //return buildWholeThing(snapshot.data);
         return MySearchWidget(
             updateLocation: widget.updateLocation,
             palette: palette,
             favorites: favorites,
-            prefs: snapshot.data,
+            prefs: snapshot.data!,
             place: place,
             settings: settings,
             image: image,
@@ -273,13 +274,13 @@ class _MySearchParentState extends State<MySearchParent> {
 
 class MySearchWidget extends StatefulWidget {
   final ColorScheme palette;
-  final place;
-  final updateLocation;
-  final favorites;
-  final prefs;
-  final settings;
+  final String place;
+  final Function updateLocation;
+  final List<String> favorites;
+  final SharedPreferences prefs;
+  final Map<String, String> settings;
   final Image image;
-  final isTabletMode;
+  final bool isTabletMode;
 
   const MySearchWidget(
       {super.key,
@@ -307,12 +308,12 @@ class MySearchWidget extends StatefulWidget {
 class _MySearchWidgetState extends State<MySearchWidget> {
   //final FloatingSearchBarController _controller = FloatingSearchBarController();
   final ColorScheme palette;
-  final place;
-  final updateLocation;
-  final prefs;
-  final settings;
+  final String place;
+  final Function updateLocation;
+  final SharedPreferences prefs;
+  final Map<String, String> settings;
   final Image image;
-  final isTabletMode;
+  final bool isTabletMode;
 
   final List<String> beginFavorites;
 
@@ -339,7 +340,7 @@ class _MySearchWidgetState extends State<MySearchWidget> {
     prefs.setStringList('favorites', fav);
 
     //Save the favorites so the widgts can access them when selecting location
-    String jsonString = jsonEncode(fav);
+    final jsonString = jsonEncode(fav);
     WidgetService.saveData('widget.favorites', jsonString);
 
     setState(() {

@@ -16,39 +16,37 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:overmorrow/daily.dart';
+import 'package:overmorrow/decoders/weather_data.dart';
+import 'package:overmorrow/hourly.dart';
+import 'package:overmorrow/main_ui.dart';
+import 'package:overmorrow/new_displays.dart';
 import 'package:overmorrow/radar.dart';
+import 'package:overmorrow/ui_helper.dart';
 import 'package:stretchy_header/stretchy_header.dart';
 
-import 'hourly.dart';
-import 'main_ui.dart';
-import 'new_displays.dart';
-import 'ui_helper.dart';
-
 class NewMain extends StatefulWidget {
-  final data;
-  final updateLocation;
-  final context;
+  final WeatherData data;
+  final Function updateLocation;
+  final BuildContext context;
 
-  NewMain(
-      {Key? key,
+  const NewMain(
+      {super.key,
       required this.data,
       required this.updateLocation,
-      required this.context})
-      : super(key: key);
+      required this.context});
 
   @override
   _NewMainState createState() => _NewMainState(data, updateLocation, context);
 }
 
 class _NewMainState extends State<NewMain> {
-  final data;
-  final updateLocation;
-  final context;
+  final WeatherData data;
+  final Function updateLocation;
+  @override
+  final BuildContext context;
 
   _NewMainState(this.data, this.updateLocation, this.context);
 
@@ -126,11 +124,10 @@ class _NewMainState extends State<NewMain> {
 
   @override
   Widget build(BuildContext context) {
-    final FlutterView view =
-        WidgetsBinding.instance.platformDispatcher.views.first;
-    final Size size = (view.physicalSize) / view.devicePixelRatio;
+    final view = WidgetsBinding.instance.platformDispatcher.views.first;
+    final size = (view.physicalSize) / view.devicePixelRatio;
 
-    final Map<String, Widget> widgetsMap = {
+    final widgetsMap = <String, Widget>{
       'sunstatus': NewSunriseSunset(
         data: data,
         key: Key(data.place),
@@ -144,22 +141,23 @@ class _NewMainState extends State<NewMain> {
       ),
       'alerts': alertWidget(data, context, data.current.palette),
       'radar': RadarSmall(data: data),
-      'daily': buildDays(data: data),
+      'daily': BuildDays(data: data),
       'air quality': aqiWidget(data, data.current.palette, context, false)
     };
 
-    final List<String> order =
-        data.settings["Layout"] == "" ? [] : data.settings["Layout"].split(",");
-    List<Widget> orderedWidgets = [];
-    if (order.isNotEmpty && order[0] != "") {
+    final order = data.settings['Layout'] == ''
+        ? <String>[]
+        : data.settings['Layout']!.split(',');
+    var orderedWidgets = <Widget>[];
+    if (order.isNotEmpty && order[0] != '') {
       orderedWidgets = order.map((name) => widgetsMap[name]!).toList();
     }
 
-    String colorMode = data.settings["Color mode"];
-    if (colorMode == "auto") {
-      var brightness =
+    var colorMode = data.settings['Color mode']!;
+    if (colorMode == 'auto') {
+      final brightness =
           SchedulerBinding.instance.platformDispatcher.platformBrightness;
-      colorMode = brightness == Brightness.dark ? "dark" : "light";
+      colorMode = brightness == Brightness.dark ? 'dark' : 'light';
     }
 
     return Scaffold(
@@ -167,7 +165,7 @@ class _NewMainState extends State<NewMain> {
       body: StretchyHeader.listView(
         displacement: 130,
         onRefresh: () async {
-          await updateLocation("${data.lat}, ${data.lng}", data.real_loc,
+          await updateLocation('${data.lat}, ${data.lng}', data.real_loc,
               time: 400);
         },
         headerData: HeaderData(
@@ -177,7 +175,7 @@ class _NewMainState extends State<NewMain> {
             header: ParrallaxBackground(
                 image: data.current.imageService.image,
                 key: Key(data.place),
-                color: BLACK),
+                color: kBlack),
             overlay: Stack(
               children: [
                 Padding(
@@ -188,14 +186,13 @@ class _NewMainState extends State<NewMain> {
                     children: [
                       const Spacer(),
                       comfortatext(
-                        "${data.current.temp}°",
+                        '${data.current.temp}°',
                         75,
                         data.settings,
                         color: data.current.colorPop,
                         weight: FontWeight.w200,
                       ),
                       comfortatext(data.current.text, 33, data.settings,
-                          weight: FontWeight.w400,
                           color: data.current.descColor)
                     ],
                   ),
@@ -215,7 +212,7 @@ class _NewMainState extends State<NewMain> {
             data: data,
             time: data.updatedTime,
           ),
-          Circles(data, 0.5, context, data.current.palette),
+          circles(data, 0.5, context, data.current.palette),
 
           /*
             Padding(
@@ -254,7 +251,7 @@ class _NewMainState extends State<NewMain> {
               updateLocation,
               data.current.palette,
               data.provider,
-              "${data.lat}, ${data.lng}",
+              '${data.lat}, ${data.lng}',
               data.real_loc,
               context),
         ],
@@ -264,20 +261,21 @@ class _NewMainState extends State<NewMain> {
 }
 
 class TabletLayout extends StatelessWidget {
-  final data;
-  final updateLocation;
+  final WeatherData data;
+  final Function updateLocation;
 
-  TabletLayout({super.key, required this.data, required this.updateLocation});
+  const TabletLayout(
+      {super.key, required this.data, required this.updateLocation});
 
   @override
   Widget build(BuildContext context) {
-    FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
+    final view = WidgetsBinding.instance.platformDispatcher.views.first;
 
-    Size size = view.physicalSize / view.devicePixelRatio;
+    final size = view.physicalSize / view.devicePixelRatio;
 
-    double panelWidth = size.width * 0.29;
+    final panelWidth = size.width * 0.29;
 
-    ColorScheme palette = data.current.palette;
+    final palette = data.current.palette;
 
     return Scaffold(
         backgroundColor: palette.surface,
@@ -302,14 +300,15 @@ class TabletLayout extends StatelessWidget {
                   displacement: 130,
                   onRefresh: () async {
                     await updateLocation(
-                        "${data.lat}, ${data.lng}", data.real_loc,
+                        '${data.lat}, ${data.lng}', data.real_loc,
                         time: 400);
                   },
                   headerData: HeaderData(
                       blurContent: false,
                       headerHeight: (size.height) * 0.43,
                       header: ParrallaxBackground(
-                          image: data.current.imageService.image, color: BLACK),
+                          image: data.current.imageService.image,
+                          color: kBlack),
                       overlay: Padding(
                         padding: const EdgeInsets.all(30),
                         child: Align(
@@ -347,7 +346,7 @@ class TabletLayout extends StatelessWidget {
                           key: Key(data.updatedTime.toString())),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 0),
+                      padding: EdgeInsets.zero,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -357,20 +356,19 @@ class TabletLayout extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 comfortatext(
-                                    "${data.current.temp}°", 72, data.settings,
+                                    '${data.current.temp}°', 72, data.settings,
                                     color: palette.primary,
                                     weight: FontWeight.w200),
                                 comfortatext(
                                     data.current.text, 27, data.settings,
-                                    color: palette.onSurface,
-                                    weight: FontWeight.w400),
+                                    color: palette.onSurface),
                               ],
                             ),
                           ),
                           const Spacer(),
                           SizedBox(
                               width: 397,
-                              child: Circles(
+                              child: circles(
                                   data, 0.3, context, data.current.palette)),
                         ],
                       ),
@@ -404,7 +402,7 @@ class TabletLayout extends StatelessWidget {
                                   updateLocation,
                                   data.current.palette,
                                   data.provider,
-                                  "${data.lat}, ${data.lng}",
+                                  '${data.lat}, ${data.lng}',
                                   data.real_loc,
                                   context),
                             ],
@@ -416,7 +414,7 @@ class TabletLayout extends StatelessWidget {
                               //since it's only available with weatherapi, and in that case there are only 3 days
                               //this makes the two sides more even
                               alertWidget(data, context, data.current.palette),
-                              buildDays(data: data),
+                              BuildDays(data: data),
                             ],
                           ),
                         )

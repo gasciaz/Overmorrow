@@ -20,10 +20,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:http/http.dart' as http;
 
 class MyGetResponse implements FileServiceResponse {
-  var url;
+  String url;
 
   MyGetResponse(this._response, this.url);
 
@@ -40,16 +39,16 @@ class MyGetResponse implements FileServiceResponse {
 
   @override
   DateTime get validTill {
-    if (url.toString().contains("search")) {
+    if (url.contains('search')) {
       //search results are stored for 40 days
       return DateTime.now().add(const Duration(days: 40));
     }
 
     //snap to the next quarter hour because that's when the weather data updates
-    DateTime now = DateTime.now();
-    int minutes = now.minute;
-    int nextQuarter = (minutes + 15 - minutes % 15) % 60;
-    int hoursToAdd = nextQuarter == 0 ? 1 : 0;
+    final now = DateTime.now();
+    final minutes = now.minute;
+    final nextQuarter = (minutes + 15 - minutes % 15) % 60;
+    final hoursToAdd = nextQuarter == 0 ? 1 : 0;
 
     return DateTime(
       now.year,
@@ -75,26 +74,26 @@ class MyGetResponse implements FileServiceResponse {
 }
 
 class MyFileService extends HttpFileService {
-  MyFileService({http.Client? httpClient}) : super(httpClient: httpClient) {}
+  MyFileService({super.httpClient});
 
   @override
   Future<FileServiceResponse> get(String url,
       {Map<String, String>? headers}) async {
-    var result = await super.get(url, headers: headers);
+    final result = await super.get(url, headers: headers);
 
-    var hihi = MyGetResponse(result, url);
+    final hihi = MyGetResponse(result, url);
     return hihi;
   }
 }
 
 CacheManager cacheManager = CacheManager(Config(
-  "pudzikey",
+  'pudzikey',
   stalePeriod: const Duration(days: 20),
   fileService: MyFileService(),
 ));
 
 CacheManager cacheManager2 = CacheManager(Config(
-  "hihikey",
+  'hihikey',
   stalePeriod: const Duration(hours: 3),
   fileService: MyFileService(),
 ));
@@ -102,15 +101,15 @@ CacheManager cacheManager2 = CacheManager(Config(
 CustomCacheManager XCustomCacheManager = CustomCacheManager();
 
 class CustomCacheManager {
-  static const cacheKey = "myCacheKey";
+  static const cacheKey = 'myCacheKey';
   static final CacheManager _cacheManager = CacheManager(Config(
-    "hehekey",
+    'hehekey',
     stalePeriod: const Duration(days: 7),
     fileService: MyFileService(),
   ));
 
   Future<List<dynamic>> fetchData(String url, String cacheKey,
-      {headers}) async {
+      {Map<String, String>? headers}) async {
     try {
       final fileInfo = await _cacheManager.getFileFromCache(cacheKey);
 
@@ -126,13 +125,12 @@ class CustomCacheManager {
         return [fileInfo.file, true];
       }
     } catch (error) {
-      print("last data");
+      print('last data');
       try {
-        final FileInfo? fileInfo =
-            await _cacheManager.getFileFromCache(cacheKey);
+        final fileInfo = await _cacheManager.getFileFromCache(cacheKey);
         return [fileInfo!.file, false];
       } catch (error) {
-        throw const SocketException("no wifi");
+        throw const SocketException('no wifi');
       }
 
       //final cachedFile = await _cacheManager.getSingleFile(url);

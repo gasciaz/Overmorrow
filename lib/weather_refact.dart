@@ -18,8 +18,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
 import 'package:overmorrow/Icons/overmorrow_weather_icons3_icons.dart';
-
-import 'ui_helper.dart';
+import 'package:overmorrow/l10n/app_localizations.dart';
+import 'package:overmorrow/ui_helper.dart';
 
 Map<String, Locale> languageNameToLocale = {
   'English': const Locale('en'),
@@ -83,7 +83,7 @@ Map<String, String> conditionToCollection = {
   'Cloudy Night': 'ymdgzsktNTE'
 };
 
-String? conditionTranslation(String key, localizations) {
+String? conditionTranslation(String key, AppLocalizations localizations) {
   final localizationMap = {
     'Clear Night': localizations.clearNight,
     'Partly Cloudy': localizations.partlyCloudy,
@@ -313,7 +313,7 @@ Map<String, String> metNWeatherToText = {
   'snowshowersandthunder_polartwilight': 'Thunderstorm'
 };
 
-Map<int, String> OMCodes = {
+Map<int, String> omCodes = {
   0: 'Clear Sky',
   1: 'Clear Sky',
   2: 'Partly Cloudy',
@@ -362,20 +362,20 @@ Map<String, String> textBackground = {
 };
 
 Map<String, List<Color>> textFontColor = {
-  'Clear Night': const [BLACK, WHITE],
-  'Partly Cloudy': const [WHITE, WHITE],
-  'Clear Sky': const [WHITE, BLACK],
-  'Overcast': const [WHITE, WHITE],
-  'Haze': const [WHITE, WHITE],
-  'Rain': const [WHITE, WHITE],
-  'Sleet': const [WHITE, WHITE],
-  'Drizzle': const [WHITE, WHITE],
-  'Thunderstorm': const [WHITE, WHITE],
-  'Heavy Snow': const [WHITE, WHITE],
-  'Fog': const [WHITE, WHITE],
-  'Snow': const [WHITE, WHITE],
-  'Heavy Rain': const [WHITE, WHITE],
-  'Cloudy Night': const [BLACK, WHITE]
+  'Clear Night': const [kBlack, kWhite],
+  'Partly Cloudy': const [kWhite, kWhite],
+  'Clear Sky': const [kWhite, kBlack],
+  'Overcast': const [kWhite, kWhite],
+  'Haze': const [kWhite, kWhite],
+  'Rain': const [kWhite, kWhite],
+  'Sleet': const [kWhite, kWhite],
+  'Drizzle': const [kWhite, kWhite],
+  'Thunderstorm': const [kWhite, kWhite],
+  'Heavy Snow': const [kWhite, kWhite],
+  'Fog': const [kWhite, kWhite],
+  'Snow': const [kWhite, kWhite],
+  'Heavy Rain': const [kWhite, kWhite],
+  'Cloudy Night': const [kBlack, kWhite]
 };
 
 Map<String, Color> textBackColor = {
