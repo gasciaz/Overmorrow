@@ -24,7 +24,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:overmorrow/core/l10n/app_localizations.dart';
+import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/decoders/decode_OM.dart';
 import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/ui_helper.dart';

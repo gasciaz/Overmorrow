@@ -22,7 +22,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:overmorrow/api_key.dart';
-import 'package:overmorrow/core/l10n/app_localizations.dart';
+import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/main_screens.dart';
 import 'package:overmorrow/services/color_service.dart';

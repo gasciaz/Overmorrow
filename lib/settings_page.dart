@@ -23,7 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:overmorrow/core/l10n/app_localizations.dart';
+import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/main.dart';
 import 'package:overmorrow/services/color_service.dart';
 import 'package:overmorrow/settings_screens.dart';

@@ -26,7 +26,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:overmorrow/core/l10n/app_localizations.dart';
+import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/main.dart';
 import 'package:overmorrow/services/location_service.dart';
 import 'package:overmorrow/settings_page.dart';

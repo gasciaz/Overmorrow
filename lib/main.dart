@@ -32,7 +32,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:overmorrow/caching.dart';
 import 'package:overmorrow/core/di/di.dart';
-import 'package:overmorrow/core/l10n/app_localizations.dart';
+import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/main_ui.dart';
 import 'package:overmorrow/services/location_service.dart';
