@@ -25,8 +25,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:overmorrow/core/core.dart';
+import 'package:overmorrow/features/search/search.dart';
 import 'package:overmorrow/main.dart';
-import 'package:overmorrow/search_screens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const kWhite = Color(0xffFFFFFF);
