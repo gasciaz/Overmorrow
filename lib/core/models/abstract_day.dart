@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:overmorrow/weather/abstract_hour.dart';
+import 'package:overmorrow/core/core.dart';
 
 abstract class AbstractDay {
   final String text;
