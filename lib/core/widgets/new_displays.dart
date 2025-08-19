@@ -21,9 +21,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:overmorrow/aqi_page.dart';
 import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/features/alerts/alerts.dart';
+import 'package:overmorrow/features/aqi/aqi.dart';
 
 class WavePainter extends CustomPainter {
   final double waveValue;
