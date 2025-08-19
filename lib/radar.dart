@@ -26,7 +26,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/decoders/decode_OM.dart';
-import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/ui_helper.dart';
 
 class RadarSmall extends StatefulWidget {

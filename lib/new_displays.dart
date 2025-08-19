@@ -25,7 +25,6 @@ import 'package:overmorrow/alerts_page.dart';
 import 'package:overmorrow/aqi_page.dart';
 import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/decoders/decode_OM.dart';
-import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/ui_helper.dart';
 
 class WavePainter extends CustomPainter {

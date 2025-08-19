@@ -26,13 +26,6 @@ import 'package:overmorrow/api_key.dart';
 import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/decoders/decode_OM.dart';
 import 'package:overmorrow/decoders/decode_RV.dart';
-import 'package:overmorrow/decoders/weather_data.dart';
-import 'package:overmorrow/weather/abstract_15_min_precip.dart';
-import 'package:overmorrow/weather/abstract_aqi.dart';
-import 'package:overmorrow/weather/abstract_current.dart';
-import 'package:overmorrow/weather/abstract_day.dart';
-import 'package:overmorrow/weather/abstract_hour.dart';
-import 'package:overmorrow/weather/abstract_sunstatus.dart';
 import 'package:overmorrow/weather_refact.dart' as weather_refactor;
 import 'package:overmorrow/weather_refact.dart';
 

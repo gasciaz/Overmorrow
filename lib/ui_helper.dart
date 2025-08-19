@@ -24,7 +24,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:overmorrow/decoders/weather_data.dart';
+import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/main.dart';
 import 'package:overmorrow/search_screens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,12 +45,16 @@ double getFontSize(String set) {
   return x;
 }
 
-Widget comfortatext(String text, double size, Map<String, String> settings,
-    {Color color = kWhite,
-    TextAlign align = TextAlign.left,
-    FontWeight weight = FontWeight.w400,
-    TextDecoration decoration = TextDecoration.none,
-    int maxLines = 40}) {
+Widget comfortatext(
+  String text,
+  double size,
+  Map<String, String> settings, {
+  Color color = kWhite,
+  TextAlign align = TextAlign.left,
+  FontWeight weight = FontWeight.w400,
+  TextDecoration decoration = TextDecoration.none,
+  int maxLines = 40,
+}) {
   final x = getFontSize(settings['Font size']!);
   final baseStyle = GoogleFonts.outfit(
     color: color,
@@ -105,33 +109,50 @@ Color darken2(Color c, [double amount = 0.1]) {
   assert(0 <= amount && amount <= 1, 'Amount must be between 0 and 1');
   final f = 1 - amount;
   return Color.fromARGB(
-      c.a.toInt(), (c.r * f).round(), (c.g * f).round(), (c.b * f).round());
+    c.a.toInt(),
+    (c.r * f).round(),
+    (c.g * f).round(),
+    (c.b * f).round(),
+  );
 }
 
 Color lighten2(Color c, [double amount = 0.1]) {
   assert(0 <= amount && amount <= 1, 'Amount must be between 0 and 1');
   return Color.fromARGB(
-      c.a.toInt(),
-      c.r.toInt() + ((255 - c.r) * amount).round(),
-      c.g.toInt() + ((255 - c.g) * amount).round(),
-      c.b.toInt() + ((255 - c.b) * amount).round());
+    c.a.toInt(),
+    c.r.toInt() + ((255 - c.r) * amount).round(),
+    c.g.toInt() + ((255 - c.g) * amount).round(),
+    c.b.toInt() + ((255 - c.b) * amount).round(),
+  );
 }
 
 Color lightAccent(Color color, int intensity) {
   final x = intensity / (color.r + color.g + color.b);
-  return Color.fromRGBO(sqrt(color.r * x).toInt(), sqrt(color.g * x).toInt(),
-      sqrt(color.b * x).toInt(), 1);
+  return Color.fromRGBO(
+    sqrt(color.r * x).toInt(),
+    sqrt(color.g * x).toInt(),
+    sqrt(color.b * x).toInt(),
+    1,
+  );
 }
 
-Widget newAqiDataPoints(String name, double value, WeatherData data,
-    [double size = 15]) {
+Widget newAqiDataPoints(
+  String name,
+  double value,
+  WeatherData data, [
+  double size = 15,
+]) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      comfortatext(name, size, data.settings,
-          color: data.current.palette.primary,
-          align: TextAlign.end,
-          weight: FontWeight.w500),
+      comfortatext(
+        name,
+        size,
+        data.settings,
+        color: data.current.palette.primary,
+        align: TextAlign.end,
+        weight: FontWeight.w500,
+      ),
       Padding(
         padding: const EdgeInsets.all(3),
         child: Container(
@@ -143,10 +164,14 @@ Widget newAqiDataPoints(String name, double value, WeatherData data,
           ),
         ),
       ),
-      comfortatext(value.toString(), size, data.settings,
-          color: data.current.palette.primaryContainer, //primarySecond
-          align: TextAlign.end,
-          weight: FontWeight.w600),
+      comfortatext(
+        value.toString(),
+        size,
+        data.settings,
+        color: data.current.palette.primaryContainer, //primarySecond
+        align: TextAlign.end,
+        weight: FontWeight.w600,
+      ),
     ],
   );
 }
@@ -179,22 +204,24 @@ class MySearchParent extends StatefulWidget {
   final Image image;
   final bool isTabletMode;
 
-  const MySearchParent(
-      {super.key,
-      required this.updateLocation,
-      required this.palette,
-      required this.place,
-      required this.settings,
-      required this.image,
-      required this.isTabletMode});
+  const MySearchParent({
+    super.key,
+    required this.updateLocation,
+    required this.palette,
+    required this.place,
+    required this.settings,
+    required this.image,
+    required this.isTabletMode,
+  });
 
   @override
   _MySearchParentState createState() => _MySearchParentState(
-      palette: palette,
-      place: place,
-      settings: settings,
-      image: image,
-      isTabletMode: isTabletMode);
+    palette: palette,
+    place: place,
+    settings: settings,
+    image: image,
+    isTabletMode: isTabletMode,
+  );
 }
 
 class _MySearchParentState extends State<MySearchParent> {
@@ -206,12 +233,13 @@ class _MySearchParentState extends State<MySearchParent> {
   final Image image;
   final bool isTabletMode;
 
-  _MySearchParentState(
-      {required this.palette,
-      required this.place,
-      required this.settings,
-      required this.image,
-      required this.isTabletMode});
+  _MySearchParentState({
+    required this.palette,
+    required this.place,
+    required this.settings,
+    required this.image,
+    required this.isTabletMode,
+  });
 
   late Future<SharedPreferences> _prefsFuture;
 
@@ -223,7 +251,7 @@ class _MySearchParentState extends State<MySearchParent> {
 
   List<String> getFavorites(SharedPreferences? prefs) {
     final ifnot = [
-      '{\n        "id": 2651922,\n        "name": "Nashville",\n        "region": "Tennessee",\n        "country": "United States of America",\n        "lat": 36.17,\n        "lon": -86.78,\n        "url": "nashville-tennessee-united-states-of-america"\n    }'
+      '{\n        "id": 2651922,\n        "name": "Nashville",\n        "region": "Tennessee",\n        "country": "United States of America",\n        "lat": 36.17,\n        "lon": -86.78,\n        "url": "nashville-tennessee-united-states-of-america"\n    }',
     ];
     final used = prefs?.getStringList('favorites') ?? ifnot;
     var n = 0;
@@ -244,30 +272,31 @@ class _MySearchParentState extends State<MySearchParent> {
       future: _prefsFuture,
       builder:
           (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasError) {
-          if (kDebugMode) {
-            print(snapshot.error);
-          }
-          return Center(
-            child: ErrorWidget(snapshot.error!),
-          );
-        }
-        final favorites = getFavorites(snapshot.data);
-        //return buildWholeThing(snapshot.data);
-        return MySearchWidget(
-            updateLocation: widget.updateLocation,
-            palette: palette,
-            favorites: favorites,
-            prefs: snapshot.data!,
-            place: place,
-            settings: settings,
-            image: image,
-            isTabletMode: isTabletMode);
-      },
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              if (kDebugMode) {
+                print(snapshot.error);
+              }
+              return Center(
+                child: ErrorWidget(snapshot.error!),
+              );
+            }
+            final favorites = getFavorites(snapshot.data);
+            //return buildWholeThing(snapshot.data);
+            return MySearchWidget(
+              updateLocation: widget.updateLocation,
+              palette: palette,
+              favorites: favorites,
+              prefs: snapshot.data!,
+              place: place,
+              settings: settings,
+              image: image,
+              isTabletMode: isTabletMode,
+            );
+          },
     );
   }
 }
@@ -282,27 +311,29 @@ class MySearchWidget extends StatefulWidget {
   final Image image;
   final bool isTabletMode;
 
-  const MySearchWidget(
-      {super.key,
-      required this.palette,
-      required this.updateLocation,
-      required this.favorites,
-      required this.prefs,
-      required this.place,
-      required this.settings,
-      required this.image,
-      required this.isTabletMode});
+  const MySearchWidget({
+    super.key,
+    required this.palette,
+    required this.updateLocation,
+    required this.favorites,
+    required this.prefs,
+    required this.place,
+    required this.settings,
+    required this.image,
+    required this.isTabletMode,
+  });
 
   @override
   _MySearchWidgetState createState() => _MySearchWidgetState(
-      palette: palette,
-      updateLocation: updateLocation,
-      beginFavorites: favorites,
-      prefs: prefs,
-      place: place,
-      settings: settings,
-      image: image,
-      isTabletMode: isTabletMode);
+    palette: palette,
+    updateLocation: updateLocation,
+    beginFavorites: favorites,
+    prefs: prefs,
+    place: place,
+    settings: settings,
+    image: image,
+    isTabletMode: isTabletMode,
+  );
 }
 
 class _MySearchWidgetState extends State<MySearchWidget> {
@@ -317,15 +348,16 @@ class _MySearchWidgetState extends State<MySearchWidget> {
 
   final List<String> beginFavorites;
 
-  _MySearchWidgetState(
-      {required this.palette,
-      required this.updateLocation,
-      required this.beginFavorites,
-      required this.prefs,
-      required this.place,
-      required this.settings,
-      required this.image,
-      required this.isTabletMode});
+  _MySearchWidgetState({
+    required this.palette,
+    required this.updateLocation,
+    required this.beginFavorites,
+    required this.prefs,
+    required this.place,
+    required this.settings,
+    required this.image,
+    required this.isTabletMode,
+  });
 
   final ValueNotifier<List<String>> recommend = ValueNotifier<List<String>>([]);
   ValueNotifier<List<String>> favorites = ValueNotifier<List<String>>([]);
@@ -371,7 +403,17 @@ class _MySearchWidgetState extends State<MySearchWidget> {
         image: image,
       );
     }
-    return searchBar2(palette, recommend, updateLocation, updateFav, favorites,
-        updateRec, place, context, settings, image);
+    return searchBar2(
+      palette,
+      recommend,
+      updateLocation,
+      updateFav,
+      favorites,
+      updateRec,
+      place,
+      context,
+      settings,
+      image,
+    );
   }
 }

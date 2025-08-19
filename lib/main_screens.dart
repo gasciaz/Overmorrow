@@ -18,8 +18,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:overmorrow/core/models/weather_data.dart';
 import 'package:overmorrow/daily.dart';
-import 'package:overmorrow/decoders/weather_data.dart';
 import 'package:overmorrow/hourly.dart';
 import 'package:overmorrow/main_ui.dart';
 import 'package:overmorrow/new_displays.dart';
@@ -32,11 +32,12 @@ class NewMain extends StatefulWidget {
   final Function updateLocation;
   final BuildContext context;
 
-  const NewMain(
-      {super.key,
-      required this.data,
-      required this.updateLocation,
-      required this.context});
+  const NewMain({
+    super.key,
+    required this.data,
+    required this.updateLocation,
+    required this.context,
+  });
 
   @override
   _NewMainState createState() => _NewMainState(data, updateLocation, context);
@@ -142,7 +143,7 @@ class _NewMainState extends State<NewMain> {
       'alerts': alertWidget(data, context, data.current.palette),
       'radar': RadarSmall(data: data),
       'daily': BuildDays(data: data),
-      'air quality': aqiWidget(data, data.current.palette, context, false)
+      'air quality': aqiWidget(data, data.current.palette, context, false),
     };
 
     final order = data.settings['Layout'] == ''
@@ -165,48 +166,56 @@ class _NewMainState extends State<NewMain> {
       body: StretchyHeader.listView(
         displacement: 130,
         onRefresh: () async {
-          await updateLocation('${data.lat}, ${data.lng}', data.real_loc,
-              time: 400);
+          await updateLocation(
+            '${data.lat}, ${data.lng}',
+            data.real_loc,
+            time: 400,
+          );
         },
         headerData: HeaderData(
-            //backgroundColor: WHITE,
-            blurContent: false,
-            headerHeight: (size.height) * 0.495,
-            header: ParrallaxBackground(
+          //backgroundColor: WHITE,
+          blurContent: false,
+          headerHeight: (size.height) * 0.495,
+          header: ParrallaxBackground(
+            image: data.current.imageService.image,
+            key: Key(data.place),
+            color: kBlack,
+          ),
+          overlay: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 26, right: 26, bottom: 26),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Spacer(),
+                    comfortatext(
+                      '${data.current.temp}°',
+                      75,
+                      data.settings,
+                      color: data.current.colorPop,
+                      weight: FontWeight.w200,
+                    ),
+                    comfortatext(
+                      data.current.text,
+                      33,
+                      data.settings,
+                      color: data.current.descColor,
+                    ),
+                  ],
+                ),
+              ),
+              MySearchParent(
+                updateLocation: updateLocation,
+                palette: data.current.palette,
+                place: data.place,
+                settings: data.settings,
                 image: data.current.imageService.image,
-                key: Key(data.place),
-                color: kBlack),
-            overlay: Stack(
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 26, right: 26, bottom: 26),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Spacer(),
-                      comfortatext(
-                        '${data.current.temp}°',
-                        75,
-                        data.settings,
-                        color: data.current.colorPop,
-                        weight: FontWeight.w200,
-                      ),
-                      comfortatext(data.current.text, 33, data.settings,
-                          color: data.current.descColor)
-                    ],
-                  ),
-                ),
-                MySearchParent(
-                  updateLocation: updateLocation,
-                  palette: data.current.palette,
-                  place: data.place,
-                  settings: data.settings,
-                  image: data.current.imageService.image,
-                  isTabletMode: false,
-                ),
-              ],
-            )),
+                isTabletMode: false,
+              ),
+            ],
+          ),
+        ),
         children: [
           FadingWidget(
             data: data,
@@ -247,13 +256,14 @@ class _NewMainState extends State<NewMain> {
             }).toList(),
           ),
           providerSelector(
-              data.settings,
-              updateLocation,
-              data.current.palette,
-              data.provider,
-              '${data.lat}, ${data.lng}',
-              data.real_loc,
-              context),
+            data.settings,
+            updateLocation,
+            data.current.palette,
+            data.provider,
+            '${data.lat}, ${data.lng}',
+            data.real_loc,
+            context,
+          ),
         ],
       ),
     );
@@ -264,8 +274,11 @@ class TabletLayout extends StatelessWidget {
   final WeatherData data;
   final Function updateLocation;
 
-  const TabletLayout(
-      {super.key, required this.data, required this.updateLocation});
+  const TabletLayout({
+    super.key,
+    required this.data,
+    required this.updateLocation,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -278,72 +291,81 @@ class TabletLayout extends StatelessWidget {
     final palette = data.current.palette;
 
     return Scaffold(
-        backgroundColor: palette.surface,
-        body: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: panelWidth,
-              child: MySearchParent(
-                updateLocation: updateLocation,
-                palette: data.current.palette,
-                place: data.place,
-                settings: data.settings,
-                image: data.current.imageService.image,
-                isTabletMode: true,
-              ),
+      backgroundColor: palette.surface,
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: panelWidth,
+            child: MySearchParent(
+              updateLocation: updateLocation,
+              palette: data.current.palette,
+              place: data.place,
+              settings: data.settings,
+              image: data.current.imageService.image,
+              isTabletMode: true,
             ),
-            Expanded(
-              child: LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) {
+          ),
+          Expanded(
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
                 return StretchyHeader.listView(
                   displacement: 130,
                   onRefresh: () async {
                     await updateLocation(
-                        '${data.lat}, ${data.lng}', data.real_loc,
-                        time: 400);
+                      '${data.lat}, ${data.lng}',
+                      data.real_loc,
+                      time: 400,
+                    );
                   },
                   headerData: HeaderData(
-                      blurContent: false,
-                      headerHeight: (size.height) * 0.43,
-                      header: ParrallaxBackground(
-                          image: data.current.imageService.image,
-                          color: kBlack),
-                      overlay: Padding(
-                        padding: const EdgeInsets.all(30),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: palette.inverseSurface,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            padding: const EdgeInsets.all(18),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.place_outlined,
-                                  color: palette.onInverseSurface,
-                                  size: 22,
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                comfortatext(data.place, 22, data.settings,
-                                    color: palette.onInverseSurface)
-                              ],
-                            ),
+                    blurContent: false,
+                    headerHeight: (size.height) * 0.43,
+                    header: ParrallaxBackground(
+                      image: data.current.imageService.image,
+                      color: kBlack,
+                    ),
+                    overlay: Padding(
+                      padding: const EdgeInsets.all(30),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: palette.inverseSurface,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          padding: const EdgeInsets.all(18),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.place_outlined,
+                                color: palette.onInverseSurface,
+                                size: 22,
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              comfortatext(
+                                data.place,
+                                22,
+                                data.settings,
+                                color: palette.onInverseSurface,
+                              ),
+                            ],
                           ),
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                   children: [
                     Align(
                       alignment: Alignment.centerRight,
                       child: FadingWidget(
-                          data: data,
-                          time: data.updatedTime,
-                          key: Key(data.updatedTime.toString())),
+                        data: data,
+                        time: data.updatedTime,
+                        key: Key(data.updatedTime.toString()),
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.zero,
@@ -356,20 +378,31 @@ class TabletLayout extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 comfortatext(
-                                    '${data.current.temp}°', 72, data.settings,
-                                    color: palette.primary,
-                                    weight: FontWeight.w200),
+                                  '${data.current.temp}°',
+                                  72,
+                                  data.settings,
+                                  color: palette.primary,
+                                  weight: FontWeight.w200,
+                                ),
                                 comfortatext(
-                                    data.current.text, 27, data.settings,
-                                    color: palette.onSurface),
+                                  data.current.text,
+                                  27,
+                                  data.settings,
+                                  color: palette.onSurface,
+                                ),
                               ],
                             ),
                           ),
                           const Spacer(),
                           SizedBox(
-                              width: 397,
-                              child: circles(
-                                  data, 0.3, context, data.current.palette)),
+                            width: 397,
+                            child: circles(
+                              data,
+                              0.3,
+                              context,
+                              data.current.palette,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -393,18 +426,26 @@ class TabletLayout extends StatelessWidget {
                                 height: 15,
                               ),
                               rain15MinuteChart(
-                                  data, data.current.palette, context),
+                                data,
+                                data.current.palette,
+                                context,
+                              ),
                               RadarSmall(data: data),
                               aqiWidget(
-                                  data, data.current.palette, context, true),
+                                data,
+                                data.current.palette,
+                                context,
+                                true,
+                              ),
                               providerSelector(
-                                  data.settings,
-                                  updateLocation,
-                                  data.current.palette,
-                                  data.provider,
-                                  '${data.lat}, ${data.lng}',
-                                  data.real_loc,
-                                  context),
+                                data.settings,
+                                updateLocation,
+                                data.current.palette,
+                                data.provider,
+                                '${data.lat}, ${data.lng}',
+                                data.real_loc,
+                                context,
+                              ),
                             ],
                           ),
                         ),
@@ -417,14 +458,16 @@ class TabletLayout extends StatelessWidget {
                               BuildDays(data: data),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ],
                 );
-              }),
+              },
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }
