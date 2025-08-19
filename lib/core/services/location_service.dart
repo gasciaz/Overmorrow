@@ -20,11 +20,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:overmorrow/api_key.dart';
-import 'package:overmorrow/caching.dart';
+import 'package:overmorrow/core/caching/caching.dart';
 
 class LocationService {
-  static Future<List<String>> getRecommendation(String query,
-      String? searchProvider, Map<String, String> settings) async {
+  static Future<List<String>> getRecommendation(
+    String query,
+    String? searchProvider,
+    Map<String, String> settings,
+  ) async {
     query = _sanitizeQuery(query);
     if (query == '') {
       return [];
@@ -46,8 +49,10 @@ class LocationService {
 
     var jsonbody = <dynamic>[];
     try {
-      final file = await cacheManager.getSingleFile(url.toString(),
-          headers: {'cache-control': 'private, max-age=120'});
+      final file = await cacheManager.getSingleFile(
+        url.toString(),
+        headers: {'cache-control': 'private, max-age=120'},
+      );
       final response = await file.readAsString();
       jsonbody = jsonDecode(response) as List<dynamic>;
     } on SocketException {
@@ -63,7 +68,9 @@ class LocationService {
   }
 
   static Future<List<String>> _getOMRecommendation(
-      String query, settings) async {
+    String query,
+    settings,
+  ) async {
     final params = {
       'name': query,
       'count': '6',
@@ -74,11 +81,13 @@ class LocationService {
 
     var jsonbody = <dynamic>[];
     try {
-      final file = await cacheManager.getSingleFile(url.toString(),
-          key: '$query, open-meteo search',
-          headers: {
-            'cache-control': 'private, max-age=120'
-          }).timeout(const Duration(seconds: 3));
+      final file = await cacheManager
+          .getSingleFile(
+            url.toString(),
+            key: '$query, open-meteo search',
+            headers: {'cache-control': 'private, max-age=120'},
+          )
+          .timeout(const Duration(seconds: 3));
       final response = await file.readAsString();
       jsonbody = jsonDecode(response)['results'] as List<dynamic>;
     } catch (e) {

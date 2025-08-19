@@ -22,7 +22,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:overmorrow/api_key.dart';
-import 'package:overmorrow/caching.dart';
+import 'package:overmorrow/core/caching/caching.dart';
 import 'package:overmorrow/weather_refact.dart';
 
 String backdropCorrection(String text) {
@@ -39,14 +39,17 @@ class ImageService {
   final String userlink;
   final String photolink;
 
-  const ImageService(
-      {required this.image,
-      required this.username,
-      required this.userlink,
-      required this.photolink});
+  const ImageService({
+    required this.image,
+    required this.username,
+    required this.userlink,
+    required this.photolink,
+  });
 
   static Future<ImageService> getUnsplashCollectionImage(
-      String condition, String loc) async {
+    String condition,
+    String loc,
+  ) async {
     final collectionId = conditionToCollection[condition] ?? 'XMGA2-GGjyw';
 
     final params = {
@@ -59,16 +62,19 @@ class ImageService {
     final url = Uri.https('api.unsplash.com', 'photos/random', params);
 
     final file = await XCustomCacheManager.fetchData(
-        url.toString(), '$condition $loc unsplash');
+      url.toString(),
+      '$condition $loc unsplash',
+    );
     final response2 = await file[0].readAsString();
     final unsplashBody = jsonDecode(response2 as String);
 
     final imagePath = unsplashBody[0]['urls']['raw'] + '&w=1500' as String;
     final image = Image(
-        image: CachedNetworkImageProvider(imagePath),
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity);
+      image: CachedNetworkImageProvider(imagePath),
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: double.infinity,
+    );
 
     final userLink =
         (unsplashBody[0]['user']['links']['html']) as String? ?? '';
@@ -77,10 +83,11 @@ class ImageService {
     final photoLink = unsplashBody[0]['links']['html'] as String? ?? '';
 
     return ImageService(
-        image: image,
-        username: userName,
-        userlink: userLink,
-        photolink: photoLink);
+      image: image,
+      username: userName,
+      userlink: userLink,
+      photolink: photoLink,
+    );
   }
 
   static ImageService getAssetImage(String condition) {
@@ -98,14 +105,18 @@ class ImageService {
     final userLink = credits[2];
 
     return ImageService(
-        image: image,
-        username: userName,
-        userlink: userLink,
-        photolink: photoLink);
+      image: image,
+      username: userName,
+      userlink: userLink,
+      photolink: photoLink,
+    );
   }
 
   static Future<ImageService> getImageService(
-      String condition, String loc, Map<String, String> settings) async {
+    String condition,
+    String loc,
+    Map<String, String> settings,
+  ) async {
     if (settings['Image source'] == 'network') {
       try {
         //ImageService i = await getUnsplashImage(condition, loc);

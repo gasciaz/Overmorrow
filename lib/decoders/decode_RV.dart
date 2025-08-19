@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:convert';
 
-import 'package:overmorrow/caching.dart';
+import 'package:overmorrow/core/caching/caching.dart';
 
 class RainviewerRadar {
   final List<String> images;
@@ -49,8 +49,9 @@ class RainviewerRadar {
     final future = data['radar']['nowcast'] as List<dynamic>;
 
     for (final x in past) {
-      final time =
-          DateTime.fromMillisecondsSinceEpoch((x['time'] as int) * 1000);
+      final time = DateTime.fromMillisecondsSinceEpoch(
+        (x['time'] as int) * 1000,
+      );
       images.add(host + (x['path'] as String));
       times.add('${time.hour}h ${time.minute}m');
     }
@@ -59,16 +60,18 @@ class RainviewerRadar {
     final startingIndex = times.length - 1;
 
     for (final x in future) {
-      final time =
-          DateTime.fromMillisecondsSinceEpoch((x['time'] as int) * 1000);
+      final time = DateTime.fromMillisecondsSinceEpoch(
+        (x['time'] as int) * 1000,
+      );
       images.add(host + (x['path'] as String));
       times.add('${time.hour}h ${time.minute}m');
     }
 
     return RainviewerRadar(
-        images: images,
-        times: times,
-        real_hour: realHour,
-        starting_index: startingIndex);
+      images: images,
+      times: times,
+      real_hour: realHour,
+      starting_index: startingIndex,
+    );
   }
 }
