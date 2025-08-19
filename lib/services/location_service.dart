@@ -44,7 +44,7 @@ class LocationService {
     };
     final url = Uri.https('api.weatherapi.com', 'v1/search.json', params);
 
-    var jsonbody = [];
+    var jsonbody = <dynamic>[];
     try {
       final file = await cacheManager.getSingleFile(url.toString(),
           headers: {'cache-control': 'private, max-age=120'});
@@ -72,7 +72,7 @@ class LocationService {
 
     final url = Uri.https('geocoding-api.open-meteo.com', 'v1/search', params);
 
-    var jsonbody = [];
+    var jsonbody = <dynamic>[];
     try {
       final file = await cacheManager.getSingleFile(url.toString(),
           key: '$query, open-meteo search',

@@ -99,9 +99,9 @@ String metNGetName(
     int start,
     int hourDif,
     AppLocalizations localizations) {
-  final String x =
+  final x =
       item['properties']['timeseries'][start]['time'].split('T')[0] as String;
-  final String hour = item['properties']['timeseries'][start]['time']
+  final hour = item['properties']['timeseries'][start]['time']
       .split('T')[1]
       .split(':')[0] as String;
   final z = x.split('-');
@@ -129,15 +129,15 @@ String metNBackdropCorrection(String text) {
 }
 
 Color metNBackColorCorrection(String text) {
-  return textBackColor[text] ?? BLACK;
+  return textBackColor[text] ?? kBlack;
 }
 
 Color metNAccentColorCorrection(String text) {
-  return accentColors[text] ?? WHITE;
+  return accentColors[text] ?? kWhite;
 }
 
 List<Color> metNContentColorCorrection(String text) {
-  return textFontColor[text] ?? [WHITE, WHITE];
+  return textFontColor[text] ?? [kWhite, kWhite];
 }
 
 IconData metNIconCorrection(String text) {
@@ -189,9 +189,9 @@ String metN24HourTime(String date, int hourDif) {
   return DateTime.parse(body["formatted"]);
 }*/
 
-Future<List<dynamic>> MetNMakeRequest(
+Future<List<dynamic>> etNMakeRequest(
     double lat, double lng, String realLoc) async {
-  final MnParams = {
+  final mnParams = {
     'lat': lat.toString(),
     'lon': lng.toString(),
     'altitude': '100',
@@ -200,21 +200,21 @@ Future<List<dynamic>> MetNMakeRequest(
   final headers = {
     'User-Agent': 'Overmorrow weather (com.marotidev.overmorrow)'
   };
-  final MnUrl = Uri.https(
-      'api.met.no', 'weatherapi/locationforecast/2.0/complete', MnParams);
+  final mnUrl = Uri.https(
+      'api.met.no', 'weatherapi/locationforecast/2.0/complete', mnParams);
 
-  //var MnFile = await cacheManager2.getSingleFile(MnUrl.toString(), key: "$real_loc, met.no", headers: headers).timeout(const Duration(seconds: 6));
-  final MnFile = await XCustomCacheManager.fetchData(
-      MnUrl.toString(), '$realLoc, met.no',
+  //var mnFile = await cacheManager2.getSingleFile(mnUrl.toString(), key: "$real_loc, met.no", headers: headers).timeout(const Duration(seconds: 6));
+  final mnFile = await XCustomCacheManager.fetchData(
+      mnUrl.toString(), '$realLoc, met.no',
       headers: headers);
 
-  final MnResponse = (await MnFile[0].readAsString()) as String;
-  final bool isonline = MnFile[1] as bool;
+  final mnResponse = (await mnFile[0].readAsString()) as String;
+  final isonline = mnFile[1] as bool;
 
-  final MnData = jsonDecode(MnResponse);
+  final mnData = jsonDecode(mnResponse);
 
-  final DateTime fetchDatetime = (await MnFile[0].lastModified()) as DateTime;
-  return [MnData, fetchDatetime, isonline];
+  final fetchDatetime = (await mnFile[0].lastModified()) as DateTime;
+  return [mnData, fetchDatetime, isonline];
 }
 
 class MetNCurrent extends AbstractCurrent {
@@ -273,7 +273,7 @@ class MetNCurrent extends AbstractCurrent {
       humidity:
           (it['instant']['details']['relative_humidity'] as double).round(),
       wind: unit_coversion(
-              (it['instant']['details']['wind_speed'] * 3.6 as double),
+              it['instant']['details']['wind_speed'] * 3.6 as double,
               settings['Wind']!)
           .round(),
       uv: (it['instant']['details']['ultraviolet_index_clear_sky'] as double)
@@ -345,7 +345,7 @@ class MetNDay extends AbstractDay {
 
     final hours = <MetNHour>[];
 
-    for (int n = start; n < end; n++) {
+    for (var n = start; n < end; n++) {
       final hour = MetNHour.fromJson(
           item['properties']['timeseries'][n] as Map<String, dynamic>,
           settings,
@@ -371,7 +371,7 @@ class MetNDay extends AbstractDay {
     }
 
     final largestValue = oneSummary.reduce(max);
-    final BIndex = oneSummary.indexOf(largestValue);
+    final bIndex = oneSummary.indexOf(largestValue);
 
     return MetNDay(
         mm_precip: precipMm.reduce((a, b) => a + b),
@@ -387,9 +387,9 @@ class MetNDay extends AbstractDay {
         windspeed:
             (windspeeds.reduce((a, b) => a + b) / windspeeds.length).round(),
         name: metNGetName(index, settings, item, start, hourDif, localizations),
-        text: conditionTranslation(weatherNames[BIndex], localizations) ??
+        text: conditionTranslation(weatherNames[bIndex], localizations) ??
             'TranslationErr',
-        icon: metNIconCorrection(weatherNames[BIndex]),
+        icon: metNIconCorrection(weatherNames[bIndex]),
         wind_dir:
             (windspeeds.reduce((a, b) => a + b) / windspeeds.length).round(),
         uv: uvs.reduce(max));
@@ -481,7 +481,7 @@ class MetNSunstatus extends AbstractSunstatus {
       int dif,
       DateTime timeThere,
       DateTime fetchDate) async {
-    final MnParams = {
+    final mnParams = {
       'lat': lat.toString(),
       'lon': lng.toString(),
       'date':
@@ -490,17 +490,17 @@ class MetNSunstatus extends AbstractSunstatus {
     final headers = {
       'User-Agent': 'Overmorrow weather (com.marotidev.overmorrow)'
     };
-    final MnUrl =
-        Uri.https('api.met.no', 'weatherapi/sunrise/3.0/sun', MnParams);
+    final mnUrl =
+        Uri.https('api.met.no', 'weatherapi/sunrise/3.0/sun', mnParams);
 
-    //var MnFile = await cacheManager2.getSingleFile(MnUrl.toString(), key: "$lat, $lng, sunstatus met.no", headers: headers).timeout(const Duration(seconds: 6));
-    final MnFile = await XCustomCacheManager.fetchData(
-        MnUrl.toString(), '$lat, $lng met.no aqi',
+    //var mnFile = await cacheManager2.getSingleFile(mnUrl.toString(), key: "$lat, $lng, sunstatus met.no", headers: headers).timeout(const Duration(seconds: 6));
+    final mnFile = await XCustomCacheManager.fetchData(
+        mnUrl.toString(), '$lat, $lng met.no aqi',
         headers: headers);
-    final MnResponse = (await MnFile[0].readAsString()) as String;
-    final item = jsonDecode(MnResponse);
+    final mnResponse = (await mnFile[0].readAsString()) as String;
+    final item = jsonDecode(mnResponse);
 
-    final List<String> sunriseString = item['properties']['sunrise']['time']
+    final sunriseString = item['properties']['sunrise']['time']
         .split('T')[1]
         .split('+')[0]
         .split(':') as List<String>;
@@ -509,7 +509,7 @@ class MetNSunstatus extends AbstractSunstatus {
       minute: int.parse(sunriseString[1]),
     );
 
-    final List<String> sunsetString = item['properties']['sunset']['time']
+    final sunsetString = item['properties']['sunset']['time']
         .split('T')[1]
         .split('+')[0]
         .split(':') as List<String>;
@@ -613,19 +613,19 @@ class MetN15MinutePrecip extends Abstract15MinPrecip {
   }
 }
 
-Future<WeatherData> MetNGetWeatherData(
+Future<WeatherData> metNGetWeatherData(
     double lat,
     double lng,
     String realLoc,
     Map<String, String> settings,
     String placeName,
     AppLocalizations localizations) async {
-  final Mn = await MetNMakeRequest(lat, lng, realLoc);
-  final MnBody = Mn[0] as Map<String, dynamic>;
+  final mn = await etNMakeRequest(lat, lng, realLoc);
+  final mnBody = mn[0] as Map<String, dynamic>;
 
   //DateTime lastKnowTime = await MetNGetLocalTime(lat, lng);
   final lastKnowTime = DateTime.now();
-  final DateTime fetchDatetime = Mn[1] as DateTime;
+  final fetchDatetime = mn[1] as DateTime;
 
   //this gives us the time passed since last fetch, this is all basically for offline mode
   final realTimeOffset = DateTime.now().difference(fetchDatetime);
@@ -635,11 +635,11 @@ Future<WeatherData> MetNGetWeatherData(
 
   final hourDif = metNCalculateHourDif(localTime);
 
-  final bool isonline = Mn[2] as bool;
+  final isonline = mn[2] as bool;
 
   //I have to use the fetch date because on offline it wouldn't work because it changes
   final sunstatus = await MetNSunstatus.fromJson(
-      MnBody, settings, lat, lng, hourDif, localTime, fetchDatetime);
+      mnBody, settings, lat, lng, hourDif, localTime, fetchDatetime);
 
   //removes the outdated hours
   final start = localTime
@@ -648,13 +648,13 @@ Future<WeatherData> MetNGetWeatherData(
       .inHours;
 
   //make sure that there is data left
-  if (start >= (MnBody['properties']['timeseries'].length as int)) {
+  if (start >= (mnBody['properties']['timeseries'].length as int)) {
     throw const SocketException('Cached data expired');
   }
 
   //remove outdated hours
-  MnBody['properties']['timeseries'] =
-      MnBody['properties']['timeseries'].sublist(start);
+  mnBody['properties']['timeseries'] =
+      mnBody['properties']['timeseries'].sublist(start);
 
   final days = <MetNDay>[];
   final hourly72 = <dynamic>[];
@@ -663,15 +663,15 @@ Future<WeatherData> MetNGetWeatherData(
   var index = 0;
 
   var previousHour = 0;
-  for (var n = 0; n < (MnBody['properties']['timeseries'].length as int); n++) {
-    final hour = (int.parse(MnBody['properties']['timeseries'][n]['time']
+  for (var n = 0; n < (mnBody['properties']['timeseries'].length as int); n++) {
+    final hour = (int.parse(mnBody['properties']['timeseries'][n]['time']
                 .split('T')[1]
                 .split(':')[0] as String) -
             hourDif) %
         24;
     if (n > 0 && hour - previousHour < 1) {
       final day = MetNDay.fromJson(
-          MnBody, settings, begin, n, index, hourDif, localizations);
+          mnBody, settings, begin, n, index, hourDif, localizations);
       days.add(day);
 
       if (hourly72.length < 72) {
@@ -697,9 +697,9 @@ Future<WeatherData> MetNGetWeatherData(
     sunstatus: sunstatus,
     alerts: [],
     minutely_15_precip:
-        MetN15MinutePrecip.fromJson(MnBody, settings, localizations),
+        MetN15MinutePrecip.fromJson(mnBody, settings, localizations),
     current: await MetNCurrent.fromJson(
-        MnBody, settings, realLoc, lat, lng, localizations),
+        mnBody, settings, realLoc, lat, lng, localizations),
     days: days,
     dailyMinMaxTemp: omGetMaxMinTempForDaily(days),
     hourly72: hourly72,

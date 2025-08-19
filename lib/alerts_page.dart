@@ -75,7 +75,7 @@ class _AlertsPageState extends State<AlertsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme palette = data.current.palette;
+    final palette = data.current.palette;
 
     return Material(
       color: palette.surface,

@@ -57,8 +57,8 @@ Future<List<dynamic>> WapiMakeRequest(String latlong, String realLoc) async {
   final file = await XCustomCacheManager.fetchData(
       url.toString(), '$realLoc, weatherapi.com');
 
-  final DateTime fetchDatetime = (await file[0].lastModified()) as DateTime;
-  final bool isonline = file[1] as bool;
+  final fetchDatetime = (await file[0].lastModified()) as DateTime;
+  final isonline = file[1] as bool;
 
   final response = (await file[0].readAsString()) as String;
 
@@ -70,7 +70,7 @@ Future<List<dynamic>> WapiMakeRequest(String latlong, String realLoc) async {
 int wapiGetWindDir(List<dynamic> data) {
   var total = 0;
   for (var i = 0; i < data.length; i++) {
-    final int x = data[i]['wind_degree'] as int;
+    final x = data[i]['wind_degree'] as int;
     total += x;
   }
   return (total / data.length).round();
@@ -83,9 +83,10 @@ List<WapiAlert> getWapiAlerts(
   //for some reason weatherapi sometimes returns like 5 of the same alerts, so i have to manually remove duplicates
   final seenDescs = <String>[];
   for (var i = 0; i < alertList.length; i++) {
-    final String d = alertList[i]['desc'] as String;
+    final d = alertList[i]['desc'] as String;
     if (!seenDescs.contains(d)) {
-      alerts.add(WapiAlert.fromJson(alertList[i] as Map<String, dynamic>, localizations));
+      alerts.add(WapiAlert.fromJson(
+          alertList[i] as Map<String, dynamic>, localizations));
       seenDescs.add(d);
     }
   }
@@ -203,7 +204,7 @@ String getTime(String date, bool ampm) {
       final minusHour = (num % 10).toString();
       return '${minusHour}am';
     } else if (num < 12) {
-      return realhour + 'am';
+      return '${realhour}am';
     } else if (num == 12) {
       return '12pm';
     }
@@ -397,10 +398,10 @@ class WapiDay extends AbstractDay {
               .round(),
           rawMinTemp: item['day']['mintemp_c'] as double,
           rawMaxTemp: item['day']['maxtemp_c'] as double,
-          hourly: buildWapiHour(item['hour'], settings, index, approximatelocal,
-              true, localizations),
-          hourly_for_precip: buildWapiHour(item['hour'], settings, index,
-              approximatelocal, false, localizations),
+          hourly: buildWapiHour(item['hour'] as List<dynamic>, settings, index,
+              approximatelocal, true, localizations),
+          hourly_for_precip: buildWapiHour(item['hour'] as List<dynamic>,
+              settings, index, approximatelocal, false, localizations),
           mm_precip: (item['day']['totalprecip_mm'] as double) +
               (item['day']['totalsnow_cm'] as double) / 10,
           total_precip: double.parse(
@@ -412,7 +413,7 @@ class WapiDay extends AbstractDay {
           wind_dir: wapiGetWindDir(item['hour'] as List<dynamic>));
 
   static List<WapiHour> buildWapiHour(
-      data,
+      List<dynamic> data,
       Map<String, String> settings,
       int index,
       DateTime approximatelocal,
@@ -715,8 +716,8 @@ Future<WeatherData> WapiGetWeatherData(
   final wapi = await WapiMakeRequest('$lat,$lng', realLoc);
 
   final wapiBody = wapi[0] as Map<String, dynamic>;
-  final DateTime fetchDatetime = wapi[1] as DateTime;
-  final bool isonline = wapi[2] as bool;
+  final fetchDatetime = wapi[1] as DateTime;
+  final isonline = wapi[2] as bool;
 
   final lastKnowTime =
       DateTime.parse(wapiBody['location']['localtime'] as String);

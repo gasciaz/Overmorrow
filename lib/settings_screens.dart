@@ -52,7 +52,7 @@ Widget mainSettingEntry(
       onTap: () {
         HapticFeedback.selectionClick();
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => pushTo));
+            context, MaterialPageRoute<dynamic>(builder: (context) => pushTo));
       },
       child: Padding(
         padding: const EdgeInsets.only(top: 13, bottom: 13),
@@ -87,7 +87,7 @@ Widget mainSettingEntry(
   );
 }
 
-Widget NewSettings(
+Widget newSettings(
     Map<String, String> settings,
     void Function(String, String) updatePage,
     Image image,
@@ -450,7 +450,7 @@ class AppearanceSelector extends StatelessWidget {
                                             const Center(
                                                 child: Icon(
                                               Icons.check,
-                                              color: WHITE,
+                                              color: kWhite,
                                             ))
                                         ],
                                       ),
@@ -792,7 +792,7 @@ class _LangaugePageState extends State<LangaugePage> {
 
   @override
   Widget build(BuildContext context) {
-    final String selected = settings['Language'] ?? 'English';
+    final selected = settings['Language'] ?? 'English';
     final options = settingSwitches['Language']!;
 
     void onTap(String? value) {

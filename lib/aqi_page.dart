@@ -177,7 +177,7 @@ Widget pollutantWidget(WeatherData data, String name, double value,
       children: [
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(),
+            padding: EdgeInsets.zero,
             child: Center(
               child: AspectRatio(
                 aspectRatio: 1,
@@ -223,7 +223,7 @@ class _AllergensPageState extends State<AllergensPage> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme palette = data.current.palette;
+    final palette = data.current.palette;
     return Material(
       color: palette.surface,
       child: CustomScrollView(
@@ -600,12 +600,12 @@ Widget europeanAndUsAqi(WeatherData data, OMExtendedAqi extendedAqi,
                     color: palette.onSurface),
                 const Spacer(),
                 comfortatext(
-                    extendedAqi.european_aqi.toString(), 25, data.settings,
+                    extendedAqi.europeanAqi.toString(), 25, data.settings,
                     color: palette.primary),
                 Padding(
                   padding: const EdgeInsets.only(left: 2, top: 1),
                   child: comfortatext(
-                      extendedAqi.european_desc, 15, data.settings,
+                      extendedAqi.europeanDesc, 15, data.settings,
                       color: palette.outline, weight: FontWeight.w600),
                 ),
               ],
@@ -629,11 +629,11 @@ Widget europeanAndUsAqi(WeatherData data, OMExtendedAqi extendedAqi,
                     data.settings,
                     color: palette.onSurface),
                 const Spacer(),
-                comfortatext(extendedAqi.us_aqi.toString(), 25, data.settings,
+                comfortatext(extendedAqi.usAqi.toString(), 25, data.settings,
                     color: palette.primary),
                 Padding(
                   padding: const EdgeInsets.only(left: 2, top: 1),
-                  child: comfortatext(extendedAqi.us_desc, 15, data.settings,
+                  child: comfortatext(extendedAqi.usDesc, 15, data.settings,
                       color: palette.outline, weight: FontWeight.w600),
                 ),
               ],
@@ -794,7 +794,7 @@ Widget dustAndAODIndicators(WeatherData data, OMExtendedAqi extendedAqi,
                     Padding(
                       padding: const EdgeInsets.only(left: 2, top: 1),
                       child: comfortatext(
-                          extendedAqi.aod_desc, 15, data.settings,
+                          extendedAqi.aodDesc, 15, data.settings,
                           color: palette.outline, weight: FontWeight.w600),
                     ),
                   ],
@@ -856,7 +856,7 @@ class _NewHourlyAqiState extends State<NewHourlyAqi>
   Widget build(BuildContext context) {
     super.build(context);
 
-    final ColorScheme palette = data.current.palette;
+    final palette = data.current.palette;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -869,17 +869,17 @@ class _NewHourlyAqiState extends State<NewHourlyAqi>
               physics: const NeverScrollableScrollPhysics(),
               controller: _pageController,
               children: <Widget>[
-                HourlyQqi(data, extendedAqi.pm2_5_h, 'PM2.5', extendedAqi,
+                hourlyQqi(data, extendedAqi.pm2_5_h, 'PM2.5', extendedAqi,
                     context, palette),
-                HourlyQqi(data, extendedAqi.pm10_h, 'PM10', extendedAqi,
+                hourlyQqi(data, extendedAqi.pm10_h, 'PM10', extendedAqi,
                     context, palette),
-                HourlyQqi(data, extendedAqi.o3_h, 'O3', extendedAqi, context,
+                hourlyQqi(data, extendedAqi.o3_h, 'O3', extendedAqi, context,
                     palette),
-                HourlyQqi(data, extendedAqi.no2_h, 'NO2', extendedAqi, context,
+                hourlyQqi(data, extendedAqi.no2_h, 'NO2', extendedAqi, context,
                     palette),
-                HourlyQqi(data, extendedAqi.co_h, 'CO', extendedAqi, context,
+                hourlyQqi(data, extendedAqi.co_h, 'CO', extendedAqi, context,
                     palette),
-                HourlyQqi(data, extendedAqi.so2_h, 'SO2', extendedAqi, context,
+                hourlyQqi(data, extendedAqi.so2_h, 'SO2', extendedAqi, context,
                     palette),
               ],
             ),
@@ -963,7 +963,7 @@ class AQIGraphPainter extends CustomPainter {
   }
 }
 
-Widget HourlyQqi(WeatherData data, List<double> hourValues, String name,
+Widget hourlyQqi(WeatherData data, List<double> hourValues, String name,
     OMExtendedAqi extendedAqi, BuildContext context, ColorScheme palette) {
   const chartTypes = <List<int>>[
     [0, 2, 4, 6, 8, 10],
@@ -976,7 +976,7 @@ Widget HourlyQqi(WeatherData data, List<double> hourValues, String name,
     [0, 200, 400, 600, 800, 1000]
   ];
 
-  final double valueMax = hourValues.reduce((a, b) => max<double>(a, b));
+  final valueMax = hourValues.reduce((a, b) => max<double>(a, b));
   var currentChart = 0;
 
   for (var i = 0; i < chartTypes.length; i++) {

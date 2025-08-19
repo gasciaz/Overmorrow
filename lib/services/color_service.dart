@@ -62,7 +62,7 @@ class ImageColorList {
       }
     });
 
-    imageProvider.resolve(const ImageConfiguration()).addListener(listener);
+    imageProvider.resolve(ImageConfiguration.empty).addListener(listener);
 
     final imageInfo = await completer.future;
     final imageHeight = imageInfo.image.height;
@@ -103,7 +103,7 @@ class ImageColorList {
       filters: [],
     );
 
-    imageProvider.resolve(const ImageConfiguration()).removeListener(listener);
+    imageProvider.resolve(ImageConfiguration.empty).removeListener(listener);
 
     return ImageColorList(
         imageColors: imageColors.colors.toList(),
@@ -300,8 +300,7 @@ class ColorPalette {
 
   static ColorScheme getCustomColorPalette(
       String theme, Map<String, String> settings) {
-    final mainColor =
-        Color(getColorFromHex(settings['Custom color'] as String));
+    final mainColor = Color(getColorFromHex(settings['Custom color']!));
 
     if (theme == 'auto') {
       final brightness =

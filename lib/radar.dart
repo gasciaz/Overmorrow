@@ -59,12 +59,12 @@ class _RadarSmallState extends State<RadarSmall> {
     currentFrameIndex = data.radar.starting_index * 1.0;
 
     final precivedHour = int.parse(data.localtime.split(':')[0]);
-    final int real = data.radar.real_hour;
+    final real = data.radar.real_hour;
 
     final offset = precivedHour - real;
 
     for (var i = 0; i < data.radar.times.length; i++) {
-      final List<String> split = data.radar.times[i].split('h');
+      final split = data.radar.times[i].split('h');
       final minute = split[1].replaceAll(RegExp(r'\D'), '');
       final hour = (int.parse(split[0]) + offset) % 24;
       if (data.settings['Time mode'] == '12 hour') {
@@ -110,8 +110,8 @@ class _RadarSmallState extends State<RadarSmall> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme palette = data.current.palette;
-    String mode = data.settings['Color mode']!;
+    final palette = data.current.palette;
+    var mode = data.settings['Color mode']!;
 
     if (mode == 'auto') {
       final brightness =
@@ -186,9 +186,8 @@ class _RadarSmallState extends State<RadarSmall> {
                                       : 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
                                 ),
                                 TileLayer(
-                                  urlTemplate: data.radar
-                                          .images[currentFrameIndex.toInt()] +
-                                      '/256/{z}/{x}/{y}/2/1_1.png',
+                                  urlTemplate:
+                                      '${data.radar.images[currentFrameIndex.toInt()]}/256/{z}/{x}/{y}/2/1_1.png',
                                   //whoah i didn't know that the radar stuttering was because of a fading animation
                                   //this makes it so much more fluid, because there is no fade between frames
                                   tileDisplay:
@@ -293,7 +292,7 @@ class _RadarSmallState extends State<RadarSmall> {
                             borderRadius: BorderRadius.circular(30),
                           )),
                       onPressed: () async {
-                        HapticFeedback.selectionClick();
+                        await HapticFeedback.selectionClick();
                         togglePlayPause();
                       },
                       child: Icon(
@@ -400,12 +399,12 @@ class _RadarBigState extends State<RadarBig> {
     currentFrameIndex = data.radar.starting_index * 1.0;
 
     final precivedHour = int.parse(data.localtime.split(':')[0]);
-    final int real = data.radar.real_hour;
+    final real = data.radar.real_hour;
 
     final offset = precivedHour - real;
 
     for (var i = 0; i < data.radar.times.length; i++) {
-      final List<String> split = data.radar.times[i].split('h');
+      final split = data.radar.times[i].split('h');
       final minute = split[1].replaceAll(RegExp(r'\D'), '');
       final hour = (int.parse(split[0]) + offset) % 24;
       if (data.settings['Time mode'] == '12 hour') {
@@ -451,10 +450,10 @@ class _RadarBigState extends State<RadarBig> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme palette = data.current.palette;
+    final palette = data.current.palette;
     final x = MediaQuery.of(context).padding.top;
 
-    String mode = data.settings['Color mode']!;
+    var mode = data.settings['Color mode']!;
 
     if (mode == 'auto') {
       final brightness =
@@ -492,8 +491,8 @@ class _RadarBigState extends State<RadarBig> {
                       : 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
                 ),
                 TileLayer(
-                  urlTemplate: data.radar.images[currentFrameIndex.toInt()] +
-                      '/256/{z}/{x}/{y}/2/1_1.png',
+                  urlTemplate:
+                      '${data.radar.images[currentFrameIndex.toInt()]}/256/{z}/{x}/{y}/2/1_1.png',
                   tileDisplay: const TileDisplay.instantaneous(),
                 ),
                 TileLayer(
@@ -608,7 +607,7 @@ class _RadarBigState extends State<RadarBig> {
                                         //side: BorderSide(width: 2, color: palette.primaryLighter)
                                       )),
                                   onPressed: () async {
-                                    HapticFeedback.selectionClick();
+                                    await HapticFeedback.selectionClick();
                                     togglePlayPause();
                                   },
                                   child: Icon(

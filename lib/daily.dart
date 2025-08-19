@@ -55,16 +55,16 @@ Widget dayStat(WeatherData data, IconData icon, int number, String addon,
   );
 }
 
-class buildDays extends StatefulWidget {
+class BuildDays extends StatefulWidget {
   final WeatherData data;
 
-  const buildDays({super.key, required this.data});
+  const BuildDays({super.key, required this.data});
 
   @override
-  _buildDaysState createState() => _buildDaysState(data);
+  _BuildDaysState createState() => _BuildDaysState(data);
 }
 
-class _buildDaysState extends State<buildDays>
+class _BuildDaysState extends State<BuildDays>
     with AutomaticKeepAliveClientMixin {
   final WeatherData data;
 
@@ -110,7 +110,7 @@ class _buildDaysState extends State<buildDays>
   @override
   bool get wantKeepAlive => true;
 
-  _buildDaysState(this.data);
+  _BuildDaysState(this.data);
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +133,7 @@ class _buildDaysState extends State<buildDays>
             child: ListView.builder(
                 key: ValueKey(daysToShow),
                 shrinkWrap: true,
-                padding: const EdgeInsets.only(),
+                padding: EdgeInsets.zero,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: daysToShow,
                 itemBuilder: (context, index) {

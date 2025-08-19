@@ -141,19 +141,19 @@ class _NewMainState extends State<NewMain> {
       ),
       'alerts': alertWidget(data, context, data.current.palette),
       'radar': RadarSmall(data: data),
-      'daily': buildDays(data: data),
+      'daily': BuildDays(data: data),
       'air quality': aqiWidget(data, data.current.palette, context, false)
     };
 
-    final List<String> order = data.settings['Layout'] == ''
-        ? []
+    final order = data.settings['Layout'] == ''
+        ? <String>[]
         : data.settings['Layout']!.split(',');
     var orderedWidgets = <Widget>[];
     if (order.isNotEmpty && order[0] != '') {
       orderedWidgets = order.map((name) => widgetsMap[name]!).toList();
     }
 
-    String colorMode = data.settings['Color mode']!;
+    var colorMode = data.settings['Color mode']!;
     if (colorMode == 'auto') {
       final brightness =
           SchedulerBinding.instance.platformDispatcher.platformBrightness;
@@ -175,7 +175,7 @@ class _NewMainState extends State<NewMain> {
             header: ParrallaxBackground(
                 image: data.current.imageService.image,
                 key: Key(data.place),
-                color: BLACK),
+                color: kBlack),
             overlay: Stack(
               children: [
                 Padding(
@@ -212,7 +212,7 @@ class _NewMainState extends State<NewMain> {
             data: data,
             time: data.updatedTime,
           ),
-          Circles(data, 0.5, context, data.current.palette),
+          circles(data, 0.5, context, data.current.palette),
 
           /*
             Padding(
@@ -275,7 +275,7 @@ class TabletLayout extends StatelessWidget {
 
     final panelWidth = size.width * 0.29;
 
-    final ColorScheme palette = data.current.palette;
+    final palette = data.current.palette;
 
     return Scaffold(
         backgroundColor: palette.surface,
@@ -307,7 +307,8 @@ class TabletLayout extends StatelessWidget {
                       blurContent: false,
                       headerHeight: (size.height) * 0.43,
                       header: ParrallaxBackground(
-                          image: data.current.imageService.image, color: BLACK),
+                          image: data.current.imageService.image,
+                          color: kBlack),
                       overlay: Padding(
                         padding: const EdgeInsets.all(30),
                         child: Align(
@@ -345,7 +346,7 @@ class TabletLayout extends StatelessWidget {
                           key: Key(data.updatedTime.toString())),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(),
+                      padding: EdgeInsets.zero,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -367,7 +368,7 @@ class TabletLayout extends StatelessWidget {
                           const Spacer(),
                           SizedBox(
                               width: 397,
-                              child: Circles(
+                              child: circles(
                                   data, 0.3, context, data.current.palette)),
                         ],
                       ),
@@ -413,7 +414,7 @@ class TabletLayout extends StatelessWidget {
                               //since it's only available with weatherapi, and in that case there are only 3 days
                               //this makes the two sides more even
                               alertWidget(data, context, data.current.palette),
-                              buildDays(data: data),
+                              BuildDays(data: data),
                             ],
                           ),
                         )

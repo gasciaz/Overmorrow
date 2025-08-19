@@ -38,16 +38,15 @@ class RainviewerRadar {
 
     final file = await XCustomCacheManager.fetchData(url, url);
     final response = await (file[0].readAsString() as Future<String>);
-    final Map<String, dynamic> data =
-        json.decode(response) as Map<String, dynamic>;
+    final data = json.decode(response) as Map<String, dynamic>;
 
-    final String host = data['host'] as String;
+    final host = data['host'] as String;
 
     final images = <String>[];
     final times = <String>[];
 
-    final List<dynamic> past = data['radar']['past'] as List<dynamic>;
-    final List<dynamic> future = data['radar']['nowcast'] as List<dynamic>;
+    final past = data['radar']['past'] as List<dynamic>;
+    final future = data['radar']['nowcast'] as List<dynamic>;
 
     for (final x in past) {
       final time =

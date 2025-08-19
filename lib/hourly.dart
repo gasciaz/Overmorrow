@@ -58,10 +58,10 @@ class _NewHourlyState extends State<NewHourly>
   Widget build(BuildContext context) {
     super.build(context);
 
-    final ColorScheme palette = data.current.palette;
+    final palette = data.current.palette;
     return Padding(
       padding: elevated
-          ? const EdgeInsets.all(0)
+          ? EdgeInsets.zero
           : const EdgeInsets.only(left: 21, right: 21, bottom: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,7 +125,7 @@ class _NewHourlyState extends State<NewHourly>
 
 Widget hourBoxes(List<dynamic> hours, WeatherData data, int value,
     bool elevated, BuildContext context) {
-  final ColorScheme palette = data.current.palette;
+  final palette = data.current.palette;
 
   return AnimationLimiter(
     child: ListView.builder(
@@ -174,7 +174,7 @@ Widget hourlyDataBuilder(hour, ColorScheme palette, bool elevated,
       switchInCurve: Curves.decelerate,
       transitionBuilder: (Widget child, Animation<double> animation) {
         final offsetAnimation =
-            Tween<Offset>(begin: const Offset(0, 1), end: const Offset(0, 0))
+            Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero)
                 .animate(animation);
         return ClipRRect(
           borderRadius: BorderRadius.circular(10),

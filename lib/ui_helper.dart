@@ -29,8 +29,8 @@ import 'package:overmorrow/main.dart';
 import 'package:overmorrow/search_screens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const WHITE = Color(0xffFFFFFF);
-const BLACK = Color(0xff000000);
+const kWhite = Color(0xffFFFFFF);
+const kBlack = Color(0xff000000);
 
 double getFontSize(String set) {
   var x = Platform.isLinux ? 0.85 : 0.92;
@@ -46,7 +46,7 @@ double getFontSize(String set) {
 }
 
 Widget comfortatext(String text, double size, Map<String, String> settings,
-    {Color color = WHITE,
+    {Color color = kWhite,
     TextAlign align = TextAlign.left,
     FontWeight weight = FontWeight.w400,
     TextDecoration decoration = TextDecoration.none,
@@ -84,7 +84,7 @@ bool estimateBrightnessForColor(Color color) {
 }
 
 Color darken(Color color, [double amount = .1]) {
-  assert(amount >= 0 && amount <= 1);
+  assert(amount >= 0 && amount <= 1, 'Amount must be between 0 and 1');
 
   final hsl = HSLColor.fromColor(color);
   final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
@@ -93,7 +93,7 @@ Color darken(Color color, [double amount = .1]) {
 }
 
 Color lighten(Color color, [double amount = .1]) {
-  assert(amount >= 0 && amount <= 1);
+  assert(amount >= 0 && amount <= 1, 'Amount must be between 0 and 1');
 
   final hsl = HSLColor.fromColor(color);
   final hslLight = hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
@@ -102,14 +102,14 @@ Color lighten(Color color, [double amount = .1]) {
 }
 
 Color darken2(Color c, [double amount = 0.1]) {
-  assert(0 <= amount && amount <= 1);
+  assert(0 <= amount && amount <= 1, 'Amount must be between 0 and 1');
   final f = 1 - amount;
   return Color.fromARGB(
       c.a.toInt(), (c.r * f).round(), (c.g * f).round(), (c.b * f).round());
 }
 
 Color lighten2(Color c, [double amount = 0.1]) {
-  assert(0 <= amount && amount <= 1);
+  assert(0 <= amount && amount <= 1, 'Amount must be between 0 and 1');
   return Color.fromARGB(
       c.a.toInt(),
       c.r.toInt() + ((255 - c.r) * amount).round(),
@@ -123,7 +123,7 @@ Color lightAccent(Color color, int intensity) {
       sqrt(color.b * x).toInt(), 1);
 }
 
-Widget NewAqiDataPoints(String name, double value, WeatherData data,
+Widget newAqiDataPoints(String name, double value, WeatherData data,
     [double size = 15]) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,

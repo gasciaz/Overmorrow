@@ -84,7 +84,7 @@ class WeatherData {
       String latlong,
       String provider,
       AppLocalizations localizations) async {
-    final List<String> split = latlong.split(',');
+    final split = latlong.split(',');
     final lat = double.parse(split[0]);
     final lng = double.parse(split[1]);
 
@@ -92,7 +92,7 @@ class WeatherData {
       return WapiGetWeatherData(
           lat, lng, realLoc, settings, placeName, localizations);
     } else if (provider == 'met norway') {
-      return MetNGetWeatherData(
+      return metNGetWeatherData(
           lat, lng, realLoc, settings, placeName, localizations);
     } else {
       return OMGetWeatherData(
@@ -122,7 +122,7 @@ class LightCurrentWeatherData {
       String latlong,
       String provider,
       Map<String, String> settings) async {
-    final List<String> split = latlong.split(',');
+    final split = latlong.split(',');
     final lat = double.parse(split[0]);
     final lng = double.parse(split[1]);
 
@@ -150,7 +150,7 @@ class LightWindData {
 
   static Future<LightWindData> getLightWindData(String placeName,
       String latlong, String provider, Map<String, String> settings) async {
-    final List<String> split = latlong.split(',');
+    final split = latlong.split(',');
     final lat = double.parse(split[0]);
     final lon = double.parse(split[1]);
 
@@ -185,7 +185,7 @@ class LightHourlyForecastData {
 
   static Future<LightHourlyForecastData> getLightForecastData(String placeName,
       String latLon, String provider, Map<String, String> settings) async {
-    final List<String> split = latLon.split(',');
+    final split = latLon.split(',');
     final lat = double.parse(split[0]);
     final lon = double.parse(split[1]);
 

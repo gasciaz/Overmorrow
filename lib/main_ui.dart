@@ -102,7 +102,7 @@ class ParrallaxBackground extends StatelessWidget {
   }
 }
 
-Widget Circles(WeatherData data, double bottom, BuildContext context,
+Widget circles(WeatherData data, double bottom, BuildContext context,
     ColorScheme palette) {
   return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 13, top: 2),
@@ -124,14 +124,14 @@ Widget Circles(WeatherData data, double bottom, BuildContext context,
         DescriptionCircle(
             text: '${data.current.precip}',
             undercaption: AppLocalizations.of(context)!.precipCapital,
-            extra: data.settings['Precipitation'] as String,
+            extra: data.settings['Precipitation']!,
             settings: data.settings,
             dir: -1,
             palette: palette),
         DescriptionCircle(
             text: '${data.current.wind}',
             undercaption: AppLocalizations.of(context)!.windCapital,
-            extra: data.settings['Wind'] as String,
+            extra: data.settings['Wind']!,
             settings: data.settings,
             dir: data.current.wind_dir + 180,
             palette: palette),
@@ -276,17 +276,17 @@ class _FadingWidgetState extends State<FadingWidget>
     if (dif > 0 && dif < 45) {
       text = AppLocalizations.of(context)!.updatedXMinutesAgo(dif);
     } else if (dif >= 45 && dif < 1440) {
-      final int hour = (dif + 30) ~/ 60;
+      final hour = (dif + 30) ~/ 60;
       text = AppLocalizations.of(context)!.updatedXHoursAgo(hour);
     } else if (dif >= 1440) {
       //number of minutes in a day
-      final int day = (dif + 720) ~/ 1440;
+      final day = (dif + 720) ~/ 1440;
       text = AppLocalizations.of(context)!.updatedXDaysAgo(day);
     }
 
     final split = text.split(',');
 
-    final ColorScheme palette = widget.data.current.palette;
+    final palette = widget.data.current.palette;
 
     return Container(
       color:
@@ -339,10 +339,10 @@ class SinceLastUpdate extends StatefulWidget {
 class _SinceLastUpdateState extends State<SinceLastUpdate> {
   @override
   Widget build(BuildContext context) {
-    final Color text = widget.data.isonline
+    final text = widget.data.isonline
         ? widget.data.current.palette.onSurface
         : widget.data.current.palette.onPrimaryContainer;
-    final Color highlight = widget.data.isonline
+    final highlight = widget.data.isonline
         ? widget.data.current.palette.primary
         : widget.data.current.palette.onPrimaryContainer;
 
@@ -425,8 +425,8 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
                 ),
               TextButton(
                 onPressed: () async {
-                  await _launchUrl(widget.data.current.imageService.photolink +
-                      '?utm_source=overmorrow&utm_medium=referral');
+                  await _launchUrl(
+                      '${widget.data.current.imageService.photolink}?utm_source=overmorrow&utm_medium=referral');
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(1),
@@ -442,8 +442,8 @@ class _SinceLastUpdateState extends State<SinceLastUpdate> {
                   color: text, weight: FontWeight.w300),
               TextButton(
                 onPressed: () async {
-                  await _launchUrl(widget.data.current.imageService.userlink +
-                      '?utm_source=overmorrow&utm_medium=referral');
+                  await _launchUrl(
+                      '${widget.data.current.imageService.userlink}?utm_source=overmorrow&utm_medium=referral');
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(1),
@@ -524,7 +524,7 @@ Widget providerSelector(
                   size: 22,
                 ),
               ),
-              value: provider.toString(),
+              value: provider,
               items: ['weatherapi.com', 'open-meteo', 'met norway'].map((item) {
                 return DropdownMenuItem(
                   value: item,
@@ -536,8 +536,8 @@ Widget providerSelector(
                 );
               }).toList(),
               onChanged: (String? value) async {
-                HapticFeedback.mediumImpact();
-                SetData('weather_provider', value!);
+                await HapticFeedback.mediumImpact();
+                await SetData('weather_provider', value!);
                 await updateLocation(latlng, realLoc);
               },
               itemHeight: 55,
@@ -580,7 +580,7 @@ class ErrorPage extends StatelessWidget {
     final size = view.physicalSize / view.devicePixelRatio;
 
     const replacement = '<api_key>';
-    var newStr = errorMessage.toString().replaceAll(wapi_Key, replacement);
+    var newStr = errorMessage.replaceAll(wapi_Key, replacement);
     newStr = newStr.replaceAll(access_key, replacement);
     //newStr = newStr.replaceAll(timezonedbKey, replacement);
 

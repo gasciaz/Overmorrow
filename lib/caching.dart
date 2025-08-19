@@ -39,7 +39,7 @@ class MyGetResponse implements FileServiceResponse {
 
   @override
   DateTime get validTill {
-    if (url.toString().contains('search')) {
+    if (url.contains('search')) {
       //search results are stored for 40 days
       return DateTime.now().add(const Duration(days: 40));
     }

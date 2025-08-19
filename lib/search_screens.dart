@@ -34,7 +34,7 @@ import 'package:overmorrow/ui_helper.dart';
 
 //before this the same place from 2 different providers would be registered as different,
 //I am trying to fix this with this
-String generateSimplifier(var split) {
+String generateSimplifier(Map<String, dynamic> split) {
   return "${split["name"]}, ${split["lat"].toStringAsFixed(2)}, ${split["lon"].toStringAsFixed(2)}";
 }
 
@@ -89,6 +89,7 @@ Widget searchBar2(
                       builder: (context) => SettingsPage(image: image),
                     ),
                   ).then((value) {
+                    if (!context.mounted) return;
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute<MyApp>(
                         builder: (context) {
@@ -304,7 +305,7 @@ class _HeroSearchPageState extends State<HeroSearchPage> {
       });
 
       //update the last known position for the home screen widgets
-      setLastKnownLocation(placeName,
+      await setLastKnownLocation(placeName,
           '${position.latitude.toStringAsFixed(2)}, ${position.longitude.toStringAsFixed(2)}');
     } on Error {
       setState(() {
@@ -604,7 +605,7 @@ Widget buildRecommend(
                             color: palette.outline),
                       ],
                     ),
-                    CurrentLocationWidget(
+                    currentLocationWidget(
                         settings,
                         locationState,
                         locationMessage,
@@ -679,7 +680,7 @@ Widget buildSearchResults(
     bool isTabletMode) {
   final favoriteNarrow = <String>[];
   for (var i = 0; i < favorites.length; i++) {
-    final d = jsonDecode(favorites[i]);
+    final d = jsonDecode(favorites[i]) as Map<String, dynamic>;
     favoriteNarrow.add(generateSimplifier(d));
   }
   return ValueListenableBuilder(
@@ -704,15 +705,16 @@ Widget buildSearchResults(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     padding: rec.isEmpty
-                        ? const EdgeInsets.all(0)
+                        ? EdgeInsets.zero
                         : const EdgeInsets.all(14),
                     child: Column(
                         children: List.generate(rec.length, (index) {
-                      final split = json.decode(rec[index]);
-                      final String name = split['name'] as String;
+                      final split =
+                          json.decode(rec[index]) as Map<String, dynamic>;
+                      final name = split['name'] as String;
                       final country =
                           generateAbbreviation(split['country'] as String);
-                      final String region = split['region'] as String;
+                      final region = split['region'] as String;
                       final simplifier = generateSimplifier(split);
 
                       final contained = favoriteNarrow.contains(simplifier);
@@ -772,7 +774,7 @@ Widget buildSearchResults(
       });
 }
 
-Widget CurrentLocationWidget(
+Widget currentLocationWidget(
     Map<String, String> settings,
     String locationState,
     String locationMessage,
@@ -922,9 +924,9 @@ Widget buildFavorites(
         child: Column(
             children: List.generate(favorites.length, (index) {
           final split = json.decode(favorites[index]);
-          final String name = split['name'] as String;
+          final name = split['name'] as String;
           final country = generateAbbreviation(split['country'] as String);
-          final String region = split['region'] as String;
+          final region = split['region'] as String;
           return GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
@@ -992,7 +994,7 @@ Widget reorderFavorites(
         if (oldIndex < newIndex) {
           newIndex -= 1;
         }
-        final String item = items.removeAt(oldIndex);
+        final item = items.removeAt(oldIndex);
         items.insert(newIndex, item);
         onFavChanged(items);
       },
@@ -1008,9 +1010,9 @@ Widget reorderableItem(
     void Function(List<String>) onFavChanged,
     bool isTabletMode) {
   final split = json.decode(items[index]);
-  final String name = split['name'] as String;
+  final name = split['name'] as String;
   final country = generateAbbreviation(split['country'] as String);
-  final String region = split['region'] as String;
+  final region = split['region'] as String;
   return ColoredBox(
     key: Key('$name, $country, $region'),
     color: isTabletMode

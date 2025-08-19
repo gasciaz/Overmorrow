@@ -314,7 +314,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -343,7 +343,7 @@ class _HomePageState extends State<HomePage> {
         startup = false;
       }
 
-      String absoluteProposed = proposedLoc;
+      var absoluteProposed = proposedLoc;
       var isItCurrentLocation = false;
 
       if (backupName == 'CurrentLocation') {
@@ -396,7 +396,7 @@ class _HomePageState extends State<HomePage> {
             absoluteProposed = '${position.latitude}, ${position.longitude}';
 
             //update the last known position for the home screen widgets
-            setLastKnownLocation(backupName, absoluteProposed);
+            await setLastKnownLocation(backupName, absoluteProposed);
           } on Error {
             backupName =
                 '${position.latitude.toStringAsFixed(2)}, ${position.longitude.toStringAsFixed(2)}';
@@ -436,7 +436,7 @@ class _HomePageState extends State<HomePage> {
         }
       }
 
-      final RealName = backupName.toString();
+      final RealName = backupName;
       if (isItCurrentLocation) {
         backupName = 'CurrentLocation';
       }
@@ -555,7 +555,7 @@ class _HomePageState extends State<HomePage> {
       isLoading = true;
     });
 
-    await Future.delayed(Duration(milliseconds: time));
+    await Future<void>.delayed(Duration(milliseconds: time));
 
     if (!mounted) return;
 
@@ -593,7 +593,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: WHITE,
+      backgroundColor: kWhite,
       body: Stack(
         children: [
           w1,
@@ -602,7 +602,7 @@ class _HomePageState extends State<HomePage> {
               color: startup2 ? colors[0] : const Color.fromRGBO(0, 0, 0, 0.7),
               child: Center(
                 child: LoadingAnimationWidget.staggeredDotsWave(
-                  color: startup2 ? colors[1] : WHITE,
+                  color: startup2 ? colors[1] : kWhite,
                   size: 40,
                 ),
               ),
@@ -617,7 +617,7 @@ List<Color> getStartBackColor() {
   final brightness =
       SchedulerBinding.instance.platformDispatcher.platformBrightness;
   final isDarkMode = brightness == Brightness.dark;
-  final back = isDarkMode ? BLACK : WHITE;
+  final back = isDarkMode ? kBlack : kWhite;
   final front = isDarkMode
       ? const Color.fromRGBO(250, 250, 250, 0.7)
       : const Color.fromRGBO(0, 0, 0, 0.3);

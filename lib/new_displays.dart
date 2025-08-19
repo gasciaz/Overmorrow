@@ -78,8 +78,9 @@ class WavePainter extends CustomPainter {
       }
     }
 
-    canvas.drawPath(path2, secondPaint);
-    canvas.drawPath(path1, firstPaint);
+    canvas
+      ..drawPath(path2, secondPaint)
+      ..drawPath(path1, firstPaint);
   }
 
   @override
@@ -107,7 +108,7 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
 
   @override
   void initState() {
-    final List<String> absoluteLocalTime = widget.data.localtime.split(':');
+    final absoluteLocalTime = widget.data.localtime.split(':');
 
     final currentTime = DateTime.now();
 
@@ -132,17 +133,17 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme palette = widget.data.current.palette;
+    final palette = widget.data.current.palette;
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
         final now = DateTime.now();
         final localTime = now.add(Duration(hours: hourdif));
 
-        final double progress = widget.data.sunstatus.sunstatus;
+        final progress = widget.data.sunstatus.sunstatus;
 
         final write = widget.data.settings['Time mode'] == '24 hour'
-            ? OMConvertTime(
+            ? omConvertTime(
                 "j T${localTime.hour.toString().padLeft(2, "0")}:${localTime.minute.toString().padLeft(2, "0")}") //the j is just added so when splitting
             : OMamPmTime(
                 'j T${localTime.hour}:${localTime.minute}'); //it can grab the second item
@@ -154,11 +155,11 @@ class _NewSunriseSunsetState extends State<NewSunriseSunset>
               style: GoogleFonts.outfit(
                   fontSize: 15.0 *
                       1.1 *
-                      getFontSize(widget.data.settings['Font size'] as String),
+                      getFontSize(widget.data.settings['Font size']!),
                   fontWeight: FontWeight.w300),
             ),
-            textDirection: TextDirection.ltr);
-        textPainter.layout();
+            textDirection: TextDirection.ltr)
+          ..layout();
 
         final textWidth = textPainter.width * 1.1;
 
@@ -338,7 +339,7 @@ Widget aqiWidget(WeatherData data, ColorScheme palette, BuildContext context,
 
 Widget alertWidget(
     WeatherData data, BuildContext context, ColorScheme palette) {
-  if (data.alerts.length > 0) {
+  if (data.alerts.isNotEmpty) {
     return Padding(
         padding:
             const EdgeInsets.only(left: 25, right: 25, bottom: 10, top: 20),
@@ -446,8 +447,7 @@ Widget rain15MinuteChart(
                   19,
                   data.settings,
                   color: palette.primary),
-              comfortatext(
-                  data.settings['Precipitation'] as String, 16, data.settings,
+              comfortatext(data.settings['Precipitation']!, 16, data.settings,
                   color: palette.primary),
               Expanded(
                 child: Padding(

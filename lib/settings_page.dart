@@ -157,7 +157,7 @@ Future<void> setLastKnownLocation(String place, String cord) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('LastKnownPositionName', place);
   await prefs.setString('LastKnownPositionCord', cord);
-  WidgetService.saveData('widget.lastKnownPlace',
+  await WidgetService.saveData('widget.lastKnownPlace',
       place); //save the name of the place to the widgets
 }
 
@@ -187,7 +187,7 @@ Widget dropdown(
     Color? textcolor,
     Color primary,
     String rawName) {
-  final Items = settingSwitches[rawName] ?? ['˚C', '˚F'];
+  final items = settingSwitches[rawName] ?? ['˚C', '˚F'];
 
   return DropdownButton(
       elevation: 0,
@@ -208,7 +208,7 @@ Widget dropdown(
       ),
       alignment: Alignment.centerRight,
       value: unit,
-      items: Items.map((item) {
+      items: items.map((item) {
         return DropdownMenuItem(
           value: item,
           child: Text(item),
@@ -341,8 +341,8 @@ class _SettingsPageState extends State<SettingsPage> {
           palette: ColorScheme.light(),
           imageColors: [],
           regionColors: [],
-          descColor: WHITE,
-          colorPop: WHITE));
+          descColor: kWhite,
+          colorPop: kWhite));
 
   _SettingsPageState({required this.image});
 
@@ -443,7 +443,7 @@ class SettingsMain extends StatelessWidget {
           ),
           // Just some content big enough to have something to scroll.
           SliverToBoxAdapter(
-            child: NewSettings(
+            child: newSettings(
                 settings, updatePage, image, palette, context, colornotify),
           ),
         ],

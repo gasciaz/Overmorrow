@@ -39,11 +39,11 @@ import 'package:overmorrow/weather/abstract_hour.dart';
 import 'package:overmorrow/weather/abstract_sunstatus.dart';
 import 'package:overmorrow/weather_refact.dart';
 
-String OMConvertTime(String time) {
+String omConvertTime(String time) {
   return time.split('T')[1];
 }
 
-String OmAqiDesc(int index, AppLocalizations localizations) {
+String omAqiDesc(int index, AppLocalizations localizations) {
   return [
     localizations.goodAqiDesc,
     localizations.fairAqiDesc,
@@ -54,7 +54,7 @@ String OmAqiDesc(int index, AppLocalizations localizations) {
   ][index - 1];
 }
 
-String OmAqiTitle(int index, AppLocalizations localizations) {
+String omAqiTitle(int index, AppLocalizations localizations) {
   return [
     localizations.good,
     localizations.fair,
@@ -98,7 +98,7 @@ String OMamPmTime(String time) {
   return "$hour:${minute.toString().padLeft(2, "0")}am";
 }
 
-int AqiIndexCorrection(int aqi) {
+int aqiIndexCorrection(int aqi) {
   if (aqi <= 20) {
     return 1;
   }
@@ -127,12 +127,12 @@ DateTime OMGetLocalTime(Map<String, dynamic> item) {
 double OMGetSunStatus(Map<String, dynamic> item) {
   final localtime = OMGetLocalTime(item);
 
-  final List<String> splitted1 =
+  final splitted1 =
       item['daily']['sunrise'][0].split('T')[1].split(':') as List<String>;
   final sunrise = localtime.copyWith(
       hour: int.parse(splitted1[0]), minute: int.parse(splitted1[1]));
 
-  final List<String> splitted2 =
+  final splitted2 =
       item['daily']['sunset'][0].split('T')[1].split(':') as List<String>;
   final sunset = localtime.copyWith(
       hour: int.parse(splitted2[0]), minute: int.parse(splitted2[1]));
@@ -191,15 +191,15 @@ Future<List<dynamic>> OMRequestData(
   final oMResponse = await oMFile[0].readAsString();
   final OMData = jsonDecode(oMResponse as String);
 
-  final DateTime fetchDatetime = (await oMFile[0].lastModified()) as DateTime;
-  final bool isonline = oMFile[1] as bool;
+  final fetchDatetime = (await oMFile[0].lastModified()) as DateTime;
+  final isonline = oMFile[1] as bool;
 
   return [OMData, fetchDatetime, isonline];
 }
 
 String oMGetName(int index, Map<String, String> settings,
     Map<String, dynamic> item, dayDif, AppLocalizations localizations) {
-  final String x = item['daily']['time'][index].split('T')[0] as String;
+  final x = item['daily']['time'][index].split('T')[0] as String;
   final z = x.split('-');
   final time = DateTime(int.parse(z[0]), int.parse(z[1]), int.parse(z[2]));
   final weeks = <String>[
@@ -240,17 +240,16 @@ String oM24hour(String time) {
 }
 
 String oMTextCorrection(int code) {
-  return OMCodes[code] ?? 'Clear Sky';
+  return omCodes[code] ?? 'Clear Sky';
 }
 
 String oMCurrentTextCorrection(
     int code, String absoluteSunriseSunset, String time) {
-  final String t =
-      (time.contains('T') ? time.split('T')[1] : time.split(' ')[1]);
+  final t = (time.contains('T') ? time.split('T')[1] : time.split(' ')[1]);
   final minute = int.parse(t.split(':')[1]);
   final hour = int.parse(t.split(':')[0]);
 
-  final List<String> x = absoluteSunriseSunset.split('/');
+  final x = absoluteSunriseSunset.split('/');
   final upH = int.parse(x[0].split(':')[0]);
   final upM = int.parse(x[0].split(':')[1]);
 
@@ -264,14 +263,14 @@ String oMCurrentTextCorrection(
   //return textBackground.keys.toList()[0]; // used for testing color combinations
 
   if (aUp <= aCurrent && aCurrent <= aDown) {
-    return OMCodes[code] ?? 'Clear Sky';
+    return omCodes[code] ?? 'Clear Sky';
   } else {
     if (code == 0 || code == 1) {
       return 'Clear Night';
     } else if (code == 2 || code == 3) {
       return 'Cloudy Night';
     }
-    return OMCodes[code] ?? 'Clear Sky';
+    return omCodes[code] ?? 'Clear Sky';
   }
 }
 
@@ -280,7 +279,7 @@ String oMBackdropCorrection(String text) {
 }
 
 List<Color> oMtextcolorCorrection(String text) {
-  return textFontColor[text] ?? [WHITE, WHITE];
+  return textFontColor[text] ?? [kWhite, kWhite];
 }
 
 IconData oMIconCorrection(String text) {
@@ -332,7 +331,7 @@ class OMCurrent extends AbstractCurrent {
     final imageService =
         await ImageService.getImageService(currentCondition, realLoc, settings);
     final colorPalette = await ColorPalette.getColorPalette(
-        imageService.image, settings['Color mode'] as String, settings);
+        imageService.image, settings['Color mode']!, settings);
 
     return OMCurrent(
       imageService: imageService,
@@ -445,10 +444,10 @@ class OMDay extends AbstractDay {
       AppLocalizations localizations) {
     final hourly = <OMHour>[];
 
-    final int l = item['hourly']['weather_code'].length as int;
+    final l = item['hourly']['weather_code'].length as int;
 
     for (var i = 0; i < 24; i++) {
-      final int j = index * 24 + i;
+      final j = index * 24 + i;
       final hour = DateTime.parse(item['hourly']['time'][j] as String);
       if ((approximatelocal.difference(hour).inMinutes <= 0 || !getRidFirst) &&
           l > j) {
@@ -478,12 +477,12 @@ class OM15MinutePrecip extends Abstract15MinPrecip {
 
     final precips = <double>[];
 
-    final int offset15 = minuteOffset ~/ 15;
+    final offset15 = minuteOffset ~/ 15;
 
     for (var i = offset15;
         i < (item['minutely_15']['precipitation'].length as int);
         i++) {
-      final double x = item['minutely_15']['precipitation'][i] as double;
+      final x = item['minutely_15']['precipitation'][i] as double;
       if (x > 0.0) {
         if (closest == 100) {
           closest = i;
@@ -614,14 +613,14 @@ class OMSunstatus extends AbstractSunstatus {
           Map<String, dynamic> item, Map<String, String> settings) =>
       OMSunstatus(
           sunrise: settings['Time mode'] == '24 hour'
-              ? OMConvertTime(item['daily']['sunrise'][0] as String)
+              ? omConvertTime(item['daily']['sunrise'][0] as String)
               : OMamPmTime(item['daily']['sunrise'][0] as String),
           sunset: settings['Time mode'] == '24 hour'
-              ? OMConvertTime(item['daily']['sunset'][0] as String)
+              ? omConvertTime(item['daily']['sunset'][0] as String)
               : OMamPmTime(item['daily']['sunset'][0] as String),
           absoluteSunriseSunset:
-              "${OMConvertTime(item["daily"]["sunrise"][0] as String)}/"
-              "${OMConvertTime(item["daily"]["sunset"][0] as String)}",
+              "${omConvertTime(item["daily"]["sunrise"][0] as String)}/"
+              "${omConvertTime(item["daily"]["sunset"][0] as String)}",
           sunstatus: OMGetSunStatus(item));
 }
 
@@ -649,12 +648,12 @@ class OMAqi extends AbstractAqi {
     final response = (await file[0].readAsString()) as String;
     final item = (jsonDecode(response) as Map<String, dynamic>)['current'];
 
-    final index = AqiIndexCorrection(item['european_aqi'] as int? ?? 0);
+    final index = aqiIndexCorrection(item['european_aqi'] as int? ?? 0);
 
     return OMAqi(
       aqi_index: index,
-      aqi_title: OmAqiTitle(index, localizations),
-      aqi_desc: OmAqiDesc(index, localizations),
+      aqi_title: omAqiTitle(index, localizations),
+      aqi_desc: omAqiDesc(index, localizations),
     );
   }
 }
@@ -697,13 +696,13 @@ class OMExtendedAqi {
 
   final List<int> dailyAqi;
 
-  final int european_aqi;
-  final int us_aqi;
-  final String european_desc;
-  final String us_desc;
+  final int europeanAqi;
+  final int usAqi;
+  final String europeanDesc;
+  final String usDesc;
 
   final double aod;
-  final String aod_desc;
+  final String aodDesc;
 
   final double dust;
 
@@ -721,12 +720,12 @@ class OMExtendedAqi {
     required this.olive,
     required this.ragweed,
     required this.aod,
-    required this.aod_desc,
+    required this.aodDesc,
     required this.dust,
-    required this.european_aqi,
-    required this.us_aqi,
-    required this.european_desc,
-    required this.us_desc,
+    required this.europeanAqi,
+    required this.usAqi,
+    required this.europeanDesc,
+    required this.usDesc,
     required this.no2_h,
     required this.o3_h,
     required this.pm2_5_h,
@@ -933,9 +932,9 @@ class OMExtendedAqi {
       }
     }
 
-    final usDesc = OmAqiTitle(usIndex + 1,
+    final usDesc = omAqiTitle(usIndex + 1,
         localizations); //because the function expects values between 1 and something
-    final europeanDesc = OmAqiTitle(europeanIndex + 1, localizations);
+    final europeanDesc = omAqiTitle(europeanIndex + 1, localizations);
 
     return OMExtendedAqi(
       pm10: item['current']['pm10'] as double? ?? -1.0,
@@ -953,7 +952,7 @@ class OMExtendedAqi {
       ragweed: item['current']['ragweed_pollen'] as double? ?? -1,
 
       aod: aodValue,
-      aod_desc: aodDesc,
+      aodDesc: aodDesc,
 
       dust: item['current']['dust'] as double? ?? -1.0,
 
@@ -968,10 +967,10 @@ class OMExtendedAqi {
 
       dailyAqi: dailyAqi,
 
-      european_aqi: item['current']['european_aqi'] as int? ?? -1,
-      us_aqi: item['current']['us_aqi'] as int? ?? -1,
-      us_desc: usDesc,
-      european_desc: europeanDesc,
+      europeanAqi: item['current']['european_aqi'] as int? ?? -1,
+      usAqi: item['current']['us_aqi'] as int? ?? -1,
+      usDesc: usDesc,
+      europeanDesc: europeanDesc,
 
       //i am looking at the one before last because the last is basically only for calculating the high
       //and not actually expected to be reached
@@ -1012,11 +1011,11 @@ Future<WeatherData> OMGetWeatherData(
     Map<String, String> settings,
     String placeName,
     AppLocalizations localizations) async {
-  final OM = await OMRequestData(lat, lng, realLoc);
-  final oMBody = OM[0] as Map<String, dynamic>;
+  final om = await OMRequestData(lat, lng, realLoc);
+  final oMBody = om[0] as Map<String, dynamic>;
 
-  final DateTime fetchDatetime = OM[1] as DateTime;
-  final bool isonline = OM[2] as bool;
+  final fetchDatetime = om[1] as DateTime;
+  final isonline = om[2] as bool;
 
   final localtime = OMGetLocalTime(oMBody);
 
@@ -1121,8 +1120,8 @@ Future<LightCurrentWeatherData> omGetLightCurrentData(
   final now = DateTime.now();
 
   final absoluteSunriseSunset =
-      "${OMConvertTime(item["daily"]["sunrise"][0] as String)}/"
-      "${OMConvertTime(item["daily"]["sunset"][0] as String)}";
+      "${omConvertTime(item["daily"]["sunrise"][0] as String)}/"
+      "${omConvertTime(item["daily"]["sunset"][0] as String)}";
 
   return LightCurrentWeatherData(
     condition: oMCurrentTextCorrection(item['current']['weather_code'] as int,
@@ -1182,8 +1181,8 @@ Future<LightHourlyForecastData> omGetHourlyForecast(
   final now = DateTime.now();
 
   final absoluteSunriseSunset =
-      "${OMConvertTime(item["daily"]["sunrise"][0] as String)}/"
-      "${OMConvertTime(item["daily"]["sunset"][0] as String)}";
+      "${omConvertTime(item["daily"]["sunrise"][0] as String)}/"
+      "${omConvertTime(item["daily"]["sunset"][0] as String)}";
 
   final hourlyConditions = <String>[];
   final hourlyTemps = <int>[];
