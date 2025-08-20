@@ -22,7 +22,7 @@ import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/features/forecast/widgets/daily.dart';
 import 'package:overmorrow/features/forecast/widgets/hourly.dart';
 import 'package:overmorrow/features/radar/radar.dart';
-import 'package:overmorrow/main_ui.dart';
+import 'package:overmorrow/features/root/widgets/main_ui.dart';
 import 'package:stretchy_header/stretchy_header.dart';
 
 class NewMain extends StatefulWidget {
