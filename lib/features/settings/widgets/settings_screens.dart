@@ -21,8 +21,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:overmorrow/core/core.dart';
 import 'package:overmorrow/features/about/about.dart';
+import 'package:overmorrow/features/root/widgets/main_ui.dart';
 import 'package:overmorrow/features/settings/settings.dart';
-import 'package:overmorrow/main_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<void> _launchUrl(String url) async {

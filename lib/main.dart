@@ -31,8 +31,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:overmorrow/core/core.dart';
+import 'package:overmorrow/features/root/widgets/main_ui.dart';
 import 'package:overmorrow/features/settings/settings.dart';
-import 'package:overmorrow/main_ui.dart';
 import 'package:workmanager/workmanager.dart';
 
 const updateWeatherDataKey = 'com.marotidev.overmorrow.updateWeatherData';
